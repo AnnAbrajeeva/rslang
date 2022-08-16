@@ -1,20 +1,31 @@
-@import url("https://fonts.googleapis.com/css2?family=Ubuntu&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap');
 
+html,
 body {
-  font-family: "Ubuntu", sans-serif;
+  font-family: 'Ubuntu', sans-serif;
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+}
+
+.wrapper,
+header,
+.home,
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.wrapper {
+  min-height: 100%;
+  flex-direction: column;
 }
 
 header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   padding: 0 10px;
-}
-
-.home {
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .home-img {
@@ -32,12 +43,17 @@ header {
   color: #615550;
 }
 
+main {
+  flex: 1 1 auto;
+  flex-direction: column;
+}
+
 footer {
-  max-width: 100vw;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 10px;
+  width: 95vw;
 }
 
 footer img {
