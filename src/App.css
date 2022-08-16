@@ -59,3 +59,7 @@ footer {
 footer img {
   width: 100px;
 }
+
+footer a {
+  text-decoration: none;
+}

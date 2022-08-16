@@ -1,0 +1,70 @@
+.team {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 5px;
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+}
+
+.av1 {
+  background: url('./images/avatar1.jpg');
+  background-size: cover;
+}
+
+.av2 {
+  background: url('./images/avatar2.jpg');
+  background-size: cover;
+}
+
+.av3 {
+  background: url('./images/avatar3.jpg');
+  background-size: cover;
+}
+
+.teams-bg {
+  max-width: 40%;
+  height: 100%;
+}
+
+.members {
+  max-width: 60%;
+}
+
+.member {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: rgba(0, 0, 0, 0.205) 2px solid;
+  max-width: 100%;
+  border-radius: 5px;
+  padding: 5px 10px;
+  text-align: justify;
+}
+
+.member:nth-child(even) {
+  flex-direction: row-reverse;
+  margin: 20px 0;
+}
+
+.about-member {
+  margin-left: 10px;
+}
+
+.member:nth-child(even) .about-member {
+  margin-right: 10px;
+}
+
+.about-member h2,
+.about-member p {
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+
+.member:nth-child(even) .about-member h2 {
+  justify-content: flex-end;
+}
