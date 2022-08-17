@@ -27,6 +27,7 @@ function App() {
   const [nav, setNav] = useState('home')
 
   return (
+<<<<<<< HEAD
     <Router>
       <ThemeProvider theme={theme}>
         <div className='wrapper'>
@@ -65,6 +66,11 @@ function App() {
         </div>
       </ThemeProvider>
     </Router>
+=======
+    <div className="App">
+      <Dictionary />
+    </div>
+>>>>>>> 951adac (feat: implement dictionary card)
   )
 }
 
