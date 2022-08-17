@@ -44,8 +44,14 @@ function App() {
               <Route path='/stats'>
                 <h2>Stats</h2>
               </Route>
-              <Route path='/games'>
+              <Route path='/games' exact>
                 <Games setIsFooter={setIsFooter} />
+              </Route>
+              <Route path='/games/sprint'>
+                <h2>Sprint</h2>
+              </Route>
+              <Route path='/games/audio-call'>
+                <h2>Audio-call</h2>
               </Route>
               <Route path='/team'>
                 <Team setIsFooter={setIsFooter} />

@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import './games.css'
 
 const GameBox = (props: { num: number; type: string }) => {
@@ -17,8 +18,12 @@ const Games = (props: { setIsFooter: (arg0: boolean) => void }) => {
 
   return (
     <div className='games'>
-      <GameBox num={1} type='Audio Call' />
-      <GameBox num={2} type='Sprint' />
+      <Link to='/games/audio-call'>
+        <GameBox num={1} type='Audio Call' />
+      </Link>
+      <Link to='/games/sprint'>
+        <GameBox num={2} type='Sprint' />
+      </Link>
     </div>
   )
 }
