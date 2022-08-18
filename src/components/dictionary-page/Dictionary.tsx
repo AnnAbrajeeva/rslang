@@ -1,4 +1,3 @@
-import Container from '@mui/material/Container'
 import Card from '@mui/material/Card'
 import { useEffect, useState } from 'react'
 import Grid from '@mui/material/Grid'
@@ -25,7 +24,6 @@ export default function Dictionary() {
   }, [])
 
   return (
-    <Container>
     <Box sx={{ width: '100%' }}>
       <Grid container spacing={2}>
         {words.map((word) => (
@@ -37,6 +35,5 @@ export default function Dictionary() {
         ))}
       </Grid>
     </Box>
-    </Container>
   )
 }

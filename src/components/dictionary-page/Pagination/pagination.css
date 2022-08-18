@@ -1,0 +1,11 @@
+.pagination {
+    display: flex;
+}
+
+.pagination li {
+    background-color: #fff;
+}
+
+.pagination ul {
+    margin: 0 auto;
+}
