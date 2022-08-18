@@ -1,5 +1,8 @@
 import Container from '@mui/material/Container'
+import Card from '@mui/material/Card'
 import { useEffect, useState } from 'react'
+import Grid from '@mui/material/Grid'
+import Box from '@mui/material/Box';
 import { IWord } from '../../types/types'
 import DictionaryCard from './DictionaryCard/DictionaryCard'
 
@@ -15,21 +18,25 @@ export default function Dictionary() {
   }
 
   useEffect(() => {
-      const fetchData = async () => {
-          getWords()
-      }
-      fetchData()
-    }, [])
+    const fetchData = async () => {
+      getWords()
+    }
+    fetchData()
+  }, [])
 
   return (
     <Container>
-      <div className="dictionary">
-        <div>
-          {words.map((word) => (
-            <DictionaryCard word={word} />
-          ))}
-        </div>
-      </div>
+    <Box sx={{ width: '100%' }}>
+      <Grid container spacing={2}>
+        {words.map((word) => (
+           <Grid item sm={12}>
+           <Card >
+            <DictionaryCard word={word} key={word.id} />
+          </Card>
+          </Grid>
+        ))}
+      </Grid>
+    </Box>
     </Container>
   )
 }

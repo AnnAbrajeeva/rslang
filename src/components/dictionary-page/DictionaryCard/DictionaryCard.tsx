@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import Card from '@mui/material/Card'
+// import Card from '@mui/material/Card'
 import CardMedia from '@mui/material/CardMedia'
 import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
@@ -18,26 +18,6 @@ interface DictionaryCardProps {
 export default function DictionaryCard({word}: DictionaryCardProps) {
   const [play, setPlay] = useState(false)
   const hardWordId = '5e9f5ee35eb9e72bc21af4a0'
-  // const word: IWord = {
-  //   id: '5e9f5ee35eb9e72bc21af4a0',
-  //   group: 0,
-  //   page: 0,
-  //   word: 'alcohol',
-  //   image: 'files/01_0002.jpg',
-  //   audio: 'files/01_0002.mp3',
-  //   audioMeaning: 'files/01_0002_meaning.mp3',
-  //   audioExample: 'files/01_0002_example.mp3',
-  //   textMeaning:
-  //     '<i>Alcohol</i> is a type of drink that can make people drunk.',
-  //   textExample:
-  //     'A person should not drive a car after he or she has been drinking <b>alcohol</b>.',
-  //   transcription: '[ǽlkəhɔ̀ːl]',
-  //   textExampleTranslate:
-  //     'Человек не должен водить машину после того, как он выпил алкоголь',
-  //   textMeaningTranslate:
-  //     'Алкоголь - это тип напитка, который может сделать людей пьяными',
-  //   wordTranslate: 'алкоголь',
-  // }
 
   const playSound = () => {
     setPlay((prev) => !prev)
@@ -67,9 +47,11 @@ export default function DictionaryCard({word}: DictionaryCardProps) {
   
 
   return (
-    <Card sx={{ maxWidth: 800 }}>
+   
       <div className="card">
+        <div className='card__header-bcg' />
         <CardMedia
+          className='card__img'
           component="img"
           sx={{ width: 251 }}
           image={`https://rs-lang-base.herokuapp.com/${word.image}`}
@@ -79,9 +61,8 @@ export default function DictionaryCard({word}: DictionaryCardProps) {
           <div className="card__header">
             <div>
               <p className="card__word">
-                {word.word} - {word.transcription}
+                {word.word} - {word.transcription} - {word.wordTranslate}
               </p>
-              <p className="card__translate">{word.wordTranslate}</p>
             </div>
             <div className="card__sound">
               <VolumeUpIcon
@@ -142,6 +123,5 @@ export default function DictionaryCard({word}: DictionaryCardProps) {
           </CardActions>
         </div>
       </div>
-    </Card>
   )
 }
