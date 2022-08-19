@@ -1,0 +1,13 @@
+.level-box {
+    background-color: rgb(204, 218, 243);
+    border-radius: 5px;
+}
+
+.level-box__wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+.level-box__title {
+    text-align: center;
+}
