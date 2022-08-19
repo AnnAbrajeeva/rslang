@@ -27,9 +27,9 @@ export default function Dictionary() {
     <Box sx={{ width: '100%' }}>
       <Grid container spacing={2}>
         {words.map((word) => (
-           <Grid item sm={12}>
+           <Grid item sm={12} key={word.id}>
            <Card >
-            <DictionaryCard word={word} key={word.id} />
+            <DictionaryCard word={word}  />
           </Card>
           </Grid>
         ))}

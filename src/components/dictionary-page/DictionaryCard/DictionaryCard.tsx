@@ -1,5 +1,4 @@
 import { useState } from 'react'
-// import Card from '@mui/material/Card'
 import CardMedia from '@mui/material/CardMedia'
 import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
@@ -17,7 +16,8 @@ interface DictionaryCardProps {
 
 export default function DictionaryCard({word}: DictionaryCardProps) {
   const [play, setPlay] = useState(false)
-  const hardWordId = '5e9f5ee35eb9e72bc21af4a0'
+  const [hard, setHard] = useState(false)
+  const [learned, setLearned] = useState(false)
 
   const playSound = () => {
     setPlay((prev) => !prev)
@@ -105,7 +105,8 @@ export default function DictionaryCard({word}: DictionaryCardProps) {
           </CardContent>
           <CardActions>
             <Button
-              variant={hardWordId !== word.id ? 'outlined' : 'contained'}
+              onClick={() => setHard(prev => !prev)}
+              variant={!hard ? 'outlined' : 'contained'}
               color="error"
               fullWidth
               endIcon={<ErrorOutlineIcon />}
@@ -113,7 +114,8 @@ export default function DictionaryCard({word}: DictionaryCardProps) {
               Difficult word
             </Button>
             <Button
-              variant={hardWordId !== word.id ? 'outlined' : 'contained'}
+              onClick={() => setLearned(prev => !prev)}
+              variant={!learned ? 'outlined' : 'contained'}
               color="success"
               fullWidth
               endIcon={<CheckCircleIcon />}

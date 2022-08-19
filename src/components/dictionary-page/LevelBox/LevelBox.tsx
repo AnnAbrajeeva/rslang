@@ -19,11 +19,17 @@ export default function LevelBox() {
     setActive(number)
   }
   return (
-    <Box sx={{ marginBottom: 5 }}>
+    <Box sx={{ marginBottom: 5, marginTop: 5 }}>
+      <h1 className="level-box__title">Choose your English level:</h1>
       <div className="level-box">
         <div className="level-box__wrapper">
           {levels.map((level) => (
-            <LevelOne activeId={active} change={changeActive} level={level} key={level.number} />
+            <LevelOne
+              activeId={active}
+              change={changeActive}
+              level={level}
+              key={level.number}
+            />
           ))}
         </div>
       </div>
