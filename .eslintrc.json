@@ -23,6 +23,7 @@
       "react", "@typescript-eslint"
   ],
   "rules": {
+      "class-methods-use-this": ["error", { "enforceForClassFields": false }],
       "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".ts", "tsx"] }],
       "react/react-in-jsx-scope": "off",
       "import/extensions": [
