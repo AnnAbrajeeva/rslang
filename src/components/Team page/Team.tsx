@@ -36,7 +36,7 @@ const Team = (props: { setIsFooter: (arg0: boolean) => void }) => {
         <Member num={2} name='Anna' github='AnnAbrajeeva' />
         <Member num={3} name='Viachaslau' github='kirakle' />
       </div>
-      <img alt='' className='teams-bg' src={require('./images/team-bg.jpg')} />
+      <img alt='' className='teams-bg' src={require('./images/team-bg.png')} />
     </div>
   )
 }

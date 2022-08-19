@@ -1,13 +1,27 @@
-import { BottomNavigation, BottomNavigationAction } from '@mui/material'
-import { Home, Leaderboard, MenuBook, SportsEsports, Groups, AccountCircle } from '@mui/icons-material'
-import { Link } from 'react-router-dom'
+import {
+  BottomNavigation,
+  BottomNavigationAction,
+  Tab,
+  Tabs,
+} from '@mui/material'
+import {
+  Home,
+  Leaderboard,
+  MenuBook,
+  SportsEsports,
+  Groups,
+  AccountCircle,
+} from '@mui/icons-material'
+import { Link, useHistory } from 'react-router-dom'
 import { useEffect } from 'react'
 
 const pages = ['home', 'book', 'games', 'stats', 'team', 'sign-in']
 
 const Navbar = (props: { value: string; setValue: (arg0: string) => void }) => {
+  const history = useHistory()
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     props.setValue(newValue)
+    newValue === 'home' ? history.push(`/`) : history.push(`/${newValue}`)
   }
 
   useEffect(() => {
@@ -19,45 +33,21 @@ const Navbar = (props: { value: string; setValue: (arg0: string) => void }) => {
   }, [props])
 
   return (
-    <div className='navbar'>
-      <BottomNavigation sx={{ width: 500 }} value={props.value} onChange={handleChange}>
-        <BottomNavigationAction component={Link} to='/' label='Home' value='home' icon={<Home fontSize='large' />} />
-        <BottomNavigationAction
-          component={Link}
-          to='/book'
-          label='Book'
-          value='book'
-          icon={<MenuBook fontSize='large' />}
-        />
-        <BottomNavigationAction
-          component={Link}
-          to='/games'
-          label='Games'
-          value='games'
-          icon={<SportsEsports fontSize='large' />}
-        />
-        <BottomNavigationAction
-          component={Link}
-          to='/stats'
-          label='Stats'
-          value='stats'
-          icon={<Leaderboard fontSize='large' />}
-        />
-        <BottomNavigationAction
-          component={Link}
-          to='/team'
-          label='Team'
-          value='team'
-          icon={<Groups fontSize='large' />}
-        />
-        <BottomNavigationAction
-          component={Link}
-          to='/sign-in'
-          label='Account'
-          value='sign-in'
-          icon={<AccountCircle fontSize='large' />}
-        />
-      </BottomNavigation>
+    <div className="navbar">
+      {/* <BottomNavigation value={props.value} onChange={handleChange}> */}
+      <Tabs
+        value={props.value}
+        onChange={handleChange}
+        aria-label="icon position tabs example"
+      >
+        <Tab value="home" icon={<Home fontSize="large" />} />
+        <Tab value="book" icon={<MenuBook fontSize="large" />} />
+        <Tab value="games" icon={<SportsEsports fontSize="large" />} />
+        <Tab value="stats" icon={<Leaderboard fontSize="large" />} />
+        <Tab value="team" icon={<Groups fontSize="large" />} />
+        <Tab value="sign-in" icon={<AccountCircle fontSize="large" />} />
+      </Tabs>
+      {/* </BottomNavigation> */}
     </div>
   )
 }
