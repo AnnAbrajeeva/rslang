@@ -13,7 +13,7 @@ import DictionaryPage from './components/dictionary-page/DictionaryPage/Dictiona
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#8AAAE5',
+      main: '#34568B',
     },
     secondary: {
       main: '#A0DAA9',
@@ -31,34 +31,34 @@ function App() {
   return (
     <Router>
       <ThemeProvider theme={theme}>
-        <div className='wrapper'>
+        <div className="wrapper">
           <header>
             <Navbar value={nav} setValue={setNav} />
           </header>
           <main>
             <Switch>
-              <Route exact path='/'>
+              <Route exact path="/">
                 <Home setIsFooter={setIsFooter} />
               </Route>
-              <Route path='/book'>
+              <Route path="/book">
                 <DictionaryPage setIsFooter={setIsFooter} />
               </Route>
-              <Route path='/stats'>
+              <Route path="/stats">
                 <h2>Stats</h2>
               </Route>
-              <Route path='/games' exact>
+              <Route path="/games" exact>
                 <Games setIsFooter={setIsFooter} />
               </Route>
-              <Route path='/games/sprint'>
+              <Route path="/games/sprint">
                 <h2>Sprint</h2>
               </Route>
-              <Route path='/games/audio-call'>
+              <Route path="/games/audio-call">
                 <h2>Audio-call</h2>
               </Route>
-              <Route path='/team'>
+              <Route path="/team">
                 <Team setIsFooter={setIsFooter} />
               </Route>
-              <Route path='/sign-in'>
+              <Route path="/sign-in">
                 <h2>Sign in</h2>
               </Route>
             </Switch>

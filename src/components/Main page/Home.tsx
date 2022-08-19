@@ -5,7 +5,7 @@ const Home = (props: { setIsFooter: (arg0: boolean) => void }) => {
 
   return (
     <div className='home'>
-      <img className='home-img' alt='img' src={require('./images/main-bg.jpg')} />
+      <img className='home-img' alt='img' src={require('./images/main-bg.png')} />
       <div className='about'>
         <h1>RS Lang</h1>
         <h2>
