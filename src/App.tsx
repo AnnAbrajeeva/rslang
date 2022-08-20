@@ -8,6 +8,7 @@ import Games from './components/Games page/Games';
 import Footer from './components/Main page/Footer';
 import Team from './components/Team page/Team';
 import DictionaryPage from './components/dictionary-page/DictionaryPage/DictionaryPage';
+import Auth from './components/Auth page/Auth';
 import './App.css';
 
 
@@ -44,7 +45,7 @@ function App() {
             <Route path="/games/sprint" element={<h2>Sprint</h2>} />
             <Route path="/games/audio-call" element={<h2>Audio-call</h2>} />
             <Route path="/team" element={<Team setIsFooter={setIsFooter} />} />
-            <Route path="/sign-in" element={<h2>Sign in</h2>} />
+            <Route path="/sign-in" element={<Auth />} />
           </Routes>
         </main>
         {isFooter && <Footer setValue={setNav} />}
