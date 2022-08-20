@@ -12,16 +12,16 @@ import {
   Groups,
   AccountCircle,
 } from '@mui/icons-material'
-import { Link, useHistory } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 
 const pages = ['home', 'book', 'games', 'stats', 'team', 'sign-in']
 
 const Navbar = (props: { value: string; setValue: (arg0: string) => void }) => {
-  const history = useHistory()
+  const history = useNavigate()
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     props.setValue(newValue)
-    newValue === 'home' ? history.push(`/`) : history.push(`/${newValue}`)
+    newValue === 'home' ? history(`/`) : history(`/${newValue}`)
   }
 
   useEffect(() => {
