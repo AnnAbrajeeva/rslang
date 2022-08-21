@@ -12,7 +12,6 @@ export default class RslangApi {
     if (!res.ok) {
       throw new Error(`Something went wrong. Status: ${res.status}`)
     }
-
     const content = await res.json()
     return content
   }
@@ -34,14 +33,14 @@ export default class RslangApi {
   getUserFromLocalStorage = () => {
     const user = localStorage.getItem('user')
     if (!user) {
-      throw new Error('Please, authorization')
+      throw new Error('Please, log in to app')
     } else {
       return JSON.parse(user) as IAuthUser
     }
   }
 
   // Получение всех слов
-  getAllWords = (page: string, group: string): Promise<IWord[]> =>
+  getAllWords = (page: number, group: number): Promise<IWord[]> =>
     this.getResource(`${this.url}words?page=${page}&group=${group}`)
 
   // Получение одного слова по id
