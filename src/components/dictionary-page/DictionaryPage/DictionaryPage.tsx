@@ -10,7 +10,7 @@ import DictionaryGames from '../DictionaryGames/DictionaryGames'
 import Loader from '../../Loader/Loader'
 import './DictionaryPage.css'
 import RslangApi from '../../../api/RslangApi'
-import { IWord } from '../../../types/types'
+import { IUserWordParams, IWord } from '../../../types/types'
 
 export default function DictionaryPage(props: {
   // eslint-disable-next-line no-unused-vars
@@ -22,6 +22,7 @@ export default function DictionaryPage(props: {
   const api = new RslangApi()
 
   const [words, setWords] = useState<IWord[]>([])
+  const [userWords, setUserWords] = useState<IUserWordParams[]>([])
   const [loading, setLoading] = useState(false)
   const [page, setPage] = useState(Number(localStorage.getItem('page')) || 0)
   const [group, setGroup] = useState(Number(localStorage.getItem('group')) || 1)
@@ -30,7 +31,9 @@ export default function DictionaryPage(props: {
     const fetchData = async () => {
       setLoading(true)
       const res = await api.getAllWords(page, group)
+      const uWords = await api.getAllUserWords()
       setWords(res)
+      setUserWords(uWords)
       setLoading(false)
     }
     fetchData()    
@@ -57,7 +60,7 @@ export default function DictionaryPage(props: {
         {loading ? (
           <Loader />
         ) : (
-          <DictionaryContent changePage={changePage} words={words} />
+          <DictionaryContent changePage={changePage} words={words} userWords={userWords} />
         )}
       </Container>
     </div>
@@ -66,14 +69,15 @@ export default function DictionaryPage(props: {
 
 interface IDictionaryContentProps {
   words: IWord[]
+  userWords: IUserWordParams[]
   changePage: (newPage: number) => void
 }
 
-function DictionaryContent({ words, changePage }: IDictionaryContentProps) {
+function DictionaryContent({ words, changePage, userWords }: IDictionaryContentProps) {
   return (
     <>
       <Box>
-        <Dictionary words={words} />
+        <Dictionary words={words} userWords={userWords} />
       </Box>
       <Pagination changePage={changePage} />
       <DictionaryGames />

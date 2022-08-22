@@ -1,4 +1,4 @@
-import { IAuthUser, IUser, IWord, IUserWord, IUserStatistics, IUserSettings } from '../types/types'
+import { IAuthUser, IUser, IWord, IUserWordParams, IUserStatistics, IUserSettings, IUserWord, IUserWordWithParams } from '../types/types'
 
 export default class RslangApi {
   url: string
@@ -130,12 +130,29 @@ export default class RslangApi {
         'Content-Type': 'application/json',
       },
     })
-    const content = await res.json() as IUserWord[]
+    const content = await res.json() as IUserWordParams[]
     return content
   }
 
+  // Все слова со словами пользователя
+
+  getAllUserWordsWithParams = async (page: number, group: number) => {
+    const {token, userId} = this.getUserFromLocalStorage()
+
+    const res = await fetch(`${this.url}users/${userId}/aggregatedWords?group=${group}&page=${page}&wordsPerPage=20`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+    const content = await res.json() as IUserWordWithParams[]
+    return content
+  }
+
+
    // Добавить слово пользователя
-   createUserWord = async (wordId: string) => {
+   createUserWord = async (wordId: string, word: IUserWordParams) => {
     const {token, userId} = this.getUserFromLocalStorage()
 
     const res = await fetch(`${this.url}users/${userId}/words/${wordId}`, {
@@ -145,13 +162,14 @@ export default class RslangApi {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify(word)
     })
-    const content = await res.json() as IUserWord[]
+    const content = await res.json() as IUserWordParams
     return content
   }
 
   // Получить слово пользователя по Id
-  пуеUserWord = async (wordId: string) => {
+  getUserWord = async (wordId: string) => {
     const {token, userId} = this.getUserFromLocalStorage()
 
     const res = await fetch(`${this.url}users/${userId}/words/${wordId}`, {
@@ -161,7 +179,7 @@ export default class RslangApi {
         'Content-Type': 'application/json',
       },
     })
-    const content = await res.json() as IUserWord[]
+    const content = await res.json() as IUserWordParams
     return content
   }
 
@@ -171,17 +189,18 @@ export default class RslangApi {
 
     const res = await fetch(`${this.url}users/${userId}/words/${wordId}`, {
       method: 'PUT',
+      credentials: 'include',
       headers: {
         Authorization: `Bearer ${token}`,
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
     })
-    const content = await res.json() as IUserWord[]
+    const content = await res.json() as IUserWordParams[]
     return content
   }
 
-  // Добавить слово пользователя
+  // Удалить слово пользователя
   deleteUserWord = async (wordId: string) => {
     const {token, userId} = this.getUserFromLocalStorage()
 
@@ -193,7 +212,22 @@ export default class RslangApi {
         'Content-Type': 'application/json',
       },
     })
-    const content = await res.json() as IUserWord[]
+    const content = await res.json() as IUserWordParams[]
+    return content
+  }
+
+  // Получить все сложные слова
+  getAllHardWords = async () => {
+    const {token, userId} = this.getUserFromLocalStorage()
+
+    const res = await fetch(`${this.url}users/${userId}/aggregatedWords?wordsPerPage=3600&filter={"userWord.difficulty":"hard"}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+    const content = await res.json() as IUserWord[] 
     return content
   }
 
