@@ -9,6 +9,7 @@ import Footer from './components/Main page/Footer';
 import Team from './components/Team page/Team';
 import DictionaryPage from './components/dictionary-page/DictionaryPage/DictionaryPage';
 import Auth from './components/Auth page/Auth';
+import Registration from './components/Registration';
 import './App.css';
 
 
@@ -46,6 +47,7 @@ function App() {
             <Route path="/games/audio-call" element={<h2>Audio-call</h2>} />
             <Route path="/team" element={<Team setIsFooter={setIsFooter} />} />
             <Route path="/sign-in" element={<Auth />} />
+            <Route path="/registration" element={<Registration />} />
           </Routes>
         </main>
         {isFooter && <Footer setValue={setNav} />}
