@@ -58,8 +58,7 @@ const Navbar = (props: { value: string; setValue: (arg0: string) => void }) => {
         <Tab value="home" icon={<Home fontSize="large" />} />
         <Tab value="book" icon={<MenuBook fontSize="large" />} />
         <Tab value="games" icon={<SportsEsports fontSize="large" />} />
-        <Tab value="stats" icon={<Leaderboard fontSize="large" />} />
-        <Tab value="team" icon={<Groups fontSize="large" />} />
+        {authData && <Tab value="stats" icon={<Leaderboard fontSize="large" />} />}
         {authData && (
           <Box>
             <Tooltip title="Open settings">
@@ -110,4 +109,4 @@ function checkUrl(str: string): string {
   return ''
 }
 
-export default Navbar
+export default Navbar;
