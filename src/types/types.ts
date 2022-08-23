@@ -40,7 +40,29 @@ export interface IUserWordParams {
 }
 
 export interface IUserWordWithParams {
-  _id: string
+  _id?: string 
+  id?: string
+  group: number
+  page: number
+  word: string
+  image: string
+  audio: string
+  audioMeaning: string
+  audioExample: string
+  textMeaning: string
+  textExample: string
+  transcription: string
+  textExampleTranslate: string
+  textMeaningTranslate: string
+  wordTranslate: string
+  userWord: {
+    difficulty: string
+    optional: {}
+  }
+}
+
+export interface IUserHardWords {
+  id: string 
   group: number
   page: number
   word: string
@@ -61,7 +83,7 @@ export interface IUserWordWithParams {
 }
 
 export interface IUserWord {
-  paginatedResults: IUserWordWithParams
+  paginatedResults: IUserWordWithParams[]
   totalCount: {
     count: number
   }

@@ -7,28 +7,32 @@ import Button from '@mui/material/Button'
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import VolumeUpIcon from '@mui/icons-material/VolumeUp'
-import { IWord } from '../../../types/types'
+import { IUserWordParams, IWord } from '../../../types/types'
 import './DictionaryCard.css'
-
 
 interface DictionaryCardProps {
   word: IWord
-  hardWord: boolean
-  learnedWord: boolean
   addDifficultWord: (id: string) => void
   addLearnedWord: (id: string) => void
+  removeFromLearned: (id: string) => void
+  removeFromHard: (id: string) => void
+  infoWord: IUserWordParams[]
+  updateUserWords: () => void
 }
 
 export default function DictionaryCard({
   word,
-  hardWord,
-  learnedWord,
   addDifficultWord,
-  addLearnedWord
+  addLearnedWord,
+  removeFromLearned,
+  removeFromHard,
+  infoWord,
+  updateUserWords
 }: DictionaryCardProps) {
+  const wordInfo = infoWord.find((uWord) => uWord.wordId === word.id)
   const [play, setPlay] = useState(false)
-  const [hard, setHard] = useState(hardWord)
-  const [learned, setLearned] = useState(learnedWord)
+  const [hard, setHard] = useState(wordInfo?.difficulty === 'hard')
+  const [learned, setLearned] = useState(wordInfo?.optional.learned)
 
   const playSound = () => {
     setPlay((prev) => !prev)
@@ -57,13 +61,27 @@ export default function DictionaryCard({
   }
 
   const addToDifficult = async (id: string) => {
-    setHard(true)
-    addDifficultWord(id) 
+    if (hard) {
+      removeFromHard(id)
+      setHard(false)
+    } else {
+      setLearned(false)
+      addDifficultWord(id)
+      setHard(true)
+    }
+    updateUserWords()
   }
 
   const addToLearned = async (id: string) => {
-    setLearned(true)
-    addLearnedWord(id)
+    if (learned === true) {
+      await removeFromLearned(id)
+      setLearned(false)
+    } else {
+      setLearned(true)
+      setHard(false)
+      await addLearnedWord(id)
+    }
+    updateUserWords()
   }
 
   return (

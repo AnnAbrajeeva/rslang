@@ -32,24 +32,36 @@ export default function DictionaryPage(props: {
       setLoading(true)
       const res = await api.getAllWords(page, group)
       const uWords = await api.getAllUserWords()
-      setWords(res)
+      if (group === 7) {
+        const hardWords = await api.getAllHardWords()
+        setWords(hardWords)
+      } else {
+        setWords(res)
+      }
       setUserWords(uWords)
       setLoading(false)
     }
-    fetchData()    
+    fetchData()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, group])    
+  }, [page, group])
+
+  const updateUserWords = async () => {
+    if (group === 7) {
+      const hardWords = await api.getAllHardWords()
+      setWords(hardWords)
+    }
+  }
 
   const changePage = (newPage: number) => {
-    setPage(newPage-1)
-    localStorage.setItem('page', (newPage-1).toString())
+    setPage(newPage - 1)
+    localStorage.setItem('page', (newPage - 1).toString())
   }
 
   const changeLevel = (newGroup: number) => {
     setGroup(newGroup)
     changePage(1)
-    localStorage.setItem('group', (newGroup).toString())
+    localStorage.setItem('group', newGroup.toString())
   }
 
   return (
@@ -60,9 +72,15 @@ export default function DictionaryPage(props: {
         {loading ? (
           <Loader />
         ) : (
-          <DictionaryContent changePage={changePage} words={words} userWords={userWords} />
+          <DictionaryContent
+            group={group}
+            changePage={changePage}
+            words={words}
+            userWords={userWords}
+            updateUserWords={updateUserWords}
+          />
         )}
-      </Container>
+      </Container> 
     </div>
   )
 }
@@ -71,15 +89,23 @@ interface IDictionaryContentProps {
   words: IWord[]
   userWords: IUserWordParams[]
   changePage: (newPage: number) => void
+  group: number
+  updateUserWords: () => void
 }
 
-function DictionaryContent({ words, changePage, userWords }: IDictionaryContentProps) {
+function DictionaryContent({
+  words,
+  changePage,
+  userWords,
+  group,
+  updateUserWords
+}: IDictionaryContentProps) {
   return (
     <>
       <Box>
-        <Dictionary words={words} userWords={userWords} />
+        <Dictionary updateUserWords={updateUserWords} words={words} userWords={userWords} />
       </Box>
-      <Pagination changePage={changePage} />
+      {group !== 7 && <Pagination changePage={changePage} />}
       <DictionaryGames />
     </>
   )

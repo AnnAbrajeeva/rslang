@@ -1,4 +1,4 @@
-import { IAuthUser, IUser, IWord, IUserWordParams, IUserStatistics, IUserSettings, IUserWord, IUserWordWithParams } from '../types/types'
+import { IAuthUser, IUser, IWord, IUserWordParams, IUserStatistics, IUserSettings, IUserWord, IUserWordWithParams, IUserHardWords } from '../types/types'
 
 export default class RslangApi {
   url: string
@@ -40,8 +40,8 @@ export default class RslangApi {
   }
 
   // Получение всех слов
-  getAllWords = (page: number, group: number): Promise<IWord[]> =>
-    this.getResource(`${this.url}words?page=${page}&group=${group}`)
+  getAllWords = (page: number, group: number) =>
+    this.getResource(`${this.url}words?page=${page}&group=${group}`) as Promise<IWord[]>
 
   // Получение одного слова по id
   getWord = (id: string): Promise<IWord> =>
@@ -184,17 +184,17 @@ export default class RslangApi {
   }
 
   // Добавить слово пользователя
-  updateUserWord = async (wordId: string) => {
+  updateUserWord = async (wordId: string, data: IUserWordParams) => {
     const {token, userId} = this.getUserFromLocalStorage()
 
     const res = await fetch(`${this.url}users/${userId}/words/${wordId}`, {
       method: 'PUT',
-      credentials: 'include',
       headers: {
         Authorization: `Bearer ${token}`,
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify(data)
     })
     const content = await res.json() as IUserWordParams[]
     return content
@@ -227,8 +227,16 @@ export default class RslangApi {
         'Content-Type': 'application/json',
       },
     })
-    const content = await res.json() as IUserWord[] 
-    return content
+    const content = await res.json() as IUserWord[]
+    let hardWords = content[0].paginatedResults
+    hardWords = hardWords.map((word) => {
+      // eslint-disable-next-line no-param-reassign, no-underscore-dangle
+      word.id = word._id 
+      // eslint-disable-next-line no-underscore-dangle, no-param-reassign
+      delete word._id
+      return word
+    }) 
+    return hardWords as IUserHardWords[]
   }
 
   getUserStatistics = async () => {

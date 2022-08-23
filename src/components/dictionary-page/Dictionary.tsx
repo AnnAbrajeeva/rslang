@@ -14,25 +14,10 @@ api.signInUser({ email: 'aaa@aa.ru', password: '12345678' }).then((res) => {
 interface IDictionaryProps {
   words: IWord[]
   userWords: IUserWordParams[]
+  updateUserWords: () => void
 }
 
-export default function Dictionary({ words, userWords }: IDictionaryProps) {
-  const checkHardWord = (id: string) => {
-    const userWord = userWords.find((uWord) => uWord.wordId === id)
-    if (userWord && userWord.difficulty === 'hard') {
-      return true
-    }
-    return false
-  }
-
-  const checkLearnedWord = (id: string) => {
-    const userWord = userWords.find((uWord) => uWord.wordId === id)
-    if (userWord && userWord.optional.learned === true) {
-      return true
-    }
-    return false
-  }
-
+export default function Dictionary({ words, userWords, updateUserWords }: IDictionaryProps) {
   const addDifficultWord = async (id: string) => {
     const isUserWord = userWords.find((uWord) => uWord.wordId === id)
     if (isUserWord) {
@@ -40,7 +25,9 @@ export default function Dictionary({ words, userWords }: IDictionaryProps) {
       wordParams.difficulty = 'hard'
       wordParams.optional.learned = false
       wordParams.optional.studing = true
-      await api.createUserWord(id, wordParams)
+      delete wordParams.id
+      delete wordParams.wordId
+      await api.updateUserWord(id, wordParams)
     } else {
       const wordParams = {
         difficulty: 'hard',
@@ -60,7 +47,9 @@ export default function Dictionary({ words, userWords }: IDictionaryProps) {
       wordParams.difficulty = 'weak'
       wordParams.optional.learned = true
       wordParams.optional.studing = true
-      await api.createUserWord(id, wordParams)
+      delete wordParams.id
+      delete wordParams.wordId
+      await api.updateUserWord(id, wordParams)
     } else {
       const wordParams = {
         difficulty: 'weak',
@@ -73,6 +62,29 @@ export default function Dictionary({ words, userWords }: IDictionaryProps) {
     }
   }
 
+  const removeFromLearned = async (id: string) => {
+    const isUserWord = userWords.find((uWord) => uWord.wordId === id)
+    if (isUserWord) {
+    const wordParams = { ...isUserWord }
+      wordParams.optional.learned = false
+      delete wordParams.id
+      delete wordParams.wordId
+      await api.updateUserWord(id, wordParams)
+    }
+  }
+
+  const removeFromHard = async (id: string) => {
+    const isUserWord = userWords.find((uWord) => uWord.wordId === id)
+    if (isUserWord) {
+    const wordParams = { ...isUserWord }
+      wordParams.difficulty = 'weak'
+      delete wordParams.id
+      delete wordParams.wordId
+      await api.updateUserWord(id, wordParams)
+    }
+  }
+
+
   return (
     <Box sx={{ width: '100%' }}>
       <Grid container spacing={2}>
@@ -80,10 +92,12 @@ export default function Dictionary({ words, userWords }: IDictionaryProps) {
           <Grid item sm={12} key={word.id}>
             <Card>
               <DictionaryCard
+                updateUserWords={updateUserWords}
+                infoWord={userWords}
                 addLearnedWord={addLearnedWord}
+                removeFromLearned={removeFromLearned}
+                removeFromHard={removeFromHard}
                 addDifficultWord={addDifficultWord}
-                hardWord={checkHardWord(word.id)}
-                learnedWord={checkLearnedWord(word.id)}
                 word={word}
                 key={word.id}
               />
