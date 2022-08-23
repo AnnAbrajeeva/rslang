@@ -1,5 +1,4 @@
 /* eslint-disable react/function-component-definition */
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-else-return */
 import { FC, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -22,17 +21,17 @@ const Registration: FC = () => {
   useEffect(() => {
     if (isUserCreated) {
       const delay = () => {
-        navigate('/auth');
+        navigate('/sign-in');
         dispatch(setRegisteringFlag(false));
       };
-      const timeoutID = setTimeout(delay, 3000);
+      const timeoutID = setTimeout(delay, 2000);
       return () => clearTimeout(timeoutID);
     } else {
       const delay = () => {
         dispatch(setUserCreationError(null));
         dispatch(setRegisteringFlag(false));
       };
-      const timeoutID = setTimeout(delay, 3000);
+      const timeoutID = setTimeout(delay, 2000);
       return () => clearTimeout(timeoutID);
     }
   }, [userCreationError, registeringFlag]);
@@ -44,7 +43,7 @@ const Registration: FC = () => {
         <div>
           <RegistrationForm />
           <h3>
-          Signed up already? <span><Link to='/sign-in'>Sign in to the app</Link></span>
+            Signed up already? <span><Link to='/sign-in'>Sign in to the app</Link></span>
           </h3>
         </div>
       )}

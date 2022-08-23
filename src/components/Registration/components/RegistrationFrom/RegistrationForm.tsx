@@ -4,9 +4,9 @@ import { TextField } from "@mui/material";
 import { LoadingButton } from '@mui/lab';
 
 import { useTypedSelector } from "../../../../redux/hooks";
-import { Form } from "./RegistrationForm.styles";
+import Form from "./RegistrationForm.styles";
 
-import { useFormikCustom } from "./hooks/useFormikCustom";
+import useFormikCustom from "./hooks/useFormikCustom";
 
 
 const RegistrationForm: FC = () => {

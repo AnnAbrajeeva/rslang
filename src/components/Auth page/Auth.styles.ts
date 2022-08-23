@@ -1,14 +1,15 @@
-/* eslint-disable import/prefer-default-export */
 import styled from "styled-components";
 
-export const Wrapper = styled.div`
-  padding: 0 20px;
+const Wrapper = styled.div`
+padding: 0 20px;
 
-  span {
-    text-decoration: underline;
-  }
+span {
+  text-decoration: underline;
+}
 
-  h3 {
-    margin-top: 20px;
-  }
+h3 {
+  margin-top: 20px;
+}
 `;
+
+export default Wrapper; 

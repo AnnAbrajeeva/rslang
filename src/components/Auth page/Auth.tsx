@@ -1,11 +1,10 @@
 /* eslint-disable react/function-component-definition */
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-else-return */
 import { FC, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { setEnteringFlag, setSigningInError } from "../../redux/features/authSlice";
 import { useTypedDispatch, useTypedSelector } from "../../redux/hooks";
-import { Wrapper } from "./Auth.styles";
+import Wrapper from "./Auth.styles";
 import Alerts from "./components/Alerts";
 import AuthForm from "./components/AuthForm";
 
@@ -22,14 +21,14 @@ const Auth: FC = () => {
         navigate('/');
         dispatch(setEnteringFlag(false));
       };
-      const timeoutID = setTimeout(delay, 3000);
+      const timeoutID = setTimeout(delay, 2000);
       return () => clearTimeout(timeoutID);
     } else {
       const delay = () => {
         dispatch(setEnteringFlag(false));
         dispatch(setSigningInError(null));
       };
-      const timeoutID = setTimeout(delay, 3000);
+      const timeoutID = setTimeout(delay, 2000);
       return () => clearTimeout(timeoutID);
     }
   }, [signingInError, enteringFlag]);

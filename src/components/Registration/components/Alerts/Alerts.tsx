@@ -1,7 +1,7 @@
 /* eslint-disable react/function-component-definition */
 import { FC } from "react"
 import { Alert, AlertTitle } from "@mui/material";
-import { Wrapper } from "./Alerts.styles";
+import Wrapper from "./Alerts.styles";
 import { useTypedSelector } from "../../../../redux/hooks";
 
 const Alerts: FC = () => {

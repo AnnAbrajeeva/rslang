@@ -4,7 +4,7 @@ import axios from 'axios';
 import { IUser } from '../types/types';
 import { ISignIn } from './types';
 
-export const BASE_URL = 'https://rs-lang-base.herokuapp.com/';
+export const BASE_URL = 'https://rs-lang-base.herokuapp.com';
 
 export const createUser = createAsyncThunk(
   'thunks/createUser',

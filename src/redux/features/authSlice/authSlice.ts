@@ -5,7 +5,7 @@ import { IAuthUser as IAuth } from '../../../types/types';
 import { IAuthState } from './types';
 
 const initialState: IAuthState = {
-  authUserData: null,
+  authData: null,
   isSigningIn: false,
   signingInError: null,
   enteringFlag: false,
@@ -16,7 +16,7 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     setAuthUserData(state, action: PayloadAction<IAuth | null>) {
-      state.authUserData = action.payload;
+      state.authData = action.payload;
     },
     setSigningInError(state, action: PayloadAction<null>) {
       state.signingInError = action.payload;
@@ -33,15 +33,14 @@ export const authSlice = createSlice({
     [signIn.fulfilled.type]: (state, action: PayloadAction<IAuth>) => {
       state.isSigningIn = false;
       state.signingInError = null;
-      state.authUserData = action.payload;
+      state.authData = action.payload;
       state.enteringFlag = true;
-      localStorage.setItem('authUserData-zm', JSON.stringify(action.payload));
+      localStorage.setItem('authData', JSON.stringify(action.payload));
     },
     [signIn.rejected.type]: (state, action: PayloadAction<string>) => {
       state.signingInError = action.payload;
       state.isSigningIn = false;
       state.enteringFlag = true;
-      console.error(action.payload);
     },
   },
 });

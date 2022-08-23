@@ -1,10 +1,9 @@
-/* eslint-disable import/prefer-default-export */
 import { useFormik } from "formik";
 import { useTypedDispatch } from "../../../../../redux/hooks";
-import { createUser} from "../../../../../redux/thunks";
-import { validationSchema } from "../utils/validationSchema";
+import { createUser } from "../../../../../redux/thunks";
+import validationSchema from "../utils/validationSchema";
 
-export function useFormikCustom() {
+export default function useFormikCustom() {
   const dispatch = useTypedDispatch();
 
   const formik = useFormik({

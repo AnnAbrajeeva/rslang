@@ -1,7 +1,9 @@
-// eslint-disable-next-line import/no-unresolved
 import { Route, Routes } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useTypedDispatch } from "./redux/hooks";
+import { setAuthUserData } from "./redux/features/authSlice";
 import Navbar from './components/Main page/Navbar';
 import Home from './components/Main page/Home';
 import Games from './components/Games page/Games';
@@ -11,7 +13,7 @@ import DictionaryPage from './components/dictionary-page/DictionaryPage/Dictiona
 import Auth from './components/Auth page/Auth';
 import Registration from './components/Registration';
 import './App.css';
-
+import { BASE_URL } from "./redux/thunks";
 
 const theme = createTheme({
   palette: {
@@ -28,8 +30,43 @@ const theme = createTheme({
 });
 
 function App() {
-  const [isFooter, setIsFooter] = useState(true)
-  const [nav, setNav] = useState('home')
+  const [isFooter, setIsFooter] = useState(true);
+  const [nav, setNav] = useState('home');
+  const dispatch = useTypedDispatch();
+
+  useEffect(() => {
+    const authUserDataLS = localStorage.authData;
+
+    if (authUserDataLS) dispatch(setAuthUserData(JSON.parse(authUserDataLS)));
+
+    if (authUserDataLS) {
+      const parsedAuthData = JSON.parse(authUserDataLS);
+      const userID = parsedAuthData.userId;
+      const { refreshToken } = parsedAuthData;
+      (async () => {
+          const response = await axios.get(
+            `${BASE_URL}/users/${userID}/tokens`,
+            {
+              headers: {
+                Authorization: `Bearer ${refreshToken}`,
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+              },
+            }
+          );
+          const newAuthData = {
+            ...parsedAuthData,
+            token: response.data.token,
+            refreshToken: response.data.refreshToken,
+          };
+
+          localStorage.removeItem('authData');
+          localStorage.setItem('authData', JSON.stringify(newAuthData));
+          dispatch(setAuthUserData(newAuthData));
+
+      })();
+    }
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
