@@ -7,14 +7,14 @@ import Button from '@mui/material/Button'
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import VolumeUpIcon from '@mui/icons-material/VolumeUp'
-import { IWord } from '../../../types/types'
 import './DictionaryCard.css'
+import { IWord } from '../../../types/types'
 
 interface DictionaryCardProps {
   word: IWord
 }
 
-export default function DictionaryCard({word}: DictionaryCardProps) {
+export default function DictionaryCard({ word }: DictionaryCardProps) {
   const [play, setPlay] = useState(false)
   const [hard, setHard] = useState(false)
   const [learned, setLearned] = useState(false)
@@ -31,99 +31,97 @@ export default function DictionaryCard({word}: DictionaryCardProps) {
     const audioTrack = new Audio(audio[0])
 
     function playNext() {
-        if (index < audio.length-1) {
-          index += 1
-          audioTrack.src = audio[index]
-          audioTrack.load()
-          audioTrack.play()
-        } else {
-          setPlay(false)
-          audioTrack.removeEventListener('ended', playNext, false) 
-        }
+      if (index < audio.length - 1) {
+        index += 1
+        audioTrack.src = audio[index]
+        audioTrack.load()
+        audioTrack.play()
+      } else {
+        setPlay(false)
+        audioTrack.removeEventListener('ended', playNext, false)
+      }
     }
-    audioTrack.addEventListener('ended', playNext) 
+    audioTrack.addEventListener('ended', playNext)
     audioTrack.play()
   }
-  
 
   return (
-   
-      <div className="card">
-        <div className='card__header-bcg' />
-        <CardMedia
-          className='card__img'
-          component="img"
-          sx={{ width: 251 }}
-          image={`https://rs-lang-base.herokuapp.com/${word.image}`}
-          alt={word.word}
-        />
-        <div className="card__descr">
-          <div className="card__header">
-            <div>
-              <p className="card__word">
-                {word.word} - {word.transcription} - {word.wordTranslate}
-              </p>
-            </div>
-            <div className="card__sound">
-              <VolumeUpIcon
-                onClick={playSound}
-                className="card__sound-icon"
-                fontSize="large"
-                color={play ? 'success' : 'inherit'}
-              />
-              <audio src={`https://rs-lang-base.herokuapp.com/${word.audio}`}>
-                <track kind="captions" />
-              </audio>
-              <audio
-                src={`https://rs-lang-base.herokuapp.com/${word.audioMeaning}`}
-              >
-                <track kind="captions" />
-              </audio>
-              <audio
-                src={`https://rs-lang-base.herokuapp.com/${word.audioExample}`}
-              >
-                <track kind="captions" />
-              </audio>
-            </div>
+    <div className="card">
+      <div className="card__header-bcg" />
+      <CardMedia
+        className="card__img"
+        component="img"
+        sx={{ width: 251 }}
+        image={`https://rs-lang-base.herokuapp.com/${word.image}`}
+        alt={word.word}
+      />
+      <div className="card__descr">
+        <div className="card__header">
+          <div>
+            <p className="card__word">
+              {word.word} - {word.transcription} - {word.wordTranslate}
+            </p>
           </div>
-          <CardContent>
-            <Typography component="div" variant="body2" color="text.secondary">
-              <p
-                className="card__mean"
-                dangerouslySetInnerHTML={{ __html: word.textMeaning }}
-              />
-              <p className="card__trans">{word.textMeaningTranslate}</p>
-            </Typography>
-            <hr />
-            <Typography component="div" variant="body2" color="text.secondary">
-              <p
-                className="card__mean"
-                dangerouslySetInnerHTML={{ __html: word.textExample }}
-              />
-              <p className="card__trans">{word.textExampleTranslate}</p>
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Button
-              onClick={() => setHard(prev => !prev)}
-              variant={!hard ? 'outlined' : 'contained'}
-              color="error"
-              fullWidth
-              endIcon={<ErrorOutlineIcon />}
+          <div className="card__sound">
+            <VolumeUpIcon
+              onClick={playSound}
+              className="card__sound-icon"
+              fontSize="large"
+              color={play ? 'success' : 'inherit'}
+            />
+            <audio src={`https://rs-lang-base.herokuapp.com/${word.audio}`}>
+              <track kind="captions" />
+            </audio>
+            <audio
+              src={`https://rs-lang-base.herokuapp.com/${word.audioMeaning}`}
             >
-              Difficult word
-            </Button>
-            <Button
-              onClick={() => setLearned(prev => !prev)}
-              variant={!learned ? 'outlined' : 'contained'}
-              color="success"
-              fullWidth
-              endIcon={<CheckCircleIcon />}
+              <track kind="captions" />
+            </audio>
+            <audio
+              src={`https://rs-lang-base.herokuapp.com/${word.audioExample}`}
             >
-              Learned
-            </Button>
-          </CardActions>
+              <track kind="captions" />
+            </audio>
+          </div>
         </div>
+        <CardContent>
+          <Typography component="div" variant="body2" color="text.secondary">
+            <p
+              className="card__mean"
+              dangerouslySetInnerHTML={{ __html: word.textMeaning }}
+            />
+            <p className="card__trans">{word.textMeaningTranslate}</p>
+          </Typography>
+          <hr />
+          <Typography component="div" variant="body2" color="text.secondary">
+            <p
+              className="card__mean"
+              dangerouslySetInnerHTML={{ __html: word.textExample }}
+            />
+            <p className="card__trans">{word.textExampleTranslate}</p>
+          </Typography>
+        </CardContent>
+        <CardActions>
+          <Button
+            onClick={() => setHard((prev) => !prev)}
+            variant={!hard ? 'outlined' : 'contained'}
+            color="error"
+            fullWidth
+            endIcon={<ErrorOutlineIcon />}
+          >
+            Difficult word
+          </Button>
+          <Button
+            onClick={() => setLearned((prev) => !prev)}
+            variant={!learned ? 'outlined' : 'contained'}
+            color="success"
+            fullWidth
+            endIcon={<CheckCircleIcon />}
+          >
+            Learned
+          </Button>
+        </CardActions>
       </div>
+    </div>
   )
 }

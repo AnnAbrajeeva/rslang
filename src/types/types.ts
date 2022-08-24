@@ -14,3 +14,9 @@ export interface IWord {
   textMeaningTranslate: string
   textExampleTranslate: string
 }
+
+export interface IResult {
+  word: string
+  translation: string
+  isCorrect: boolean
+}

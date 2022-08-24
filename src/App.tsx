@@ -9,6 +9,7 @@ import Footer from './components/Main page/Footer'
 import './App.css'
 import Team from './components/Team page/Team'
 import DictionaryPage from './components/dictionary-page/DictionaryPage/DictionaryPage'
+import Sprint from './components/Games page/Sprint/Sprint'
 
 const theme = createTheme({
   palette: {
@@ -25,7 +26,6 @@ const theme = createTheme({
 })
 
 function App() {
-  const [isFooter, setIsFooter] = useState(true)
   const [nav, setNav] = useState('home')
 
   return (
@@ -38,32 +38,34 @@ function App() {
           <main>
             <Switch>
               <Route exact path="/">
-                <Home setIsFooter={setIsFooter} />
+                <Home />
               </Route>
               <Route path="/book">
-                <DictionaryPage setIsFooter={setIsFooter} />
+                <DictionaryPage />
               </Route>
               <Route path="/stats">
                 <h2>Stats</h2>
               </Route>
               <Route path="/games" exact>
-                <Games setIsFooter={setIsFooter} />
+                <Games />
               </Route>
               <Route path="/games/sprint">
-                <h2>Sprint</h2>
+                <Sprint />
               </Route>
               <Route path="/games/audio-call">
                 <h2>Audio-call</h2>
               </Route>
               <Route path="/team">
-                <Team setIsFooter={setIsFooter} />
+                <Team />
               </Route>
               <Route path="/sign-in">
                 <h2>Sign in</h2>
               </Route>
             </Switch>
           </main>
-          {isFooter && <Footer setValue={setNav} />}
+          {!window.location.href.includes('games') && (
+            <Footer setValue={setNav} />
+          )}
         </div>
       </ThemeProvider>
     </Router>
