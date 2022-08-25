@@ -87,7 +87,7 @@ export default function DictionaryPage(props: {
   }
 
   const learnedPageColor = () => {
-    const color = allLearned ? '8px solid green' : ''
+    const color = allLearned && authData ? '8px solid green' : ''
     return color
   }
 
@@ -120,8 +120,6 @@ interface DictionaryGamesWrapperProps {
 
 function DictionaryGamesWrapper({disabled}: DictionaryGamesWrapperProps) {
 
-  
-
   return (
     <div className={disabled ? 'disabled' : ''}>
       <DictionaryGames />
@@ -136,7 +134,7 @@ interface IDictionaryContentProps {
   group: number
   updateUserWords: () => void
   learnCardsStyle: () => string
-  checkLearnedPage: () => void
+  checkLearnedPage: () => boolean
 }
 
 function DictionaryContent({
@@ -160,7 +158,7 @@ function DictionaryContent({
         />
       </Box>
       {group !== 6 && <Pagination changePage={changePage} />}
-      {words.length > 0 && <DictionaryGamesWrapper disabled={false} />}
+      {words.length > 0 && <DictionaryGamesWrapper disabled={checkLearnedPage()} />}
     </>
   )
 }
