@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
@@ -6,18 +7,30 @@ import { IUserWordParams, IWord } from '../../types/types'
 import RslangApi from '../../api/RslangApi'
 
 const api = new RslangApi()
-api.signInUser({ email: 'aaa@aa.ru', password: '12345678' }).then((res) => {
-  localStorage.setItem('user', JSON.stringify(res))
-  console.log(res)
-})
+// api.signInUser({ email: 'aaa@aa.ru', password: '12345678' }).then((res) => {
+//   localStorage.setItem('user', JSON.stringify(res))
+//   console.log(res)
+// })
+
+function EmptyList() {
+  return <h1 style={{ textAlign: 'center' }}>It's empty yet</h1>
+}
 
 interface IDictionaryProps {
   words: IWord[]
   userWords: IUserWordParams[]
   updateUserWords: () => void
+  learnCardsStyle: () => string
+  checkLearnedPage: () => void
 }
 
-export default function Dictionary({ words, userWords, updateUserWords }: IDictionaryProps) {
+export default function Dictionary({
+  words,
+  userWords,
+  updateUserWords,
+  learnCardsStyle,
+  checkLearnedPage
+}: IDictionaryProps) {
   const addDifficultWord = async (id: string) => {
     const isUserWord = userWords.find((uWord) => uWord.wordId === id)
     if (isUserWord) {
@@ -32,12 +45,12 @@ export default function Dictionary({ words, userWords, updateUserWords }: IDicti
       const wordParams = {
         difficulty: 'hard',
         optional: {
-          studing: true,
           learned: false,
         },
       }
       await api.createUserWord(id, wordParams)
     }
+    updateUserWords()
   }
 
   const addLearnedWord = async (id: string) => {
@@ -46,7 +59,6 @@ export default function Dictionary({ words, userWords, updateUserWords }: IDicti
       const wordParams = { ...isUserWord }
       wordParams.difficulty = 'weak'
       wordParams.optional.learned = true
-      wordParams.optional.studing = true
       delete wordParams.id
       delete wordParams.wordId
       await api.updateUserWord(id, wordParams)
@@ -54,57 +66,55 @@ export default function Dictionary({ words, userWords, updateUserWords }: IDicti
       const wordParams = {
         difficulty: 'weak',
         optional: {
-          studing: true,
           learned: true,
         },
       }
       await api.createUserWord(id, wordParams)
     }
+    updateUserWords()
   }
 
   const removeFromLearned = async (id: string) => {
     const isUserWord = userWords.find((uWord) => uWord.wordId === id)
     if (isUserWord) {
-    const wordParams = { ...isUserWord }
-      wordParams.optional.learned = false
-      delete wordParams.id
-      delete wordParams.wordId
-      await api.updateUserWord(id, wordParams)
+      api.deleteUserWord(isUserWord.wordId!)
     }
+    updateUserWords()
   }
 
   const removeFromHard = async (id: string) => {
     const isUserWord = userWords.find((uWord) => uWord.wordId === id)
     if (isUserWord) {
-    const wordParams = { ...isUserWord }
-      wordParams.difficulty = 'weak'
-      delete wordParams.id
-      delete wordParams.wordId
-      await api.updateUserWord(id, wordParams)
+      api.deleteUserWord(isUserWord.wordId!)
     }
+    updateUserWords()
   }
 
-
   return (
-    <Box sx={{ width: '100%' }}>
-      <Grid container spacing={2}>
-        {words.map((word) => (
-          <Grid item sm={12} key={word.id}>
-            <Card>
-              <DictionaryCard
-                updateUserWords={updateUserWords}
-                infoWord={userWords}
-                addLearnedWord={addLearnedWord}
-                removeFromLearned={removeFromLearned}
-                removeFromHard={removeFromHard}
-                addDifficultWord={addDifficultWord}
-                word={word}
-                key={word.id}
-              />
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
+    <Box sx={{ width: '100%'}}>
+      {words.length ? (
+        <Grid container spacing={2}>
+          {words.map((word) => (
+            <Grid item sm={12} key={word.id} sx={{ paddingRight: '16px' }}>
+              <Card sx={{ border: learnCardsStyle}}>
+                <DictionaryCard
+                  updateUserWords={updateUserWords}
+                  checkLearnedPage={checkLearnedPage}
+                  infoWord={userWords}
+                  addLearnedWord={addLearnedWord}
+                  removeFromLearned={removeFromLearned}
+                  removeFromHard={removeFromHard}
+                  addDifficultWord={addDifficultWord}
+                  word={word}
+                  key={word.id}
+                />
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      ) : (
+        <EmptyList />
+      )}
     </Box>
   )
 }

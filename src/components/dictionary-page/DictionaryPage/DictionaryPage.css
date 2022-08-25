@@ -2,3 +2,8 @@
     width: 100%;
     flex: 1;
 }
+
+.disabled {
+    opacity: 0.2;
+    pointer-events: none;
+}

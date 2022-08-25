@@ -7,6 +7,7 @@ import Button from '@mui/material/Button'
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import VolumeUpIcon from '@mui/icons-material/VolumeUp'
+import { useTypedSelector } from "../../../redux/hooks";
 import { IUserWordParams, IWord } from '../../../types/types'
 import './DictionaryCard.css'
 
@@ -18,6 +19,7 @@ interface DictionaryCardProps {
   removeFromHard: (id: string) => void
   infoWord: IUserWordParams[]
   updateUserWords: () => void
+  checkLearnedPage: () => void
 }
 
 export default function DictionaryCard({
@@ -27,13 +29,15 @@ export default function DictionaryCard({
   removeFromLearned,
   removeFromHard,
   infoWord,
-  updateUserWords
+  updateUserWords,
+  checkLearnedPage
 }: DictionaryCardProps) {
   const wordInfo = infoWord.find((uWord) => uWord.wordId === word.id)
   const [play, setPlay] = useState(false)
   const [hard, setHard] = useState(wordInfo?.difficulty === 'hard')
   const [learned, setLearned] = useState(wordInfo?.optional.learned)
-
+  const { authData } = useTypedSelector(state => state.auth);
+  
   const playSound = () => {
     setPlay((prev) => !prev)
     const audio = [
@@ -69,7 +73,6 @@ export default function DictionaryCard({
       addDifficultWord(id)
       setHard(true)
     }
-    updateUserWords()
   }
 
   const addToLearned = async (id: string) => {
@@ -81,7 +84,6 @@ export default function DictionaryCard({
       setHard(false)
       await addLearnedWord(id)
     }
-    updateUserWords()
   }
 
   return (
@@ -140,7 +142,7 @@ export default function DictionaryCard({
             <p className="card__trans">{word.textExampleTranslate}</p>
           </Typography>
         </CardContent>
-        <CardActions>
+        {authData && <CardActions>
           <Button
             onClick={() => addToDifficult(word.id)}
             variant={!hard ? 'outlined' : 'contained'}
@@ -159,7 +161,7 @@ export default function DictionaryCard({
           >
             Learned
           </Button>
-        </CardActions>
+        </CardActions>}
       </div>
     </div>
   )

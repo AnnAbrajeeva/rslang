@@ -30,13 +30,10 @@ export default class RslangApi {
     return content
   }
 
+  // eslint-disable-next-line consistent-return
   getUserFromLocalStorage = () => {
-    const user = localStorage.getItem('user')
-    if (!user) {
-      throw new Error('Please, log in to app')
-    } else {
-      return JSON.parse(user) as IAuthUser
-    }
+    const user = localStorage.getItem('authData')
+    return JSON.parse(user || '{}') as IAuthUser
   }
 
   // Получение всех слов
@@ -84,7 +81,7 @@ export default class RslangApi {
       body: JSON.stringify(data)
     })
     const content = await res.json() as IUser
-    return content
+    return content 
   }
 
    // Удалить пользователя
@@ -204,7 +201,7 @@ export default class RslangApi {
   deleteUserWord = async (wordId: string) => {
     const {token, userId} = this.getUserFromLocalStorage()
 
-    const res = await fetch(`${this.url}users/${userId}/words/${wordId}`, {
+    await fetch(`${this.url}users/${userId}/words/${wordId}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -212,8 +209,6 @@ export default class RslangApi {
         'Content-Type': 'application/json',
       },
     })
-    const content = await res.json() as IUserWordParams[]
-    return content
   }
 
   // Получить все сложные слова

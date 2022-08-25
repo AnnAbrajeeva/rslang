@@ -1,13 +1,15 @@
 import Box from '@mui/material/Box'
 import LevelOne from './LevelOne'
+import { useTypedSelector } from '../../../redux/hooks'
 import './LevelBox.css'
 
 interface LevelBoxProps {
-  changeLevel: (newGroup: number) => void;
+  changeLevel: (newGroup: number) => void
   group: number
 }
 
-export default function LevelBox({changeLevel, group}: LevelBoxProps) {
+export default function LevelBox({ changeLevel, group }: LevelBoxProps) {
+  const { authData } = useTypedSelector((state) => state.auth)
   const levels = [
     { number: 1, text: 'Beginner', color: '#C097FF' },
     { number: 2, text: 'Pre-Intermediate', color: '#C5CCFF' },
@@ -18,19 +20,40 @@ export default function LevelBox({changeLevel, group}: LevelBoxProps) {
     { number: 7, text: 'Difficult Words', color: '#FF2700' },
   ]
 
+  // eslint-disable-next-line consistent-return
+  const showLevels = (level: { number: number; text: string; color: string }) => {
+    if (level.number !== 7) {
+      return (
+        <LevelOne
+          activeId={group+1}
+          change={changeLevel}
+          level={level}
+          key={level.number}
+        />
+      )
+    }
+    if (level.number === 7 && authData) {
+      return (
+        <LevelOne
+          activeId={group+1}
+          change={changeLevel}
+          level={level}
+          key={level.number}
+        />
+      )
+    } 
+  }
+
   return (
     <Box sx={{ marginBottom: 5, marginTop: 5 }}>
       <h1 className="level-box__title">Choose your English level:</h1>
       <div className="level-box">
         <div className="level-box__wrapper">
-          {levels.map((level) => (
-            <LevelOne
-              activeId={group}
-              change={changeLevel}
-              level={level}
-              key={level.number}
-            />
-          ))}
+          {levels.map(
+            (level) => (
+              showLevels(level)
+            )
+          )}
         </div>
       </div>
     </Box>

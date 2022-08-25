@@ -11,6 +11,7 @@ import Loader from '../../Loader/Loader'
 import './DictionaryPage.css'
 import RslangApi from '../../../api/RslangApi'
 import { IUserWordParams, IWord } from '../../../types/types'
+import { useTypedSelector } from '../../../redux/hooks'
 
 export default function DictionaryPage(props: {
   // eslint-disable-next-line no-unused-vars
@@ -20,25 +21,31 @@ export default function DictionaryPage(props: {
   useEffect(() => setIsFooter(true), [setIsFooter])
 
   const api = new RslangApi()
+  const { authData } = useTypedSelector((state) => state.auth)
 
   const [words, setWords] = useState<IWord[]>([])
   const [userWords, setUserWords] = useState<IUserWordParams[]>([])
   const [loading, setLoading] = useState(false)
   const [page, setPage] = useState(Number(localStorage.getItem('page')) || 0)
-  const [group, setGroup] = useState(Number(localStorage.getItem('group')) || 1)
+  const [group, setGroup] = useState(Number(localStorage.getItem('group')) || 0)
+  const [allLearned, setAllLearned] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true)
       const res = await api.getAllWords(page, group)
-      const uWords = await api.getAllUserWords()
-      if (group === 7) {
-        const hardWords = await api.getAllHardWords()
-        setWords(hardWords)
+      if (authData || localStorage.getItem('authData')) {
+        const uWords = await api.getAllUserWords()
+        setUserWords(uWords)
+        if (group === 6) {
+          const hardWords = await api.getAllHardWords()
+          setWords(hardWords)
+        } else {
+          setWords(res)
+        }
       } else {
         setWords(res)
-      }
-      setUserWords(uWords)
+      }    
       setLoading(false)
     }
     fetchData()
@@ -46,10 +53,25 @@ export default function DictionaryPage(props: {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, group])
 
+  useEffect(() => {
+    setAllLearned(checkLearnedPage())
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userWords])
+
+  const checkLearnedPage = () => {
+    const userWordsId = userWords.map((word) => word.wordId)
+    const wordsId = words.map((word) => word.id)
+    return wordsId.every((id) => userWordsId.includes(id))
+  }
+
   const updateUserWords = async () => {
-    if (group === 7) {
+    if (group === 6) {
       const hardWords = await api.getAllHardWords()
       setWords(hardWords)
+    } else {
+      const uWords = await api.getAllUserWords()
+      setUserWords(uWords)
+      setAllLearned(checkLearnedPage())
     }
   }
 
@@ -59,28 +81,50 @@ export default function DictionaryPage(props: {
   }
 
   const changeLevel = (newGroup: number) => {
-    setGroup(newGroup)
+    setGroup(newGroup-1)
     changePage(1)
-    localStorage.setItem('group', newGroup.toString())
+    localStorage.setItem('group', (newGroup-1).toString())
+  }
+
+  const learnedPageColor = () => {
+    const color = allLearned ? '8px solid green' : ''
+    return color
   }
 
   return (
     <div className="dictionary-page">
       <CssBaseline />
-      <Container sx={{ paddingBottom: 5, paddingTop: 5 }}>
+      <Container sx={{ paddingBottom: 5, paddingTop: 5}}>
         <LevelBox changeLevel={changeLevel} group={group} />
         {loading ? (
           <Loader />
         ) : (
           <DictionaryContent
+            learnCardsStyle={learnedPageColor}
             group={group}
             changePage={changePage}
             words={words}
             userWords={userWords}
             updateUserWords={updateUserWords}
+            checkLearnedPage={checkLearnedPage}
           />
         )}
-      </Container> 
+      </Container>
+    </div>
+  )
+}
+
+interface DictionaryGamesWrapperProps {
+  disabled: boolean
+}
+
+function DictionaryGamesWrapper({disabled}: DictionaryGamesWrapperProps) {
+
+  
+
+  return (
+    <div className={disabled ? 'disabled' : ''}>
+      <DictionaryGames />
     </div>
   )
 }
@@ -91,6 +135,8 @@ interface IDictionaryContentProps {
   changePage: (newPage: number) => void
   group: number
   updateUserWords: () => void
+  learnCardsStyle: () => string
+  checkLearnedPage: () => boolean
 }
 
 function DictionaryContent({
@@ -98,15 +144,23 @@ function DictionaryContent({
   changePage,
   userWords,
   group,
-  updateUserWords
+  updateUserWords,
+  learnCardsStyle,
+  checkLearnedPage
 }: IDictionaryContentProps) {
   return (
     <>
       <Box>
-        <Dictionary updateUserWords={updateUserWords} words={words} userWords={userWords} />
+        <Dictionary
+          updateUserWords={updateUserWords}
+          words={words}
+          userWords={userWords}
+          learnCardsStyle={learnCardsStyle}
+          checkLearnedPage={checkLearnedPage}
+        />
       </Box>
-      {group !== 7 && <Pagination changePage={changePage} />}
-      <DictionaryGames />
+      {group !== 6 && <Pagination changePage={changePage} />}
+      {words.length > 0 && <DictionaryGamesWrapper disabled={checkLearnedPage()} />}
     </>
   )
 }
