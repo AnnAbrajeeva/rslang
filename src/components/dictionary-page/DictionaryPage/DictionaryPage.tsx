@@ -136,7 +136,7 @@ interface IDictionaryContentProps {
   group: number
   updateUserWords: () => void
   learnCardsStyle: () => string
-  checkLearnedPage: () => boolean
+  checkLearnedPage: () => void
 }
 
 function DictionaryContent({
@@ -160,7 +160,7 @@ function DictionaryContent({
         />
       </Box>
       {group !== 6 && <Pagination changePage={changePage} />}
-      {words.length > 0 && <DictionaryGamesWrapper disabled={checkLearnedPage()} />}
+      {words.length > 0 && <DictionaryGamesWrapper disabled={false} />}
     </>
   )
 }
