@@ -23,6 +23,8 @@
       "react", "@typescript-eslint"
   ],
   "rules": {
+      "no-unused-vars": ["error", { "vars": "all", "args": "none", "ignoreRestSiblings": false }],
+      "class-methods-use-this": ["error", { "enforceForClassFields": false }],
       "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".ts", "tsx"] }],
       "react/react-in-jsx-scope": "off",
       "import/extensions": [
@@ -34,7 +36,11 @@
             "ts": "never",
             "tsx": "never"
           }
-       ]
+       ],
+       "import/no-unresolved": [
+        2, 
+        { "caseSensitive": false }
+     ]
   },
   "settings": {
       "import/resolver": {

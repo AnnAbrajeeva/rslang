@@ -10,7 +10,6 @@ interface LevelOneProps {
     color: string
   }
   activeId: number | null
-  // eslint-disable-next-line no-unused-vars
   change: (number: number) => void
 }
 
