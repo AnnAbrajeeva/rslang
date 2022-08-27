@@ -1,5 +1,5 @@
 import { Button, Grid, List, Typography } from '@mui/material'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Cancel, CheckCircle, VolumeUp } from '@mui/icons-material'
 import { IResult } from '../../../types/types'
 
@@ -25,7 +25,7 @@ const ResultItem = (props: {
 export default function Result(props: { result: IResult[]; score: number }) {
   let correctWords = props.result.filter((el) => el.isCorrect).length
   let unCorrectWords = props.result.filter((el) => !el.isCorrect).length
-  const history = useHistory()
+  const navigate = useNavigate()
 
   return (
     <div className="results">
@@ -48,7 +48,7 @@ export default function Result(props: { result: IResult[]; score: number }) {
           <Button
             variant="contained"
             color="primary"
-            onClick={() => history.go(-1)}
+            onClick={() => navigate('/games')}
           >
             Go home
           </Button>

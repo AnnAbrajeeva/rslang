@@ -1,10 +1,9 @@
 import { Button } from '@mui/material'
 import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
-const Footer = (props: { setValue: (arg0: string) => void }) => {
-  const changeNav = () => {
-    props.setValue('team')
-  }
+const Footer = () => {
+  const navigate = useNavigate()
 
   return (
     <footer>
@@ -16,7 +15,11 @@ const Footer = (props: { setValue: (arg0: string) => void }) => {
 
       <div>
         <Link to="/team">
-          <Button variant="contained" color="secondary" onClick={changeNav}>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => navigate('/team')}
+          >
             Our Team
           </Button>
         </Link>

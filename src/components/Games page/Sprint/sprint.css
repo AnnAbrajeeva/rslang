@@ -1,8 +1,17 @@
-.sprint,
+.sprint {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+}
+
 .sprint-cont {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  height: 90%;
+  width: 100%;
 }
 
 .sprint {
@@ -45,10 +54,6 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-}
-
-.sprint-cont {
-  width: 100%;
 }
 
 .sprint-game-cont {
@@ -127,4 +132,28 @@
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
     rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
   background-color: rgb(235, 235, 228);
+}
+
+.alert {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 10%;
+  width: 100%;
+}
+
+.alert > div {
+  width: 30%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.alert div div {
+  font-size: 20px;
+}
+
+.alert div svg {
+  width: 30px;
+  height: 30px;
 }

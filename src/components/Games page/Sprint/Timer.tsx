@@ -55,7 +55,7 @@ export default function Timer(props: { setIsEnded: (arg0: boolean) => void }) {
   useEffect(() => {
     const timer = setInterval(() => {
       setProgress((prevProgress) => (prevProgress > 0 ? prevProgress - 1 : 0))
-    }, 10000)
+    }, 1000)
     if (progress === 0) props.setIsEnded(true)
     return () => {
       clearInterval(timer)

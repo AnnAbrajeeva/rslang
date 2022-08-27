@@ -12,7 +12,7 @@ const IndicatorBtn = (props: { isColor: unknown }) => {
   )
 }
 
-const Indicators = (props: { indicators: Object }) => {
+const Indicators = (props: { indicators: Object; multiplier: number }) => {
   return (
     <>
       {[1, 2, 3].map((el, i) => (
@@ -21,6 +21,7 @@ const Indicators = (props: { indicators: Object }) => {
           isColor={props.indicators[`${el}` as keyof typeof props.indicators]}
         />
       ))}
+      <span>x<b>{props.multiplier}</b></span>
     </>
   )
 }
