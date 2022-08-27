@@ -1,0 +1,184 @@
+.sprint {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  height: 70vh;
+  width: 70%;
+  background-image: linear-gradient(to top, #c1dfc4 0%, #deecdd 100%);
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.sprint-cont {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 90%;
+  width: 100%;
+}
+
+.results {
+  flex-direction: column;
+  width: 100%;
+  margin: 0 50px;
+  max-height: 80%;
+  overflow-y: auto;
+}
+
+.sprint-btns {
+  margin: 20px 0;
+}
+
+.sprint-btns button {
+  margin: 0 20px;
+}
+
+.sprint h1,
+.sprint h1 {
+  margin: 20px 0;
+  padding: 0;
+}
+
+.result-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px;
+}
+
+.result-item div {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.sprint-game-cont {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.time-score {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 20%;
+}
+
+.time-score div {
+  margin: 20px 0;
+}
+
+.score {
+  width: 120px;
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #edf1ff;
+  border-radius: 50%;
+  box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px,
+    rgba(6, 24, 44, 0.65) 0px 4px 6px -1px,
+    rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+}
+
+.score h2 {
+  margin: 0;
+  color: #282d3c;
+}
+
+.levels {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.levels button {
+  width: 50px;
+  height: 50px;
+  font-size: 20px;
+  margin: 20px;
+}
+
+.levels h2 {
+  text-align: center;
+  margin: 20px;
+}
+
+.indicators {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.indicators div {
+  margin: 0;
+}
+
+.indicators-cont {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 300px;
+}
+
+.indicators-btn {
+  width: 35px;
+  height: 35px;
+  margin: 20px 0;
+  border-radius: 50%;
+  border: none;
+  outline: none;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+  background-color: rgb(235, 235, 228);
+}
+
+.indicator-btns {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.indicator-toys {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.indicator-toys img {
+  width: 100px;
+  height: 100px;
+}
+/* 
+.alert {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 10%;
+  width: 100%;
+}
+
+.alert > div {
+  width: 30%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.alert div div {
+  font-size: 20px;
+}
+
+.alert div svg {
+  width: 30px;
+  height: 30px;
+} */

@@ -13,13 +13,7 @@ import RslangApi from '../../../api/RslangApi'
 import { IUserWordParams, IWord } from '../../../types/types'
 import { useTypedSelector } from '../../../redux/hooks'
 
-export default function DictionaryPage(props: {
-  // eslint-disable-next-line no-unused-vars
-  setIsFooter: (arg0: boolean) => void
-}) {
-  const { setIsFooter } = props
-  useEffect(() => setIsFooter(true), [setIsFooter])
-
+export default function DictionaryPage() {
   const api = new RslangApi()
   const { authData } = useTypedSelector((state) => state.auth)
 
@@ -45,7 +39,7 @@ export default function DictionaryPage(props: {
         }
       } else {
         setWords(res)
-      }    
+      }
       setLoading(false)
     }
     fetchData()
@@ -55,7 +49,7 @@ export default function DictionaryPage(props: {
 
   useEffect(() => {
     setAllLearned(checkLearnedPage())
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userWords])
 
   const checkLearnedPage = () => {
@@ -81,9 +75,9 @@ export default function DictionaryPage(props: {
   }
 
   const changeLevel = (newGroup: number) => {
-    setGroup(newGroup-1)
+    setGroup(newGroup - 1)
     changePage(1)
-    localStorage.setItem('group', (newGroup-1).toString())
+    localStorage.setItem('group', (newGroup - 1).toString())
   }
 
   const learnedPageColor = () => {
@@ -94,7 +88,7 @@ export default function DictionaryPage(props: {
   return (
     <div className="dictionary-page">
       <CssBaseline />
-      <Container sx={{ paddingBottom: 5, paddingTop: 5}}>
+      <Container sx={{ paddingBottom: 5, paddingTop: 5 }}>
         <LevelBox changeLevel={changeLevel} group={group} />
         {loading ? (
           <Loader />
@@ -118,8 +112,7 @@ interface DictionaryGamesWrapperProps {
   disabled: boolean
 }
 
-function DictionaryGamesWrapper({disabled}: DictionaryGamesWrapperProps) {
-
+function DictionaryGamesWrapper({ disabled }: DictionaryGamesWrapperProps) {
   return (
     <div className={disabled ? 'disabled' : ''}>
       <DictionaryGames />
@@ -144,7 +137,7 @@ function DictionaryContent({
   group,
   updateUserWords,
   learnCardsStyle,
-  checkLearnedPage
+  checkLearnedPage,
 }: IDictionaryContentProps) {
   return (
     <>
@@ -158,7 +151,9 @@ function DictionaryContent({
         />
       </Box>
       {group !== 6 && <Pagination changePage={changePage} />}
-      {words.length > 0 && <DictionaryGamesWrapper disabled={checkLearnedPage()} />}
+      {words.length > 0 && (
+        <DictionaryGamesWrapper disabled={checkLearnedPage()} />
+      )}
     </>
   )
 }
