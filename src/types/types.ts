@@ -1,7 +1,7 @@
 export interface IWord {
   id: string
-  group: 0
-  page: 0
+  group: number
+  page: number
   word: string
   image: string
   audio: string
@@ -19,4 +19,32 @@ export interface IResult {
   word: string
   translation: string
   isCorrect: boolean
+}
+export interface IUser {
+  name?: string
+  email: string
+  password: string
+}
+
+export interface IAuthUser {
+  message: 'string'
+  token: 'string'
+  refreshToken: 'string'
+  userId: 'string'
+  name: 'string'
+}
+
+export interface IUserWord {
+  difficulty: 'string'
+  optional: {}
+}
+
+export interface IUserStatistics {
+  learnedWords: number
+  optional: {}
+}
+
+export interface IUserSettings {
+  wordsPerDay: number
+  optional: {}
 }
