@@ -4,17 +4,17 @@ import SprintContainer from './SprintGameCont'
 import { useState } from 'react'
 import Result from './Result'
 import SelectLevel from './SelectLevel'
+import LevelBox from '../../dictionary-page/LevelBox/LevelBox'
 
 const Sprint = () => {
   const [isEnded, setIsEnded] = useState(false)
   const [result, setResult] = useState([])
-  const [level, setLevel] = useState(0)
+  const [level, setLevel] = useState(-1)
   const [score, setScore] = useState(0)
-  
 
   return (
     <div className="sprint">
-      {level !== 0 && (
+      {level !== -1 && (
         <>
           {!isEnded && result.length !== 20 && (
             <SprintContainer
@@ -30,7 +30,11 @@ const Sprint = () => {
           )}
         </>
       )}
-      {level === 0 && <SelectLevel setLevel={setLevel} />}
+      {level === -1 && (
+        <div className="levels">
+          <LevelBox changeLevel={setLevel} group={level} />
+        </div>
+      )}
     </div>
   )
 }

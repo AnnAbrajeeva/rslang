@@ -7,7 +7,10 @@ const ResultItem = (props: {
   word: string
   isCorrect: boolean
   translation: string
+  sound: string
 }) => {
+  const audio = new Audio(`https://rs-lang-base.herokuapp.com/${props.sound}`)
+
   return (
     <div className="result-item">
       <div>
@@ -17,7 +20,11 @@ const ResultItem = (props: {
           {props.word} - {props.translation}
         </Typography>
       </div>
-      <VolumeUp />
+      <VolumeUp
+        onClick={() => {
+          audio.play()
+        }}
+      />
     </div>
   )
 }
@@ -59,6 +66,7 @@ export default function Result(props: { result: IResult[]; score: number }) {
               word={el.word}
               isCorrect={el.isCorrect}
               translation={el.translation}
+              sound={el.sound}
               key={i}
             />
           ))}

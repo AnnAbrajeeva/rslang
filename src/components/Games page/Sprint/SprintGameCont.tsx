@@ -1,8 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Alert } from '@mui/material'
+import { Button } from '@mui/material'
 import {
   ArrowCircleLeftOutlined,
   ArrowCircleRightOutlined,
+  Fullscreen,
+  VolumeOff,
+  FullscreenExit,
+  VolumeUp,
 } from '@mui/icons-material'
 import { IResult, IWord } from '../../../types/types'
 import { useEffect } from 'react'
@@ -10,6 +14,11 @@ import { useState } from 'react'
 import Timer from './Timer'
 import Score from './Score'
 import Indicators from './Indicators'
+import RslangApi from '../../../api/RslangApi'
+import Loader from '../../Loader/Loader'
+const correctSound = new Audio(require('./sounds/correct.mp3'))
+const wrongSound = new Audio(require('./sounds/wrong.mp3'))
+const api = new RslangApi()
 
 const SprintContainer = (props: {
   result: IResult[]
@@ -24,18 +33,13 @@ const SprintContainer = (props: {
   let [scoreIndicator, setScoreIndicator] = useState(0)
   let [toyIndicator, setToyIndicator] = useState(0)
   let [indicators, setIndicators] = useState({ 1: false, 2: false, 3: false })
-  let [wrongAlert, setWrongAlert] = useState(false)
-  let [correctAlert, setCorrectAlert] = useState(false)
+  let [fullscreen, setFullscreen] = useState(false)
+  let [volumeOff, setVolumeOff] = useState(false)
 
   useEffect(() => {
-    fetch(
-      `https://rs-lang-base.herokuapp.com/words?page=${Math.floor(
-        Math.random() * 30
-      )}&group=${props.level}`
-    )
-      .then((res) => res.json())
-      .then((data) => setWords(data))
-  }, [props.level])
+    let randomPage = Math.floor(Math.random() * 30)
+    api.getAllWords(randomPage, props.level - 1).then((data) => setWords(data))
+  }, [])
 
   useEffect(() => {
     document.addEventListener('keydown', handleKey)
@@ -52,19 +56,20 @@ const SprintContainer = (props: {
     setIteration((prev) => (prev += 1))
     if (Math.random() < 0.5) setRandomNum(iteration + 1)
     else setRandomNum(Math.floor(Math.random() * 20))
-    setTimeout(() => {
-      setCorrectAlert(false)
-      setWrongAlert(false)
-    }, 1000)
+    correctSound.pause()
+    wrongSound.pause()
+    correctSound.currentTime = 0
+    wrongSound.currentTime = 0
   }
 
   function correctMatch() {
-    setCorrectAlert(true)
+    if (!volumeOff) correctSound.play()
     setToyIndicator((prev) => (prev += 1))
     props.result.push({
       word: words[iteration].word,
       translation: words[iteration].wordTranslate,
       isCorrect: true,
+      sound: words[iteration].audio,
     })
     if (scoreIndicator !== 3) {
       setScoreIndicator((prev) => (prev += 1))
@@ -77,7 +82,7 @@ const SprintContainer = (props: {
   }
 
   function wrongMatch() {
-    setWrongAlert(true)
+    if (!volumeOff) wrongSound.play()
     setToyIndicator(0)
     setScoreIndicator(0)
     setIndicators({ 1: false, 2: false, 3: false })
@@ -85,6 +90,7 @@ const SprintContainer = (props: {
       word: words[iteration].word,
       translation: words[iteration].wordTranslate,
       isCorrect: false,
+      sound: words[iteration].audio,
     })
   }
 
@@ -108,19 +114,47 @@ const SprintContainer = (props: {
 
   return (
     <>
-      {/* <div className="alert">
-        {wrongAlert && (
-          <Alert severity="error">
-            <b>WRONG!</b>
-          </Alert>
+      <div className="sprint-media-btns">
+        {!fullscreen && (
+          <Fullscreen
+            fontSize="large"
+            onClick={() => {
+              if (document.documentElement.requestFullscreen) {
+                setFullscreen(true)
+                document.documentElement.requestFullscreen()
+              }
+            }}
+          />
         )}
-        {correctAlert && (
-          <Alert severity="success">
-            CORRECT!&nbsp;
-            <b style={{ color: '#4caf50' }}>+{scoreIndicator * 5}</b>
-          </Alert>
+        {fullscreen && (
+          <FullscreenExit
+            fontSize="large"
+            onClick={() => {
+              if (document.exitFullscreen) {
+                setFullscreen(false)
+                document.exitFullscreen()
+              }
+            }}
+          />
         )}
-      </div> */}
+        &nbsp;
+        {!volumeOff && (
+          <VolumeOff
+            fontSize="large"
+            onClick={() => {
+              setVolumeOff(true)
+            }}
+          />
+        )}
+        {volumeOff && (
+          <VolumeUp
+            fontSize="large"
+            onClick={() => {
+              setVolumeOff(false)
+            }}
+          />
+        )}
+      </div>
       <div className="sprint-cont">
         {words.length === 20 && iteration !== 20 && (
           <>
@@ -155,11 +189,7 @@ const SprintContainer = (props: {
             </div>
           </>
         )}
-        {words.length !== 20 && (
-          <>
-            <h2>Loading...</h2>
-          </>
-        )}
+        {words.length !== 20 && <Loader />}
       </div>
     </>
   )

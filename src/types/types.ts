@@ -120,6 +120,7 @@ export interface IResult {
   word: string
   translation: string
   isCorrect: boolean
+  sound: string
 }
 export interface IUser {
   name?: string

@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px;
+  padding: 20px;
   height: 70vh;
   width: 70%;
   background-image: linear-gradient(to top, #c1dfc4 0%, #deecdd 100%);
@@ -13,7 +13,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
   height: 90%;
   width: 100%;
 }
@@ -51,6 +51,10 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
+}
+
+.result-item svg {
+  cursor: pointer;
 }
 
 .sprint-game-cont {
@@ -92,22 +96,10 @@
 
 .levels {
   width: 100%;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
 }
 
-.levels button {
-  width: 50px;
-  height: 50px;
-  font-size: 20px;
-  margin: 20px;
-}
-
-.levels h2 {
-  text-align: center;
-  margin: 20px;
+.levels .level {
+  line-height: 1.5;
 }
 
 .indicators {
@@ -158,27 +150,14 @@
   width: 100px;
   height: 100px;
 }
-/* 
-.alert {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 10%;
-  width: 100%;
+
+.sprint-media-btns {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 20px;
 }
 
-.alert > div {
-  width: 30%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.sprint-media-btns svg {
+  cursor: pointer;
 }
-
-.alert div div {
-  font-size: 20px;
-}
-
-.alert div svg {
-  width: 30px;
-  height: 30px;
-} */
