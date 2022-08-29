@@ -1,0 +1,28 @@
+.stat-card {
+    border-radius: 20px;
+    max-width: 500px;
+    width: 100%;
+    padding: 20px 15px;
+    background: linear-gradient(45deg, #c0daff , #edfeff);
+    margin: 0 20px;
+}
+
+.stat-card__table {
+    width: 100%;
+}
+
+.stat-card__title {
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 25px;
+    margin-top: 0;
+}
+
+.stat-card__row td {
+    padding-top: 15px;
+    font-size: 22px;
+}
+
+.stat-card__number {
+    padding-left: 10px;
+}
