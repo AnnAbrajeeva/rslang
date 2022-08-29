@@ -6,12 +6,12 @@ import Container from '@mui/material/Container'
 import Dictionary from '../Dictionary'
 import LevelBox from '../LevelBox/LevelBox'
 import Pagination from '../Pagination/Pagination'
-import DictionaryGames from '../DictionaryGames/DictionaryGames'
 import Loader from '../../Loader/Loader'
 import './DictionaryPage.css'
 import RslangApi from '../../../api/RslangApi'
 import { IUserWordParams, IWord } from '../../../types/types'
 import { useTypedSelector } from '../../../redux/hooks'
+import Games from '../../Games page/Games'
 
 export default function DictionaryPage() {
   const api = new RslangApi()
@@ -115,7 +115,7 @@ interface DictionaryGamesWrapperProps {
 function DictionaryGamesWrapper({ disabled }: DictionaryGamesWrapperProps) {
   return (
     <div className={disabled ? 'disabled' : ''}>
-      <DictionaryGames />
+      <Games />
     </div>
   )
 }
@@ -127,7 +127,7 @@ interface IDictionaryContentProps {
   group: number
   updateUserWords: () => void
   learnCardsStyle: () => string
-  checkLearnedPage: () => boolean
+  checkLearnedPage: () => boolean 
 }
 
 function DictionaryContent({
@@ -150,10 +150,8 @@ function DictionaryContent({
           checkLearnedPage={checkLearnedPage}
         />
       </Box>
-      {group !== 6 && <Pagination changePage={changePage} />}
-      {words.length > 0 && (
-        <DictionaryGamesWrapper disabled={checkLearnedPage()} />
-      )}
+      {group !== 6 && <Pagination checkLearnedPage={checkLearnedPage} changePage={changePage} />}
+      {words.length > 0 && <DictionaryGamesWrapper disabled={checkLearnedPage()} />}
     </>
   )
-}
+} 

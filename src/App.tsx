@@ -15,6 +15,7 @@ import Registration from './components/Registration'
 import './App.css'
 import { BASE_URL } from './redux/thunks'
 import Sprint from './components/Games page/Sprint/Sprint'
+import Statistics from './components/Statistics/StatisticsPage/Statistics';
 
 const theme = createTheme({
   palette: {
@@ -74,7 +75,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/book" element={<DictionaryPage />} />
-            <Route path="/stats" element={<h2>Stats</h2>} />
+            <Route path="/stats" element={<Statistics />} />
             <Route path="/games" element={<Games />} />
             <Route path="/games/sprint" element={<Sprint />} />
             <Route path="/games/audio-call" element={<h2>Audio-call</h2>} />
