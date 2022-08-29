@@ -95,7 +95,7 @@ export default function Dictionary({
       {words.length ? (
         <Grid container spacing={2}>
           {words.map((word) => (
-            <Grid item sm={12} key={word.id} sx={{ paddingRight: '16px' }}>
+            <Grid item sm={12} key={word.id} sx={{ paddingRight: '16px', width: '100%' }}>
               <Card sx={{ border: learnCardsStyle}}>
                 <DictionaryCard
                   updateUserWords={updateUserWords}
