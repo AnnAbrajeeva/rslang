@@ -1,5 +1,5 @@
-import { IUserWord } from '../../../types/IUserWord';
-import { IWord } from '../../../types/IWord';
+import { IUserWord } from '../../../types/auth-audio/IUserWord';
+import { IWord } from '../../../types/auth-audio/IWord';
 
 export interface IChallengeState {
   isStartedFromTextbook: boolean;

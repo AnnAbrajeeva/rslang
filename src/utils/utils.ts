@@ -7,9 +7,9 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable prefer-const */
 /* eslint-disable no-plusplus */
-import { ILocalStatistic } from '../types/ILocalStatistic';
-import { TDifficulty } from '../types/IUserWord';
-import { IWord } from '../types/IWord';
+import { ILocalStatistic } from '../types/auth-audio/ILocalStatistic';
+import { TDifficulty } from '../types/auth-audio/IUserWord';
+import { IWord } from '../types/auth-audio/IWord';
 import AUDIOCHALLENGE from './constants';
 import { TGetWordsByGroup } from './types';
 

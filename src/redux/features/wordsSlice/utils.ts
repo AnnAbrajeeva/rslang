@@ -1,8 +1,8 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable import/prefer-default-export */
-import { IUserWord } from '../../../types/IUserWord';
-import { IWord } from '../../../types/IWord';
+import { IUserWord } from '../../../types/auth-audio/IUserWord';
+import { IWord } from '../../../types/auth-audio/IWord';
 
 export const combineAllWordsWithUserWords = (
   allWords: Array<IWord>,

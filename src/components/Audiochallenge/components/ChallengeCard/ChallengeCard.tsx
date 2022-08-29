@@ -2,7 +2,7 @@
 /* eslint-disable eqeqeq */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/function-component-definition */
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useTypedSelector, useTypedDispatch } from '../../../../redux/hooks';
 import { selectAnswer, submitAnswer } from '../../../../redux/features/audioChallengeSlice';
 import Answer from '../Answer';
@@ -16,11 +16,13 @@ import {
 } from './ChallengeCard.styles';
 import MemoizedAudio from '../Audio';
 
-const correctSound = require('../../../../assets/sounds/correct_answer.wav');
-const wrongSound = require('../../../../assets/sounds/wrong.wav');
+const correctSound = require('../../../../assets/sounds/correct_answer.mp3');
+const wrongSound = require('../../../../assets/sounds/wrong.mp3');
 
 const ChallengeCard: FC = () => {
-  const {
+
+    const [count, setCount] = useState(0);
+    const {
     currentQuestionsSet,
     currentQuestionIndex,
     currentAnswer,
@@ -30,10 +32,11 @@ const ChallengeCard: FC = () => {
 
   const correctAudio = new Audio(correctSound);
   const wrongAudio = new Audio(wrongSound);
-  
+
   const dispatch = useTypedDispatch();
-  
+
   useEffect(() => {
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowRight' && currentAnswer) dispatch(submitAnswer());
     }
@@ -68,7 +71,7 @@ const ChallengeCard: FC = () => {
   return (
     <StyledChallengeCard>
       <StyledQuestionWrapper>
-        <MemoizedAudio src={currentQuestionsSet[currentQuestionIndex].audio} />
+        <MemoizedAudio  count={count} setcount={setCount} src={currentQuestionsSet[currentQuestionIndex].audio} />
         {currentAnswer && <StyledRightAnswer>{question}</StyledRightAnswer>}
       </StyledQuestionWrapper>
       <StyledAnswersWrapper>
@@ -86,7 +89,7 @@ const ChallengeCard: FC = () => {
         Go
       </StyledButton>}
       {!currentAnswer && <StyledButton onClick={handleDontKnowClick}>
-      Don&apos;t know
+        Don&apos;t know
       </StyledButton>}
     </StyledChallengeCard>
   );

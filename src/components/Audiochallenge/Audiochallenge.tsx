@@ -1,6 +1,5 @@
 /* eslint-disable react/function-component-definition */
-import { FC, useEffect } from 'react';
-import { CircularProgress } from '@mui/material';
+import { FC, useEffect} from 'react';
 import { useTypedDispatch, useTypedSelector } from '../../redux/hooks';
 import { fetchAllWords, fetchUserWords, getStatistic } from '../../redux/thunks';
 import { NUM_OF_QUESTIONS, setAnswersSet, setInitialChallengeState, setWordsByLevel, startChallenge } from '../../redux/features/audioChallengeSlice';
@@ -9,6 +8,7 @@ import ResultsTable from './components/ResultsTable';
 import { StyledAlert, Wrapper } from './Audiochallenge.styles';
 import { getWordsByPageAndGroup, getWordsFromTextbookForUser, shuffleArray } from '../../utils';
 import LevelPicker from './components/LevelPicker';
+import Loader from '../Loader/Loader';
 
 
 const Audiochallenge: FC = () => {
@@ -19,7 +19,7 @@ const Audiochallenge: FC = () => {
   const dispatch = useTypedDispatch();
   const user = localStorage.getItem('authData');
   const isShowLevel = !isStartedFromTextbook && !isChallengeStarted && !showResult && fetchAllWordsFulfilled;
-
+  
   useEffect(() => {
     if (!user) {
       const startGame = async () => {
@@ -27,7 +27,7 @@ const Audiochallenge: FC = () => {
         if (isStartedFromTextbook) {
           dispatch(setAnswersSet(allWords));
           const currentWords = shuffleArray(getWordsByPageAndGroup(allWords, group, page)).slice(NUM_OF_QUESTIONS);
-          dispatch(setWordsByLevel(currentWords));
+          await dispatch(setWordsByLevel(currentWords));
           dispatch(startChallenge());
         }
       }
@@ -56,7 +56,7 @@ const Audiochallenge: FC = () => {
 
   return (
     <Wrapper>
-      {!fetchAllWordsFulfilled && <CircularProgress />}
+      {!fetchAllWordsFulfilled && <Loader/>}
       {isChallengeStarted && !currentQuestionsSet.length && <StyledAlert severity="info">Words for the game are not found. Restart the game.</StyledAlert>}
       {isShowLevel && <LevelPicker />}
       {fetchAllWordsFulfilled && isChallengeStarted && !showResult && currentQuestionsSet.length && <ChallengeCard />}

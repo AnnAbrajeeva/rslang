@@ -1,5 +1,5 @@
-import { IStatistic } from '../types/IStatistic';
-import { IUserWord } from '../types/IUserWord';
+import { IStatistic } from '../types/auth-audio/IStatistic';
+import { IUserWord } from '../types/auth-audio/IUserWord';
 import { IAuthUser } from '../types/types';
 
 export interface ISignIn {

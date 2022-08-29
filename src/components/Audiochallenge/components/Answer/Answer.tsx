@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 /* eslint-disable react/function-component-definition */
 import { FC, useEffect } from 'react';
 import { useTypedDispatch, useTypedSelector } from '../../../../redux/hooks';
@@ -11,14 +12,14 @@ const Answer: FC<AnswerProps> = ({ value, answerText, currentAnswer, correctAnsw
   const isButtonsBlocked = useTypedSelector(state => state.challenge.isButtonsBlocked);
   const dispatch = useTypedDispatch();
 
-  const correctAudio = new Audio('../../../../assets/sounds/correct_answer.wav');
-  const wrongAudio = new Audio('../../../../assets/sounds/wrong.wav');
+  const correctAudio = new Audio('../../../../assets/sounds/correct_answer.mp3');
+  const wrongAudio = new Audio('../../../../assets/sounds/wrong.mp3');
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (Number(e.key) === value && !isButtonsBlocked) {
         if (correctAnswer === answerText) correctAudio.play();
-        if (correctAnswer !== answerText) wrongAudio.play();
+        if (correctAnswer != answerText) wrongAudio.play();
         dispatch(selectAnswer(answerText));
       }
     }

@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, current, PayloadAction } from '@reduxjs/toolkit';
-import { IUserWord } from '../../../types/IUserWord';
-import { IWord } from '../../../types/IWord';
+import { IUserWord } from '../../../types/auth-audio/IUserWord';
+import { IWord } from '../../../types/auth-audio/IWord';
 import { fetchAllWords, fetchUserWords } from '../../thunks';
 import { IWordsState } from './types';
 import { combineAllWordsWithUserWords } from './utils';

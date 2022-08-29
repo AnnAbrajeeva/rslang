@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IStatistic } from '../../../types/IStatistic';
+import { IStatistic } from '../../../types/auth-audio/IStatistic';
 import { getStatistic } from '../../thunks';
 import { IStatisticState } from './types';
 

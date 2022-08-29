@@ -1,4 +1,4 @@
-import { IWord } from '../../../types/IWord';
+import { IWord } from '../../../types/auth-audio/IWord';
 
 export interface IWordsState {
   allWords: Array<IWord> | [];

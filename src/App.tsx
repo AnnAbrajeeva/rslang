@@ -13,8 +13,9 @@ import DictionaryPage from './components/dictionary-page/DictionaryPage/Dictiona
 import Auth from './components/Auth page/Auth'
 import Registration from './components/Registration'
 import './App.css'
-import { BASE_URL } from './redux/thunks'
+import { BASE_URL, fetchAllWords } from './redux/thunks'
 import Sprint from './components/Games page/Sprint/Sprint'
+import Audiochallenge from './components/Audiochallenge'
 
 
 const theme = createTheme({
@@ -42,7 +43,7 @@ function App() {
     const page = localStorage.getItem('page');
     if (!group) localStorage.setItem('group', String(0));
     if (!page) localStorage.setItem('page', String(0));
-
+    dispatch(fetchAllWords());
 
     if (authUserDataLS) {
       const parsedAuthData = JSON.parse(authUserDataLS);
@@ -91,7 +92,8 @@ function App() {
             <Route path="/stats" element={<h2>Stats</h2>} />
             <Route path="/games" element={<Games />} />
             <Route path="/games/sprint" element={<Sprint />} />
-            <Route path="/games/audio-call" element={<h2>Audio-call</h2>} />
+            <Route path="/games/audio-call" element={<Audiochallenge/>} />
+            <Route path="/games/audio-calll" element={<Audiochallenge/>} />
             <Route path="/team" element={<Team />} />
             <Route path="/sign-in" element={<Auth />} />
             <Route path="/registration" element={<Registration />} />

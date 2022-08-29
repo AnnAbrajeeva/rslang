@@ -1,4 +1,4 @@
-import { IDailyResult, IStatistic } from '../../../types/IStatistic';
+import { IDailyResult, IStatistic } from '../../../types/auth-audio/IStatistic';
 
 export interface IStatisticState {
   statisticData: IStatistic | {};

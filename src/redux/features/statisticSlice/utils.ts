@@ -1,6 +1,6 @@
 /* eslint-disable consistent-return */
 /* eslint-disable import/prefer-default-export */
-import { IStatistic } from '../../../types/IStatistic';
+import { IStatistic } from '../../../types/auth-audio/IStatistic';
 import { getCurrentDate, isObjectEmpty } from '../../../utils';
 import { TDailyResults, TLearnedWordsIds } from './types';
 
