@@ -139,7 +139,7 @@ const SprintContainer = (props: {
         )}
         &nbsp;
         {!volumeOff && (
-          <VolumeOff
+          <VolumeUp
             fontSize="large"
             onClick={() => {
               setVolumeOff(true)
@@ -147,7 +147,7 @@ const SprintContainer = (props: {
           />
         )}
         {volumeOff && (
-          <VolumeUp
+          <VolumeOff
             fontSize="large"
             onClick={() => {
               setVolumeOff(false)
