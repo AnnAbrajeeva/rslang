@@ -37,7 +37,7 @@ const SprintContainer = (props: {
 
   useEffect(() => {
     let randomPage = Math.floor(Math.random() * 30)
-    api.getAllWords(10, props.level - 1).then((data) => setWords(data))
+    api.getAllWords(randomPage, props.level - 1).then((data) => setWords(data))
   }, [])
 
   useEffect(() => {
