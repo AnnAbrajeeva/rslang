@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useTypedDispatch } from './redux/hooks'
 import { setAuthUserData } from './redux/features/authSlice'
-import Navbar from './components/Main page/Navbar'
 import Home from './components/Main page/Home'
+import Header from './components/Main page/Header';
 import Games from './components/Games page/Games'
 import Footer from './components/Main page/Footer'
 import Team from './components/Team page/Team'
@@ -15,6 +15,7 @@ import Registration from './components/Registration'
 import './App.css'
 import { BASE_URL } from './redux/thunks'
 import Sprint from './components/Games page/Sprint/Sprint'
+
 
 const theme = createTheme({
   palette: {
@@ -31,44 +32,57 @@ const theme = createTheme({
 })
 
 function App() {
-  const [nav, setNav] = useState('home')
-  const dispatch = useTypedDispatch()
+  const [nav, setNav] = useState('home');
+  const dispatch = useTypedDispatch();
 
   useEffect(() => {
-    const authUserDataLS = localStorage.authData
+    const authUserDataLS = localStorage.getItem('authData');
+    if (authUserDataLS) dispatch(setAuthUserData(JSON.parse(authUserDataLS)));
+    const group = localStorage.getItem('group');
+    const page = localStorage.getItem('page');
+    if (!group) localStorage.setItem('group', String(0));
+    if (!page) localStorage.setItem('page', String(0));
 
-    if (authUserDataLS) dispatch(setAuthUserData(JSON.parse(authUserDataLS)))
 
     if (authUserDataLS) {
-      const parsedAuthData = JSON.parse(authUserDataLS)
-      const userID = parsedAuthData.userId
-      const { refreshToken } = parsedAuthData
-      ;(async () => {
-        const response = await axios.get(`${BASE_URL}/users/${userID}/tokens`, {
-          headers: {
-            Authorization: `Bearer ${refreshToken}`,
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-        })
-        const newAuthData = {
-          ...parsedAuthData,
-          token: response.data.token,
-          refreshToken: response.data.refreshToken,
-        }
+      const parsedAuthData = JSON.parse(authUserDataLS);
+      const { refreshToken, userId } = parsedAuthData;
 
-        localStorage.removeItem('authData')
-        localStorage.setItem('authData', JSON.stringify(newAuthData))
-        dispatch(setAuthUserData(newAuthData))
-      })()
+      (async () => {
+        try {
+          const response = await axios.get(
+            `${BASE_URL}/users/${userId}/tokens`,
+            {
+              headers: {
+                Authorization: `Bearer ${refreshToken}`,
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+              },
+            }
+          );
+          const newAuthData = {
+            ...parsedAuthData,
+            token: response.data.token,
+            refreshToken: response.data.refreshToken,
+          };
+          localStorage.removeItem('authData');
+          localStorage.setItem('authData', JSON.stringify(newAuthData));
+          dispatch(setAuthUserData(newAuthData));
+
+        } catch (e) {
+          // dispatch(setAuthUserData(null));
+          // localStorage.removeItem('authData');
+          // navigate('/sign-in');
+        }
+      })();
     }
-  }, [])
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
       <div className="wrapper">
         <header>
-          <Navbar value={nav} setValue={setNav} />
+        <Header value={nav} setValue={setNav} />
         </header>
         <main>
           <Routes>
@@ -91,4 +105,4 @@ function App() {
   )
 }
 
-export default App
+export default App;
