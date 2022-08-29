@@ -1,4 +1,3 @@
-/* eslint-disable import/named */
 /* eslint-disable import/no-duplicates */
 /* eslint-disable consistent-return */
 /* eslint-disable no-underscore-dangle */
@@ -18,7 +17,7 @@ import {
 } from './types';
 
 export const BASE_URL = 'https://rs-lang-base.herokuapp.com';
-
+export const BASE_URL2 = 'https://zoukman-rslang.herokuapp.com';
 
 export const createUser = createAsyncThunk(
   'thunks/createUser',
@@ -63,7 +62,7 @@ export const fetchAllWords = createAsyncThunk(
   'thunks/fetchAllWords',
   async (_, thunkAPI) => {
     try {
-      const response = await axios.get(`https://zoukman-rslang.herokuapp.com/wordsAll`); 
+      const response = await axios.get(`${BASE_URL2}/wordsAll`); 
       return response.data.map((el: any) =>
         ({ ...el, _id: el._id.$oid })
       );

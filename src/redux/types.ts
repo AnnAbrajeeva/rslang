@@ -1,3 +1,4 @@
+import { IStatistic } from '../types/IStatistic';
 import { IUserWord } from '../types/IUserWord';
 import { IAuthUser } from '../types/types';
 
@@ -27,6 +28,11 @@ export interface IDeleteUserWord {
   userId: string;
   wordId: string;
   token: string;
+}
+
+export interface ISendStatistic {
+  userData: IAuthUser;
+  newStatistic: IStatistic;
 }
 
 export interface IPostUserWord {
