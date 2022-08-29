@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { Button } from '@mui/material'
 import {
   ArrowCircleLeftOutlined,
