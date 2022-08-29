@@ -69,6 +69,7 @@ const SprintContainer = (props: {
       translation: words[iteration].wordTranslate,
       isCorrect: true,
       sound: words[iteration].audio,
+      id: words[iteration].id,
     })
     if (scoreIndicator !== 3) {
       setScoreIndicator((prev) => (prev += 1))
@@ -90,6 +91,7 @@ const SprintContainer = (props: {
       translation: words[iteration].wordTranslate,
       isCorrect: false,
       sound: words[iteration].audio,
+      id: words[iteration].id,
     })
   }
 

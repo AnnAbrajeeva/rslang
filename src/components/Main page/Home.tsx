@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import './main.css'
 
 const Home = () => {
   return (

@@ -1,5 +1,7 @@
-import { Button } from '@mui/material'
+import { Button, ButtonGroup } from '@mui/material'
 import { Link } from 'react-router-dom'
+import FooterLinks from './FooterLinks'
+import './main.css'
 
 const Footer = (props: { setValue: (arg0: string) => void }) => {
   const changeNav = () => {
@@ -14,13 +16,18 @@ const Footer = (props: { setValue: (arg0: string) => void }) => {
 
       <h3>2022</h3>
 
-      <div>
-        <Link to="/team">
-          <Button variant="contained" color="secondary" onClick={changeNav}>
-            Our Team
-          </Button>
-        </Link>
-      </div>
+      <ButtonGroup
+        variant="contained"
+        aria-label="outlined primary button group"
+        color="secondary"
+      >
+        <Button onClick={changeNav}>
+          <Link to="/team">Our Team</Link>
+        </Button>
+        <Button>
+          <FooterLinks />
+        </Button>
+      </ButtonGroup>
     </footer>
   )
 }

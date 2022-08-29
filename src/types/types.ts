@@ -35,6 +35,7 @@ export interface IUserWordParams {
   optional: {
     learned?: boolean
     studing?: boolean
+    correctGuess?: number
   }
   wordId?: string
 }
@@ -121,7 +122,9 @@ export interface IResult {
   translation: string
   isCorrect: boolean
   sound: string
+  id: string
 }
+
 export interface IUser {
   name?: string
   email: string
