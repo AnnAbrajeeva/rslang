@@ -37,7 +37,7 @@ const SprintContainer = (props: {
 
   useEffect(() => {
     let randomPage = Math.floor(Math.random() * 30)
-    api.getAllWords(randomPage, props.level - 1).then((data) => setWords(data))
+    api.getAllWords(10, props.level - 1).then((data) => setWords(data))
   }, [])
 
   useEffect(() => {
@@ -69,6 +69,7 @@ const SprintContainer = (props: {
       translation: words[iteration].wordTranslate,
       isCorrect: true,
       sound: words[iteration].audio,
+      id: words[iteration].id,
     })
     if (scoreIndicator !== 3) {
       setScoreIndicator((prev) => (prev += 1))
@@ -90,6 +91,7 @@ const SprintContainer = (props: {
       translation: words[iteration].wordTranslate,
       isCorrect: false,
       sound: words[iteration].audio,
+      id: words[iteration].id,
     })
   }
 

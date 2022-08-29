@@ -2,13 +2,38 @@ import { Button, Grid, List, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { Cancel, CheckCircle, VolumeUp } from '@mui/icons-material'
 import { IResult } from '../../../types/types'
+import RslangApi from '../../../api/RslangApi'
+import { useEffect } from 'react'
+const api = new RslangApi()
 
 const ResultItem = (props: {
   word: string
   isCorrect: boolean
   translation: string
   sound: string
+  id: string
 }) => {
+  useEffect(() => {
+    if (props.isCorrect) {
+      api
+        .getUserWord(props.id)
+        .then((data) => {
+          if (data.wordId && data.optional.correctGuess) {
+            api.updateUserWord(data.wordId, {
+              difficulty: data.difficulty,
+              optional: { correctGuess: data.optional.correctGuess + 1 },
+            })
+          }
+        })
+        .catch((err) => {
+          api.createUserWord(props.id, {
+            difficulty: 'weak',
+            optional: { correctGuess: 1 },
+          })
+        })
+    }
+  }, [props.id, props.isCorrect, props.word])
+
   const audio = new Audio(`https://rs-lang-base.herokuapp.com/${props.sound}`)
 
   return (
@@ -67,6 +92,7 @@ export default function Result(props: { result: IResult[]; score: number }) {
               isCorrect={el.isCorrect}
               translation={el.translation}
               sound={el.sound}
+              id={el.id}
               key={i}
             />
           ))}
