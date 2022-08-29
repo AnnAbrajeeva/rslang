@@ -12,6 +12,7 @@ import './DictionaryPage.css'
 import RslangApi from '../../../api/RslangApi'
 import { IUserWordParams, IWord } from '../../../types/types'
 import { useTypedSelector } from '../../../redux/hooks'
+import Games from '../../Games page/Games'
 
 export default function DictionaryPage() {
   const api = new RslangApi()
@@ -152,7 +153,8 @@ function DictionaryContent({
       </Box>
       {group !== 6 && <Pagination changePage={changePage} />}
       {words.length > 0 && (
-        <DictionaryGamesWrapper disabled={checkLearnedPage()} />
+        // <DictionaryGamesWrapper disabled={checkLearnedPage()} />
+        <Games />
       )}
     </>
   )

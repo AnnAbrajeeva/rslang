@@ -1,10 +1,14 @@
-import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import './games.css'
 
 const GameBox = (props: { num: number; type: string }) => {
   return (
-    <div className="game-box">
+    <span
+      className="game-box"
+      onClick={() => {
+        console.log(window.location.href)
+      }}
+    >
       <img
         src={require(`./images/game${props.num}-bg.gif`)}
         alt=""
@@ -13,11 +17,11 @@ const GameBox = (props: { num: number; type: string }) => {
       <div className="about-game">
         <h2 className="game-name">{props.type}</h2>
       </div>
-    </div>
+    </span>
   )
 }
 
-const Games = () => {
+const Games = (props: { dicLevel?: number; dicPage?: number }) => {
   return (
     <div className="games">
       <Link to="/games/audio-call">
