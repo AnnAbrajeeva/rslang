@@ -6,7 +6,6 @@ import Container from '@mui/material/Container'
 import Dictionary from '../Dictionary'
 import LevelBox from '../LevelBox/LevelBox'
 import Pagination from '../Pagination/Pagination'
-import DictionaryGames from '../DictionaryGames/DictionaryGames'
 import Loader from '../../Loader/Loader'
 import './DictionaryPage.css'
 import RslangApi from '../../../api/RslangApi'
@@ -116,7 +115,7 @@ interface DictionaryGamesWrapperProps {
 function DictionaryGamesWrapper({ disabled }: DictionaryGamesWrapperProps) {
   return (
     <div className={disabled ? 'disabled' : ''}>
-      <DictionaryGames />
+      <Games />
     </div>
   )
 }
@@ -151,10 +150,15 @@ function DictionaryContent({
           checkLearnedPage={checkLearnedPage}
         />
       </Box>
-      {group !== 6 && <Pagination changePage={changePage} />}
+
+      {group !== 6 && (
+        <Pagination
+          checkLearnedPage={checkLearnedPage}
+          changePage={changePage}
+        />
+      )}
       {words.length > 0 && (
-        // <DictionaryGamesWrapper disabled={checkLearnedPage()} />
-        <Games />
+        <DictionaryGamesWrapper disabled={checkLearnedPage()} />
       )}
     </>
   )
