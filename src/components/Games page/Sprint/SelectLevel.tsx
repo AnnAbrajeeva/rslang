@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Button } from '@mui/material'
 
 const SelectLevel = (props: { setLevel: (arg0: number) => void }) => {

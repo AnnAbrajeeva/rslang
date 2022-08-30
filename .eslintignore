@@ -3,3 +3,10 @@ Home.tsx
 Navbar.tsx
 Games.tsx
 Team.tsx
+Indicators.tsx
+Result.tsx
+Score.tsx
+SelectLevel.tsx
+Sprint.tsx
+SprintGameCont.tsx
+Timer.tsx

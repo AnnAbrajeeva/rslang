@@ -1,4 +1,8 @@
 /* eslint-disable */
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8fc97c7 (fix: eslint)
 import { Button } from '@mui/material'
 import {
   ArrowCircleLeftOutlined,

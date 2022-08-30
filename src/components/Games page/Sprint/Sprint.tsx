@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import Timer from './Timer'
 import './sprint.css'
 import SprintContainer from './SprintGameCont'

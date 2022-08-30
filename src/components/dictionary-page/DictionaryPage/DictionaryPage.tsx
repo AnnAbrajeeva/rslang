@@ -30,6 +30,7 @@ export default function DictionaryPage() {
       const res = await api.getAllWords(page, group)
       if (authData || localStorage.getItem('authData')) {
         const uWords = await api.getAllUserWords()
+        console.log(uWords)
         setUserWords(uWords)
         if (group === 6) {
           const hardWords = await api.getAllHardWords()
@@ -65,7 +66,7 @@ export default function DictionaryPage() {
     } else {
       const uWords = await api.getAllUserWords()
       setUserWords(uWords)
-      setAllLearned(checkLearnedPage())
+      setAllLearned(checkLearnedPage()) 
     }
   }
 

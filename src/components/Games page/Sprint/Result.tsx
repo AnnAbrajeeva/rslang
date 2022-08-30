@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Button, Grid, List, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { Cancel, CheckCircle, VolumeUp } from '@mui/icons-material'
