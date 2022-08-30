@@ -15,7 +15,7 @@ import Registration from './components/Registration'
 import './App.css'
 import { BASE_URL } from './redux/thunks'
 import Sprint from './components/Games page/Sprint/Sprint'
-import Statistics from './components/Statistics/StatisticsPage/Statistics';
+import Statistics from './components/Statistics/StatisticsPage/Statistics'
 
 const theme = createTheme({
   palette: {
@@ -33,6 +33,7 @@ const theme = createTheme({
 
 function App() {
   const [nav, setNav] = useState('home')
+  const [isGameBeforeDic, setIsGameBeforeDic] = useState(false)
   const dispatch = useTypedDispatch()
 
   useEffect(() => {
@@ -76,8 +77,14 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/book" element={<DictionaryPage />} />
             <Route path="/stats" element={<Statistics />} />
-            <Route path="/games" element={<Games />} />
-            <Route path="/games/sprint" element={<Sprint />} />
+            <Route
+              path="/games"
+              element={<Games gameBefDic={setIsGameBeforeDic} />}
+            />
+            <Route
+              path="/games/sprint"
+              element={<Sprint gameBefDic={isGameBeforeDic} />}
+            />
             <Route path="/games/audio-call" element={<h2>Audio-call</h2>} />
             <Route path="/team" element={<Team />} />
             <Route path="/sign-in" element={<Auth />} />

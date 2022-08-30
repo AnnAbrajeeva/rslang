@@ -6,11 +6,13 @@ import Result from './Result'
 import SelectLevel from './SelectLevel'
 import LevelBox from '../../dictionary-page/LevelBox/LevelBox'
 
-const Sprint = () => {
+const Sprint = (props: { gameBefDic: boolean }) => {
   const [isEnded, setIsEnded] = useState(false)
   const [result, setResult] = useState([])
   const [level, setLevel] = useState(-1)
   const [score, setScore] = useState(0)
+
+  if (props.gameBefDic) setLevel(Number(localStorage.group))
 
   return (
     <div className="sprint">

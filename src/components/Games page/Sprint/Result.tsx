@@ -8,61 +8,66 @@ const api = new RslangApi()
 
 const ResultItem = (properties: { props: IResult }) => {
   const props = properties.props
+  let callFunctionOnce = 1
 
   useEffect(() => {
-    if (localStorage.authData) {
-      api
-        .getUserWord(props.id)
-        .then((data) => {
-          if (
-            data.wordId &&
-            data.optional.correctGuess &&
-            data.optional.wrongGuess
-          ) {
+    if (callFunctionOnce === 1) {
+      callFunctionOnce++
+
+      if (localStorage.authData) {
+        api
+          .getUserWord(props.id)
+          .then((data) => {
+            if (
+              data.wordId &&
+              data.optional.correctGuess &&
+              data.optional.wrongGuess
+            ) {
+              if (props.isCorrect) {
+                api.updateUserWord(data.wordId, {
+                  difficulty: data.difficulty,
+                  optional: {
+                    correctGuess: data.optional.correctGuess + 1,
+                    isNewWord: false,
+                    guessTime: Date.now(),
+                  },
+                })
+              } else if (!props.isCorrect) {
+                api.updateUserWord(data.wordId, {
+                  difficulty: data.difficulty,
+                  optional: {
+                    wrongGuess: data.optional.wrongGuess + 1,
+                    isNewWord: false,
+                    guessTime: Date.now(),
+                  },
+                })
+              }
+            }
+          })
+          .catch((err) => {
             if (props.isCorrect) {
-              api.updateUserWord(data.wordId, {
-                difficulty: data.difficulty,
+              api.createUserWord(props.id, {
+                difficulty: 'weak',
                 optional: {
-                  correctGuess: data.optional.correctGuess + 1,
-                  isNewWord: false,
+                  correctGuess: 1,
                   guessTime: Date.now(),
+                  isNewWord: true,
                 },
               })
             } else if (!props.isCorrect) {
-              api.updateUserWord(data.wordId, {
-                difficulty: data.difficulty,
+              api.createUserWord(props.id, {
+                difficulty: 'weak',
                 optional: {
-                  wrongGuess: data.optional.wrongGuess + 1,
-                  isNewWord: false,
+                  wrongGuess: 1,
                   guessTime: Date.now(),
+                  isNewWord: true,
                 },
               })
             }
-          }
-        })
-        .catch((err) => {
-          if (props.isCorrect) {
-            api.createUserWord(props.id, {
-              difficulty: 'weak',
-              optional: {
-                correctGuess: 1,
-                guessTime: Date.now(),
-                isNewWord: true,
-              },
-            })
-          } else if (!props.isCorrect) {
-            api.createUserWord(props.id, {
-              difficulty: 'weak',
-              optional: {
-                wrongGuess: 1,
-                guessTime: Date.now(),
-                isNewWord: true,
-              },
-            })
-          }
-        })
+          })
+      }
     }
-  }, [props.id, props.isCorrect, props.word])
+  }, [props.id, props.isCorrect])
 
   const audio = new Audio(`https://rs-lang-base.herokuapp.com/${props.sound}`)
 
