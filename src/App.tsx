@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useTypedDispatch } from './redux/hooks'
 import { setAuthUserData } from './redux/features/authSlice'
-import Navbar from './components/Main page/Navbar'
 import Home from './components/Main page/Home'
+import Header from './components/Main page/Header';
 import Games from './components/Games page/Games'
 import Footer from './components/Main page/Footer'
 import Team from './components/Team page/Team'
@@ -13,9 +13,11 @@ import DictionaryPage from './components/dictionary-page/DictionaryPage/Dictiona
 import Auth from './components/Auth page/Auth'
 import Registration from './components/Registration'
 import './App.css'
-import { BASE_URL } from './redux/thunks'
+import { BASE_URL, fetchAllWords } from './redux/thunks'
 import Sprint from './components/Games page/Sprint/Sprint'
-import Statistics from './components/Statistics/StatisticsPage/Statistics'
+import Audiochallenge from './components/Audiochallenge'
+import Statistics from './components/Statistics/StatisticsPage/Statistics';
+
 
 const theme = createTheme({
   palette: {
@@ -37,40 +39,53 @@ function App() {
   const dispatch = useTypedDispatch()
 
   useEffect(() => {
-    const authUserDataLS = localStorage.authData
-
-    if (authUserDataLS) dispatch(setAuthUserData(JSON.parse(authUserDataLS)))
+    const authUserDataLS = localStorage.getItem('authData');
+    if (authUserDataLS) dispatch(setAuthUserData(JSON.parse(authUserDataLS)));
+    const group = localStorage.getItem('group');
+    const page = localStorage.getItem('page');
+    if (!group) localStorage.setItem('group', String(0));
+    if (!page) localStorage.setItem('page', String(0));
+    dispatch(fetchAllWords());
 
     if (authUserDataLS) {
-      const parsedAuthData = JSON.parse(authUserDataLS)
-      const userID = parsedAuthData.userId
-      const { refreshToken } = parsedAuthData
-      ;(async () => {
-        const response = await axios.get(`${BASE_URL}/users/${userID}/tokens`, {
-          headers: {
-            Authorization: `Bearer ${refreshToken}`,
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-        })
-        const newAuthData = {
-          ...parsedAuthData,
-          token: response.data.token,
-          refreshToken: response.data.refreshToken,
-        }
+      const parsedAuthData = JSON.parse(authUserDataLS);
+      const { refreshToken, userId } = parsedAuthData;
 
-        localStorage.removeItem('authData')
-        localStorage.setItem('authData', JSON.stringify(newAuthData))
-        dispatch(setAuthUserData(newAuthData))
-      })()
+      (async () => {
+        try {
+          const response = await axios.get(
+            `${BASE_URL}/users/${userId}/tokens`,
+            {
+              headers: {
+                Authorization: `Bearer ${refreshToken}`,
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+              },
+            }
+          );
+          const newAuthData = {
+            ...parsedAuthData,
+            token: response.data.token,
+            refreshToken: response.data.refreshToken,
+          };
+          localStorage.removeItem('authData');
+          localStorage.setItem('authData', JSON.stringify(newAuthData));
+          dispatch(setAuthUserData(newAuthData));
+
+        } catch (e) {
+          // dispatch(setAuthUserData(null));
+          // localStorage.removeItem('authData');
+          // navigate('/sign-in');
+        }
+      })();
     }
-  }, [])
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
       <div className="wrapper">
         <header>
-          <Navbar value={nav} setValue={setNav} />
+        <Header value={nav} setValue={setNav} />
         </header>
         <main>
           <Routes>
@@ -85,7 +100,9 @@ function App() {
               path="/games/sprint"
               element={<Sprint gameBefDic={isGameBeforeDic} />}
             />
-            <Route path="/games/audio-call" element={<h2>Audio-call</h2>} />
+            <Route path="/games/sprint" element={<Sprint />} />
+            <Route path="/games/audio-call" element={<Audiochallenge/>} />
+            <Route path="/games/audio-calll" element={<Audiochallenge/>} />
             <Route path="/team" element={<Team />} />
             <Route path="/sign-in" element={<Auth />} />
             <Route path="/registration" element={<Registration />} />
@@ -99,4 +116,4 @@ function App() {
   )
 }
 
-export default App
+export default App;
