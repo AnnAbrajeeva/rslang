@@ -1,10 +1,16 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import registration from './features/registrationSlice';
 import auth from './features/authSlice';
+import challenge from './features/audioChallengeSlice';
+import words from './features/wordsSlice';
+import statistic from './features/statisticSlice';
 
 const rootReducer = combineReducers({
   registration,
-  auth
+  auth,
+  challenge,
+  words,
+  statistic,
 });
 
 export const store = configureStore({
