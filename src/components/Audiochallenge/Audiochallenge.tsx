@@ -1,4 +1,4 @@
-/* eslint-disable react/function-component-definition */
+/* eslint-disable */
 import { FC, useEffect} from 'react';
 import { useTypedDispatch, useTypedSelector } from '../../redux/hooks';
 import { fetchAllWords, fetchUserWords, getStatistic } from '../../redux/thunks';
@@ -9,10 +9,10 @@ import { StyledAlert, Wrapper } from './Audiochallenge.styles';
 import { getWordsByPageAndGroup, getWordsFromTextbookForUser, shuffleArray } from '../../utils';
 import LevelPicker from './components/LevelPicker';
 import Loader from '../Loader/Loader';
-
+import { isGameBeforeDic as isStartedFromTextbook } from '../Games page/Games';
 
 const Audiochallenge: FC = () => {
-  const { isStartedFromTextbook, isChallengeStarted, showResult, currentQuestionsSet } = useTypedSelector(state => state.challenge);
+  const { isChallengeStarted, showResult, currentQuestionsSet } = useTypedSelector(state => state.challenge);
   const { fetchAllWordsFulfilled, allWords } = useTypedSelector(state => state.words);
   const group = localStorage.getItem('group') ? Number(localStorage.getItem('group')) : 0;
   const page = localStorage.getItem('page') ? Number(localStorage.getItem('page')) : 0;

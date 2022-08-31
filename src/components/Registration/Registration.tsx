@@ -1,5 +1,4 @@
-/* eslint-disable react/function-component-definition */
-/* eslint-disable no-else-return */
+/* eslint-disable  */
 import { FC, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { setRegisteringFlag, setUserCreationError } from "../../redux/features/registrationSlice";
@@ -24,14 +23,14 @@ const Registration: FC = () => {
         navigate('/sign-in');
         dispatch(setRegisteringFlag(false));
       };
-      const timeoutID = setTimeout(delay, 2000);
+      const timeoutID = setTimeout(delay, 3500);
       return () => clearTimeout(timeoutID);
     } else {
       const delay = () => {
         dispatch(setUserCreationError(null));
         dispatch(setRegisteringFlag(false));
       };
-      const timeoutID = setTimeout(delay, 2000);
+      const timeoutID = setTimeout(delay, 3500);
       return () => clearTimeout(timeoutID);
     }
   }, [userCreationError, registeringFlag]);

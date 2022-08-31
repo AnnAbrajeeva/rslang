@@ -70,9 +70,8 @@ const Navbar = (props: { value: string; setValue: (arg0: string) => void }) => {
         <Tab value="home" icon={<Home fontSize="large" />} />
         <Tab value="book" icon={<MenuBook fontSize="large" />} />
         <Tab value="games" icon={<SportsEsports fontSize="large" />} />
-        {authData && (
-          <Tab value="stats" icon={<Leaderboard fontSize="large" />} />
-        )}
+        <Tab value="stats" icon={<Leaderboard fontSize="large" />} />
+
         {authData && (
           <Box>
             <Tooltip title="Open settings">
@@ -113,7 +112,6 @@ const Navbar = (props: { value: string; setValue: (arg0: string) => void }) => {
           <Tab value="sign-in" icon={<AccountCircle fontSize="large" />} />
         )}
       </Tabs>
-      {/* </BottomNavigation> */}
     </div>
   )
 }

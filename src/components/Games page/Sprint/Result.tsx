@@ -6,33 +6,68 @@ import RslangApi from '../../../api/RslangApi'
 import { useEffect } from 'react'
 const api = new RslangApi()
 
-const ResultItem = (props: {
-  word: string
-  isCorrect: boolean
-  translation: string
-  sound: string
-  id: string
-}) => {
+const ResultItem = (properties: { props: IResult }) => {
+  const props = properties.props
+  let callFunctionOnce = 1
+
   useEffect(() => {
-    if (props.isCorrect) {
-      api
-        .getUserWord(props.id)
-        .then((data) => {
-          if (data.wordId && data.optional.correctGuess) {
-            api.updateUserWord(data.wordId, {
-              difficulty: data.difficulty,
-              optional: { correctGuess: data.optional.correctGuess + 1 },
-            })
-          }
-        })
-        .catch((err) => {
-          api.createUserWord(props.id, {
-            difficulty: 'weak',
-            optional: { correctGuess: 1 },
+    if (callFunctionOnce === 1) {
+      callFunctionOnce++
+
+      if (localStorage.authData) {
+        api
+          .getUserWord(props.id)
+          .then((data) => {
+            if (
+              data.wordId &&
+              data.optional.correctGuess &&
+              data.optional.wrongGuess
+            ) {
+              if (props.isCorrect) {
+                api.updateUserWord(data.wordId, {
+                  difficulty: data.difficulty,
+                  optional: {
+                    correctGuess: data.optional.correctGuess + 1,
+                    isNewWord: false,
+                    guessTime: Date.now(),
+                  },
+                })
+              } else if (!props.isCorrect) {
+                api.updateUserWord(data.wordId, {
+                  difficulty: data.difficulty,
+                  optional: {
+                    wrongGuess: data.optional.wrongGuess + 1,
+                    isNewWord: false,
+                    guessTime: Date.now(),
+                  },
+                })
+              }
+            }
           })
-        })
+          .catch((err) => {
+            if (props.isCorrect) {
+              api.createUserWord(props.id, {
+                difficulty: 'weak',
+                optional: {
+                  correctGuess: 1,
+                  guessTime: Date.now(),
+                  isNewWord: true,
+                },
+              })
+            } else if (!props.isCorrect) {
+              api.createUserWord(props.id, {
+                difficulty: 'weak',
+                optional: {
+                  wrongGuess: 1,
+                  guessTime: Date.now(),
+                  isNewWord: true,
+                },
+              })
+            }
+          })
+      }
     }
-  }, [props.id, props.isCorrect, props.word])
+  }, [props.id, props.isCorrect])
 
   const audio = new Audio(`https://rs-lang-base.herokuapp.com/${props.sound}`)
 
@@ -41,8 +76,9 @@ const ResultItem = (props: {
       <div>
         {props.isCorrect && <CheckCircle color="success" />}
         {!props.isCorrect && <Cancel color="error" />}
+        &nbsp;
         <Typography variant="h6" component="div">
-          {props.word} - {props.translation}
+          {props.word} - {props.transcription} - {props.translation}
         </Typography>
       </div>
       <VolumeUp
@@ -82,19 +118,12 @@ export default function Result(props: { result: IResult[]; score: number }) {
             color="primary"
             onClick={() => navigate('/games')}
           >
-            Go home
+            Home
           </Button>
         </Typography>
         <List>
           {props.result.map((el, i) => (
-            <ResultItem
-              word={el.word}
-              isCorrect={el.isCorrect}
-              translation={el.translation}
-              sound={el.sound}
-              id={el.id}
-              key={i}
-            />
+            <ResultItem props={el} key={i} />
           ))}
         </List>
       </Grid>

@@ -1,5 +1,4 @@
-/* eslint-disable consistent-return */
-/* eslint-disable import/prefer-default-export */
+/* eslint-disable  */
 import { IStatistic } from '../../../types/auth-audio/IStatistic';
 import { getCurrentDate, isObjectEmpty } from '../../../utils';
 import { TDailyResults, TLearnedWordsIds } from './types';
@@ -44,7 +43,6 @@ export const prepareNewStatistic = (
         dailyResults: newDailyResults,
       },
     };
-  // eslint-disable-next-line no-else-return
   } else if (isObjectEmpty(prevData)) {
     const addedWordsIds: TLearnedWordsIds = {};
     gameWordsIds.forEach((item) => {

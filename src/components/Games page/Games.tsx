@@ -1,10 +1,19 @@
-import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { setGameFromTextbook } from '../../redux/features/audioChallengeSlice';
+import { useTypedDispatch } from '../../redux/hooks';
 import './games.css'
+export let isGameBeforeDic = false
 
 const GameBox = (props: { num: number; type: string }) => {
   return (
-    <div className="game-box">
+    <span
+      className="game-box"
+      onClick={() => {
+        console.log('a')
+        if (window.location.pathname.includes('book')) isGameBeforeDic = true
+        else isGameBeforeDic = false
+      }}
+    >
       <img
         src={require(`./images/game${props.num}-bg.gif`)}
         alt=""
@@ -13,13 +22,17 @@ const GameBox = (props: { num: number; type: string }) => {
       <div className="about-game">
         <h2 className="game-name">{props.type}</h2>
       </div>
-    </div>
+    </span>
   )
 }
 
-const Games = () => {
+
+
+const Games = (props: { gameBefDic?: (arg: boolean) => void }) => {
+
+
   return (
-    <div className="games">
+    <div className="games" >
       <Link to="/games/audio-call">
         <GameBox num={1} type="Audio Call" />
       </Link>

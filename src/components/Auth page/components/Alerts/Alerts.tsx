@@ -1,4 +1,4 @@
-/* eslint-disable react/function-component-definition */
+/* eslint-disable  */
 import { FC } from "react"
 import { Alert, AlertTitle } from "@mui/material";
 import Wrapper from "./Alerts.styles";

@@ -1,4 +1,4 @@
-/* eslint-disable no-param-reassign */
+/* eslint-disable */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IStatistic } from '../../../types/auth-audio/IStatistic';
 import { getStatistic } from '../../thunks';
@@ -31,7 +31,7 @@ const statisticSlice = createSlice({
     },
     [getStatistic.rejected.type]: (state, action: PayloadAction<string>) => {
       state.statisticError = action.payload;
-      console.error(action.payload);
+      console.log(action.payload);
     },
   },
 });

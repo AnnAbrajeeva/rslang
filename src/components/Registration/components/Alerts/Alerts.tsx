@@ -1,4 +1,4 @@
-/* eslint-disable react/function-component-definition */
+/* eslint-disable */
 import { FC } from "react"
 import { Alert, AlertTitle } from "@mui/material";
 import Wrapper from "./Alerts.styles";
@@ -15,7 +15,7 @@ const Alerts: FC = () => {
       {isSuccess && (
         <Alert severity="success">
           <AlertTitle>Success</AlertTitle>
-          A new user has been created!
+          A new user has been created! Please sign in.
         </Alert>)
       }
       {isError && (

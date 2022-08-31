@@ -1,4 +1,4 @@
-/* eslint-disable no-param-reassign */
+/* eslint-disable */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { signIn } from '../../thunks';
 import { IAuthUser as IAuth } from '../../../types/types';

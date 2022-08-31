@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { Button } from '@mui/material'
 import {
   ArrowCircleLeftOutlined,
@@ -25,6 +26,7 @@ const SprintContainer = (props: {
   level: number
   score: number
   setScore: Function
+  page: number
 }) => {
   let [randomNum, setRandomNum] = useState(Math.floor(Math.random() * 20))
   let [iteration, setIteration] = useState(0)
@@ -33,12 +35,13 @@ const SprintContainer = (props: {
   let [toyIndicator, setToyIndicator] = useState(0)
   let [indicators, setIndicators] = useState({ 1: false, 2: false, 3: false })
   let [fullscreen, setFullscreen] = useState(false)
-  let [volumeOff, setVolumeOff] = useState(false)
+  const [volumeOff, setVolumeOff] = useState(false)
 
   useEffect(() => {
     let randomPage = Math.floor(Math.random() * 30)
+    if (props.page !== -1) randomPage = props.page
     api.getAllWords(randomPage, props.level - 1).then((data) => setWords(data))
-  }, [])
+  }, [props.level, props.page])
 
   useEffect(() => {
     document.addEventListener('keydown', handleKey)
@@ -67,8 +70,10 @@ const SprintContainer = (props: {
     props.result.push({
       word: words[iteration].word,
       translation: words[iteration].wordTranslate,
+      transcription: words[iteration].transcription,
       isCorrect: true,
       sound: words[iteration].audio,
+
       id: words[iteration].id,
     })
     if (scoreIndicator !== 3) {
@@ -89,6 +94,7 @@ const SprintContainer = (props: {
     props.result.push({
       word: words[iteration].word,
       translation: words[iteration].wordTranslate,
+      transcription: words[iteration].transcription,
       isCorrect: false,
       sound: words[iteration].audio,
       id: words[iteration].id,

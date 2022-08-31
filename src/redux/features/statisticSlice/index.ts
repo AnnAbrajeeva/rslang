@@ -1,4 +1,4 @@
-/* eslint-disable import/export */
+/* eslint-disable */
 import statisticSlice from './statisticSlice';
 
 export * from './statisticSlice';

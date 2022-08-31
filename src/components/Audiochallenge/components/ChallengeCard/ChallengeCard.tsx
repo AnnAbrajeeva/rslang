@@ -1,7 +1,5 @@
-/* eslint-disable import/no-unresolved */
-/* eslint-disable eqeqeq */
-/* eslint-disable react/no-array-index-key */
-/* eslint-disable react/function-component-definition */
+/* eslint-disable */
+
 import { FC, useEffect, useState } from 'react';
 import { useTypedSelector, useTypedDispatch } from '../../../../redux/hooks';
 import { selectAnswer, submitAnswer } from '../../../../redux/features/audioChallengeSlice';

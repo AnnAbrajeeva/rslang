@@ -1,23 +1,11 @@
-/* eslint-disable import/no-duplicates */
-/* eslint-disable consistent-return */
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable prefer-template */
+/* eslint-disable */
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { IUser } from '../types/types';
 import { IAuthUser } from '../types/types';
-import {
-  ICreateUserWord,
-  IDeleteUserWord,
-  IGetUserWords,
-  ILoadingPageData,
-  IPostUserWord,
-  ISendStatistic,
-  ISignIn,
-} from './types';
+import { IGetUserWords, IPostUserWord, ISendStatistic, ISignIn } from './types';
 
 export const BASE_URL = 'https://rs-lang-base.herokuapp.com';
-export const BASE_URL2 = 'https://zoukman-rslang.herokuapp.com';
 
 export const createUser = createAsyncThunk(
   'thunks/createUser',
@@ -31,9 +19,9 @@ export const createUser = createAsyncThunk(
 
       return response.data;
     } catch (e) {
-      if (e instanceof Error) console.error(e.message);
+      if (e instanceof Error) console.log(e.message);
       return thunkAPI.rejectWithValue(
-        'Не удалось создать нового пользователя! Попробуйте еще раз.'
+        'New user could not be created! Try again.'
       );
     }
   }
@@ -50,9 +38,9 @@ export const signIn = createAsyncThunk(
 
       return response.data;
     } catch (e) {
-      if (e instanceof Error) console.error(e.message);
+      if (e instanceof Error) console.log(e.message);
       return thunkAPI.rejectWithValue(
-        'Не удалось войти в учётную запись! Попробуйте еще раз.'
+        'Failed to log in to my account! Try again.'
       );
     }
   }
@@ -62,13 +50,13 @@ export const fetchAllWords = createAsyncThunk(
   'thunks/fetchAllWords',
   async (_, thunkAPI) => {
     try {
-      const response = await axios.get(`${BASE_URL2}/wordsAll`); 
+      const response = await axios.get(`https://zoukman-rslang.herokuapp.com/wordsAll`);
       return response.data.map((el: any) =>
         ({ ...el, _id: el._id.$oid })
       );
     } catch (e) {
-      if (e instanceof Error) console.error(e.message);
-      return thunkAPI.rejectWithValue('Не удалось получить слова');
+      if (e instanceof Error) console.log(e.message);
+      return thunkAPI.rejectWithValue('Failed to get the words');
     }
   }
 );
@@ -90,109 +78,8 @@ export const fetchUserWords = createAsyncThunk(
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        'Не удалось загрузить слова пользователя'
+        'Failed to load user words'
       );
-    }
-  }
-);
-
-export const fetchWords = createAsyncThunk(
-  'words/fetchWords',
-  async (pageData: ILoadingPageData, thunkAPI) => {
-    try {
-      const response = await axios(
-        `${BASE_URL}/words?group=${pageData.savedGroupNumber - 1}&page=${pageData.savedPageNumber - 1
-        }`
-      );
-
-      return response.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(
-        'Не удалось загрузить данные. Ошибка сервера'
-      );
-    }
-  }
-);
-
-export const getUserWords = createAsyncThunk(
-  'words/getUserWords',
-  async (userData: IGetUserWords, thunkAPI) => {
-    try {
-      const response = await axios.get(
-        `${BASE_URL}/users/${userData.userId}/aggregatedWords?wordsPerPage=3600&filter={"$or":[{"userWord.difficulty":"difficult"}, {"userWord.difficulty":"easy"}]}`,
-        {
-          headers: {
-            Authorization: `Bearer ${userData.token}`,
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-
-      return response.data[0].paginatedResults;
-    } catch (error) {
-      return thunkAPI.rejectWithValue('Не удалось загрузить слова');
-    }
-  }
-);
-
-export const createUserWord = createAsyncThunk(
-  'words/createUserWord',
-  async (userWord: ICreateUserWord, thunkAPI) => {
-    try {
-      await axios.post(
-        `${BASE_URL}/users/${userWord.userId}/words/${userWord.wordId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${userWord.token}`,
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-    } catch (error) {
-      return thunkAPI.rejectWithValue('Не удалось добавить слово');
-    }
-  }
-);
-
-export const updateCurrentWord = createAsyncThunk(
-  'words/updateCurrentWord',
-  async (userWord: ICreateUserWord, thunkAPI) => {
-    try {
-      await axios.put(
-        `${BASE_URL}/users/${userWord.userId}/words/${userWord.wordId}`,
-        userWord.wordData,
-        {
-          headers: {
-            Authorization: `Bearer ${userWord.token}`,
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-    } catch (error) {
-      return thunkAPI.rejectWithValue('Не удалось добавить слово');
-    }
-  }
-);
-
-export const deleteUserWord = createAsyncThunk(
-  'words/deleteUserWord',
-  async (userWord: IDeleteUserWord, thunkAPI) => {
-    try {
-      await axios.delete(
-        `${BASE_URL}/users/${userWord.userId}/words/${userWord.wordId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${userWord.token}`,
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-    } catch (error) {
-      return thunkAPI.rejectWithValue('Не удалось удалить слово');
     }
   }
 );
@@ -215,7 +102,7 @@ export const postUserWord = createAsyncThunk(
       );
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        'Не удалось обновить слово в базе данных'
+        'Failed to post a word in the database'
       );
     }
   }
@@ -239,7 +126,7 @@ export const updateUserWord = createAsyncThunk(
       );
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        'Не удалось обновить слово в базе данных'
+        'Failed to update a word in the database'
       );
     }
   }
@@ -259,7 +146,7 @@ export const getStatistic = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue('Не удалось получить статистику');
+      return thunkAPI.rejectWithValue('Failed to get statistics');
     }
   }
 );
@@ -283,7 +170,7 @@ export const sendStatistic = createAsyncThunk(
         }
       );
     } catch (error) {
-      return thunkAPI.rejectWithValue('Не удалось получить статистику');
+      return thunkAPI.rejectWithValue('Failed to send statistics');
     }
   }
 );

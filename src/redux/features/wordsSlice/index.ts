@@ -1,4 +1,4 @@
-/* eslint-disable import/export */
+/* eslint-disable */
 import wordsSlice from './wordsSlice';
 
 export * from './wordsSlice';
