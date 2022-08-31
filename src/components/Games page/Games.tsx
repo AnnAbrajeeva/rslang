@@ -26,11 +26,7 @@ const GameBox = (props: { num: number; type: string }) => {
   )
 }
 
-
-
 const Games = (props: { gameBefDic?: (arg: boolean) => void }) => {
-
-
   return (
     <div className="games" >
       <Link to="/games/audio-call">
