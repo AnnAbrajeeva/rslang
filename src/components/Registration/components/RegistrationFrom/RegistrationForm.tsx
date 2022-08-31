@@ -1,4 +1,4 @@
-/* eslint-disable react/function-component-definition */
+/* eslint-disable */
 import { FC } from "react";
 import { TextField } from "@mui/material";
 import { LoadingButton } from '@mui/lab';

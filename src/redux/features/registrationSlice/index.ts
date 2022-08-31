@@ -1,4 +1,4 @@
-/* eslint-disable import/no-named-as-default */
+/* eslint-disable */
 import registrationSlice from "./registrationSlice";
 
 export * from './registrationSlice';

@@ -1,5 +1,4 @@
-/* eslint-disable eqeqeq */
-/* eslint-disable react/function-component-definition */
+/* eslint-disable */
 import { FC, useEffect } from 'react';
 import { useTypedDispatch, useTypedSelector } from '../../../../redux/hooks';
 import { AnswerProps } from './types';

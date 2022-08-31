@@ -1,4 +1,4 @@
-/* eslint-disable no-param-reassign */
+/* eslint-disable */
 import { createSlice, current, PayloadAction } from '@reduxjs/toolkit';
 import { IUserWord } from '../../../types/auth-audio/IUserWord';
 import { IWord } from '../../../types/auth-audio/IWord';

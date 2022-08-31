@@ -1,6 +1,4 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable react/function-component-definition */
+/* eslint-disable */
 import { FC } from 'react';
 import { Wrapper, StyledButtonsRow } from './LevelPicker.styles';
 import { useTypedDispatch, useTypedSelector } from '../../../../redux/hooks';

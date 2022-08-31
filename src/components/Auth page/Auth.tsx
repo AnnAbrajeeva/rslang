@@ -1,5 +1,4 @@
-/* eslint-disable react/function-component-definition */
-/* eslint-disable no-else-return */
+/* eslint-disable */
 import { FC, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { setEnteringFlag, setSigningInError } from "../../redux/features/authSlice";
@@ -11,7 +10,7 @@ import AuthForm from "./components/AuthForm";
 const Auth: FC = () => {
   const dispatch = useTypedDispatch();
   const navigate = useNavigate();
-  const { signingInError, enteringFlag } = useTypedSelector((state: { auth: any; }) => state.auth);
+  const { signingInError, enteringFlag } = useTypedSelector((state) => state.auth);
 
   const isUserAuthorized = !signingInError && enteringFlag;
 
@@ -21,14 +20,14 @@ const Auth: FC = () => {
         navigate('/');
         dispatch(setEnteringFlag(false));
       };
-      const timeoutID = setTimeout(delay, 2000);
+      const timeoutID = setTimeout(delay, 3500);
       return () => clearTimeout(timeoutID);
     } else {
       const delay = () => {
         dispatch(setEnteringFlag(false));
         dispatch(setSigningInError(null));
       };
-      const timeoutID = setTimeout(delay, 2000);
+      const timeoutID = setTimeout(delay, 3500);
       return () => clearTimeout(timeoutID);
     }
   }, [signingInError, enteringFlag]);

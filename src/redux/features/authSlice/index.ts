@@ -1,4 +1,4 @@
-/* eslint-disable import/no-named-as-default */
+/* eslint-disable */
 import authSlice from "./authSlice";
 
 export * from './authSlice';

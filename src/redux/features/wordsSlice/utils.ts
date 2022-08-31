@@ -1,6 +1,4 @@
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable import/prefer-default-export */
+/* eslint-disable */
 import { IUserWord } from '../../../types/auth-audio/IUserWord';
 import { IWord } from '../../../types/auth-audio/IWord';
 

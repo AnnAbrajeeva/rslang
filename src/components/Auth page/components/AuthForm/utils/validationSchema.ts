@@ -1,4 +1,4 @@
-/* eslint-disable import/prefer-default-export */
+/* eslint-disable */
 import * as yup from 'yup';
 
 export const validationSchema = yup.object({

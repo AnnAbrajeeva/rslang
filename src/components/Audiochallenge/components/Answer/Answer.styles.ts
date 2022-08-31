@@ -1,4 +1,4 @@
-/* eslint-disable no-nested-ternary */
+/* eslint-disable */
 import styled from 'styled-components';
 
 interface IProps {

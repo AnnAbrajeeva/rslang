@@ -1,6 +1,4 @@
-/* eslint-disable prefer-destructuring */
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable react/function-component-definition */
+/* eslint-disable */
 import { FC } from 'react';
 import { useTypedSelector } from '../../../../redux/hooks';
 import { ResultsItemProps } from './types';

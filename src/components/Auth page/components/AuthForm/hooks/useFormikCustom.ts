@@ -1,4 +1,4 @@
-/* eslint-disable import/prefer-default-export */
+/* eslint-disable */
 import { useFormik } from "formik";
 import { useTypedDispatch } from "../../../../../redux/hooks";
 import { signIn } from "../../../../../redux/thunks";

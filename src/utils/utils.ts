@@ -1,17 +1,11 @@
-/* eslint-disable consistent-return */
-/* eslint-disable no-unreachable-loop */
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable no-prototype-builtins */
-/* eslint-disable guard-for-in */
-/* eslint-disable no-unused-expressions */
-/* eslint-disable prefer-const */
-/* eslint-disable no-plusplus */
+
+/* eslint-disable  */
 import { ILocalStatistic } from '../types/auth-audio/ILocalStatistic';
 import { TDifficulty } from '../types/auth-audio/IUserWord';
 import { IWord } from '../types/auth-audio/IWord';
 import AUDIOCHALLENGE from './constants';
 import { TGetWordsByGroup } from './types';
+
 
 export const shuffleArray = <T>(arr: Array<T>): Array<T> => {
   const result = [...arr];
@@ -52,19 +46,19 @@ const setInitialLocalStatistic = (
   const audiochallengeStat =
     game === AUDIOCHALLENGE
       ? {
-          bestStreak: currentStreak,
-          gameNewWordsCount: allWordsList.length,
-          rightAnswers: rightAnswersIds.length,
-          wrongAnswers: wrongAnswersIds.length,
-          wordList: allWordsList,
-        }
+        bestStreak: currentStreak,
+        gameNewWordsCount: allWordsList.length,
+        rightAnswers: rightAnswersIds.length,
+        wrongAnswers: wrongAnswersIds.length,
+        wordList: allWordsList,
+      }
       : {
-          bestStreak: 0,
-          gameNewWordsCount: 0,
-          rightAnswers: 0,
-          wrongAnswers: 0,
-          wordList: [],
-        };
+        bestStreak: 0,
+        gameNewWordsCount: 0,
+        rightAnswers: 0,
+        wrongAnswers: 0,
+        wordList: [],
+      };
 
   const newData: ILocalStatistic = {
     date: getCurrentDate(),
@@ -113,25 +107,15 @@ export const updateLocalStatistic = (
       const audiochallengeStat =
         game === AUDIOCHALLENGE
           ? {
-              bestStreak:
-                currentStreak > prevData.games.audiochallenge.bestStreak
-                  ? currentStreak
-                  : prevData.games.audiochallenge.bestStreak,
-              gameNewWordsCount:
-                prevData.games.audiochallenge.gameNewWordsCount +
-                dailyGameNewWords.length,
-              rightAnswers:
-                prevData.games.audiochallenge.rightAnswers +
-                rightAnswersIds.length,
-              wrongAnswers:
-                prevData.games.audiochallenge.wrongAnswers +
-                wrongAnswersIds.length,
-              wordList: [
-                ...prevData.games.audiochallenge.wordList,
-                ...dailyGameNewWords,
-              ],
-            }
-          : { ...prevData.games.audiochallenge };
+            bestStreak: currentStreak > prevData.games.audiochallenge.bestStreak ? currentStreak : prevData.games.audiochallenge.bestStreak,
+            gameNewWordsCount: prevData.games.audiochallenge.gameNewWordsCount + dailyGameNewWords.length,
+            rightAnswers: (prevData.games.audiochallenge.rightAnswers + rightAnswersIds.length),
+            wrongAnswers: (prevData.games.audiochallenge.wrongAnswers + wrongAnswersIds.length),
+            wordList: [
+              ...prevData.games.audiochallenge.wordList,
+              ...dailyGameNewWords,
+            ],
+          } : { ...prevData.games.audiochallenge };
 
       newData = {
         games: {
@@ -139,10 +123,8 @@ export const updateLocalStatistic = (
         },
         date: currentDate,
         allNewWordsCount: prevData.allNewWordsCount + dailyAllNewWords.length,
-        allGamesRight:
-          audiochallengeStat.rightAnswers,
-        allGamesWrong:
-          audiochallengeStat.wrongAnswers,
+        allGamesRight: audiochallengeStat.rightAnswers,
+        allGamesWrong: audiochallengeStat.wrongAnswers,
         wordList: [...prevData.wordList, ...dailyAllNewWords],
       };
       userId
@@ -152,22 +134,22 @@ export const updateLocalStatistic = (
       const audiochallengeStat =
         game === AUDIOCHALLENGE
           ? {
-              bestStreak: currentStreak,
-              gameNewWordsCount: dailyGameNewWords.length,
-              rightAnswers: rightAnswersIds.length,
-              wrongAnswers: wrongAnswersIds.length,
-              wordList: [
-                ...prevData.games.audiochallenge.wordList,
-                ...dailyGameNewWords,
-              ],
-            }
+            bestStreak: currentStreak,
+            gameNewWordsCount: dailyGameNewWords.length,
+            rightAnswers: rightAnswersIds.length,
+            wrongAnswers: wrongAnswersIds.length,
+            wordList: [
+              ...prevData.games.audiochallenge.wordList,
+              ...dailyGameNewWords,
+            ],
+          }
           : {
-              ...prevData.games.audiochallenge,
-              bestStreak: 0,
-              gameWordsCount: 0,
-              rightAnswers: 0,
-              wrongAnswers: 0,
-            };
+            ...prevData.games.audiochallenge,
+            bestStreak: 0,
+            gameWordsCount: 0,
+            rightAnswers: 0,
+            wrongAnswers: 0,
+          };
       newData = {
         games: {
           audiochallenge: audiochallengeStat,
@@ -196,14 +178,14 @@ export const updateLocalStatistic = (
 };
 
 export const checkIsLearnedWord = (word: IWord) => (
-    word.userWord &&
-    word.userWord.optional &&
-    word.userWord.optional.counter &&
-    ((word.userWord.difficulty === 'easy' &&
-      word.userWord.optional.counter > 2) ||
-      (word.userWord.difficulty === 'difficult' &&
-        word.userWord.optional.counter > 4))
-  );
+  word.userWord &&
+  word.userWord.optional &&
+  word.userWord.optional.counter &&
+  ((word.userWord.difficulty === 'easy' &&
+    word.userWord.optional.counter > 2) ||
+    (word.userWord.difficulty === 'difficult' &&
+      word.userWord.optional.counter > 4))
+);
 
 export const getNotLearnedWords = (words: Array<IWord>) => [...words].filter((el) => !checkIsLearnedWord(el));
 
@@ -292,3 +274,21 @@ export const getWordsByPageAndGroup = (
   group: number,
   page: number
 ) => [...allWords].filter((el) => el.group === group && el.page === page);
+
+export const getAudioChallengeStatistics = () => {
+  let statKey: string;
+  let statistics: ILocalStatistic|undefined;
+  const user = localStorage.getItem('authData');
+  if (user) {
+    statKey = `statistic-${(JSON.parse(user)).userId}`
+    statistics = JSON.parse(localStorage.getItem(statKey)!)
+  }
+  if (statistics) {
+    statistics.games.audiochallenge.rightAnswers/=2;
+    statistics.games.audiochallenge.wrongAnswers/=2;
+    statistics.allGamesRight/=2;
+    statistics.allGamesWrong/=2;
+    return statistics;
+  }
+  return null;
+}

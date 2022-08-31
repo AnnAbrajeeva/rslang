@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-param-reassign */
+/* eslint-disable */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { createUser } from '../../thunks';
 import { IRegistrationState, ICreatedUser } from './types';

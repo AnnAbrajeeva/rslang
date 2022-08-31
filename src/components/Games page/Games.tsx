@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom'
+import { setGameFromTextbook } from '../../redux/features/audioChallengeSlice';
+import { useTypedDispatch } from '../../redux/hooks';
 import './games.css'
 export let isGameBeforeDic = false
 
@@ -26,7 +28,7 @@ const GameBox = (props: { num: number; type: string }) => {
 
 const Games = (props: { gameBefDic?: (arg: boolean) => void }) => {
   return (
-    <div className="games">
+    <div className="games" >
       <Link to="/games/audio-call">
         <GameBox num={1} type="Audio Call" />
       </Link>
