@@ -5,6 +5,7 @@ import Box from '@mui/material/Box'
 import DictionaryCard from './DictionaryCard/DictionaryCard'
 import { IUserWordParams, IWord, IUserWordWithParams } from '../../types/types'
 import RslangApi from '../../api/RslangApi'
+import { getCurrentDate } from '../../utils'
 
 const api = new RslangApi()
 
@@ -33,7 +34,6 @@ export default function Dictionary({
       const wordParams = { ...isUserWord }
       wordParams.difficulty = 'hard'
       wordParams.optional.learned = false
-      wordParams.optional.studing = true
       delete wordParams.id
       delete wordParams.wordId
       await api.updateUserWord(id, wordParams)
@@ -55,6 +55,7 @@ export default function Dictionary({
       const wordParams = { ...isUserWord }
       wordParams.difficulty = 'weak'
       wordParams.optional.learned = true
+      wordParams.optional.data = getCurrentDate()
       delete wordParams.id
       delete wordParams.wordId
       await api.updateUserWord(id, wordParams)
@@ -63,6 +64,7 @@ export default function Dictionary({
         difficulty: 'weak',
         optional: {
           learned: true,
+          data: getCurrentDate()
         },
       }
       await api.createUserWord(id, wordParams)
@@ -78,15 +80,7 @@ export default function Dictionary({
       delete wordParams.id
       delete wordParams.wordId
       await api.updateUserWord(id, wordParams)
-    } else {
-      const wordParams = {
-        difficulty: 'weak',
-        optional: {
-          learned: false,
-        }
-      }
-      await api.createUserWord(id, wordParams)
-    }
+    } 
     updateUserWords()
   }
 
@@ -98,13 +92,7 @@ export default function Dictionary({
       delete wordParams.id
       delete wordParams.wordId
       await api.updateUserWord(id, wordParams)
-    } else {
-      const wordParams = {
-        difficulty: 'weak',
-        optional: {},
-      }
-      await api.createUserWord(id, wordParams)
-    }
+    } 
     updateUserWords()
   }
 

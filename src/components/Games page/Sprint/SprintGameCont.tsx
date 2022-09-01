@@ -1,8 +1,4 @@
 /* eslint-disable */
-<<<<<<< HEAD
-=======
-
->>>>>>> 8fc97c7 (fix: eslint)
 import { Button } from '@mui/material'
 import {
   ArrowCircleLeftOutlined,
@@ -31,6 +27,8 @@ const SprintContainer = (props: {
   score: number
   setScore: Function
   page: number
+  increaseCount: () => void
+  saveBestStreak: () => void
 }) => {
   let [randomNum, setRandomNum] = useState(Math.floor(Math.random() * 20))
   let [iteration, setIteration] = useState(0)
@@ -40,6 +38,7 @@ const SprintContainer = (props: {
   let [indicators, setIndicators] = useState({ 1: false, 2: false, 3: false })
   let [fullscreen, setFullscreen] = useState(false)
   const [volumeOff, setVolumeOff] = useState(false)
+
 
   useEffect(() => {
     let randomPage = Math.floor(Math.random() * 30)
@@ -59,6 +58,7 @@ const SprintContainer = (props: {
 
   function matchBtns() {
     if (iteration === 19) props.setIsEnded(true)
+    props.saveBestStreak()
     setIteration((prev) => (prev += 1))
     if (Math.random() < 0.5) setRandomNum(iteration + 1)
     else setRandomNum(Math.floor(Math.random() * 20))
@@ -88,6 +88,7 @@ const SprintContainer = (props: {
       setIndicators(checkIndicators(scoreIndicator))
       props.setScore((prev: number) => (prev += scoreIndicator * 5))
     }
+    props.increaseCount()
   }
 
   function wrongMatch() {
@@ -103,6 +104,7 @@ const SprintContainer = (props: {
       sound: words[iteration].audio,
       id: words[iteration].id,
     })
+    props.saveBestStreak()
   }
 
   function wrongBtn() {

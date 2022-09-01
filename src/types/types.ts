@@ -3,11 +3,18 @@ export interface IUserWordParams {
   difficulty: string
   optional: {
     learned?: boolean
-    studing?: boolean
-    correctGuess?: number
-    wrongGuess?: number
-    isNewWord?: boolean
-    guessTime?: number
+    data?: string
+    counter?: number // для выставления признака изученного слова, инкремент при правильном ответе, обнуление при неправильном
+    sprint?: {
+      rightCounter: number
+      wrongCounter: number
+    }
+    audiochallenge?: {
+      rightCounter: number
+      wrongCounter: number
+    }
+
+    wordId?: string
   }
   wordId?: string
 }
@@ -33,13 +40,20 @@ export interface IUserWordWithParams {
     difficulty: string
     optional: {
       learned?: boolean
-      studing?: boolean
-      correctGuess?: number
+      data: string
+      counter?: number // для выставления признака изученного слова, инкремент при правильном ответе, обнуление при неправильном
+      sprint?: {
+        rightCounter: number
+        wrongCounter: number
+      }
+      audiochallenge?: {
+        rightCounter: number
+        wrongCounter: number
+      }
     }
     wordId?: string
   }
 }
-
 
 export interface IUserHardWords {
   id: string
@@ -116,4 +130,3 @@ export interface IUserSettings {
   wordsPerDay: number
   optional: {}
 }
-

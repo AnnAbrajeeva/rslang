@@ -1,5 +1,6 @@
 
 /* eslint-disable  */
+import { ILocalStatisticSprint } from '../components/Games page/Sprint/utils/updateStatistic';
 import { ILocalStatistic } from '../types/auth-audio/ILocalStatistic';
 import { TDifficulty } from '../types/auth-audio/IUserWord';
 import { IWord } from '../types/auth-audio/IWord';
@@ -40,9 +41,18 @@ const setInitialLocalStatistic = (
   rightAnswersIds: Array<string>,
   wrongAnswersIds: Array<string>,
   game: string,
-  currentStreak: number
+  currentStreak: number,
+  prevData: ILocalStatisticSprint
 ) => {
   const allWordsList = [...rightAnswersIds, ...wrongAnswersIds];
+  const sprintStat = prevData && prevData.games && prevData.games.sprint ? prevData.games.sprint : {
+    bestStreak: 0,
+    gameNewWordsCount: 0,
+    rightAnswers: 0,
+    wrongAnswers: 0,
+    wordList: [],
+  };
+
   const audiochallengeStat =
     game === AUDIOCHALLENGE
       ? {
@@ -60,7 +70,7 @@ const setInitialLocalStatistic = (
         wordList: [],
       };
 
-  const newData: ILocalStatistic = {
+  const newData: ILocalStatisticSprint = {
     date: getCurrentDate(),
     allNewWordsCount: rightAnswersIds.length + wrongAnswersIds.length,
     allGamesRight: rightAnswersIds.length,
@@ -68,6 +78,7 @@ const setInitialLocalStatistic = (
     wordList: allWordsList,
     games: {
       audiochallenge: audiochallengeStat,
+      sprint: sprintStat
     },
   };
   return newData;
@@ -88,9 +99,9 @@ export const updateLocalStatistic = (
     ? guestStatistic
     : null);
   const currentDate = getCurrentDate();
-  let newData: ILocalStatistic;
-  if (prevStatistic) {
-    const prevData = JSON.parse(prevStatistic);
+  let newData: ILocalStatisticSprint;
+  const prevData = JSON.parse(prevStatistic || '{}') as ILocalStatisticSprint
+  if (prevStatistic && prevData.games.audiochallenge) {
     let dailyGameNewWords: string[] = [];
     if (game === AUDIOCHALLENGE) {
       dailyGameNewWords = getNewWordsFromArray(
@@ -120,11 +131,12 @@ export const updateLocalStatistic = (
       newData = {
         games: {
           audiochallenge: audiochallengeStat,
+          sprint: prevData.games.sprint
         },
         date: currentDate,
         allNewWordsCount: prevData.allNewWordsCount + dailyAllNewWords.length,
-        allGamesRight: audiochallengeStat.rightAnswers,
-        allGamesWrong: audiochallengeStat.wrongAnswers,
+        allGamesRight: audiochallengeStat.rightAnswers+prevData.games.sprint.rightAnswers,
+        allGamesWrong: audiochallengeStat.wrongAnswers + prevData.games.sprint.wrongAnswers,
         wordList: [...prevData.wordList, ...dailyAllNewWords],
       };
       userId
@@ -153,11 +165,12 @@ export const updateLocalStatistic = (
       newData = {
         games: {
           audiochallenge: audiochallengeStat,
+          sprint: prevData.games.sprint
         },
         date: currentDate,
         allNewWordsCount: dailyAllNewWords.length,
-        allGamesRight: rightAnswersIds.length,
-        allGamesWrong: wrongAnswersIds.length,
+        allGamesRight: rightAnswersIds.length + prevData.games.sprint.rightAnswers,
+        allGamesWrong: wrongAnswersIds.length + prevData.games.sprint.wrongAnswers,
         wordList: [...prevData.wordList, ...dailyAllNewWords],
       };
       userId
@@ -169,7 +182,8 @@ export const updateLocalStatistic = (
       rightAnswersIds,
       wrongAnswersIds,
       game,
-      currentStreak
+      currentStreak,
+      prevData
     );
     userId
       ? localStorage.setItem(userKey, JSON.stringify(newData))

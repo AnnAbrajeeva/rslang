@@ -6,7 +6,9 @@ import { Cancel, CheckCircle, VolumeUp } from '@mui/icons-material'
 import { IResult } from '../../../types/types'
 import RslangApi from '../../../api/RslangApi'
 import { useEffect } from 'react'
+import { updateLocalStatisticSprint } from './utils/updateStatistic'
 const api = new RslangApi()
+const user = JSON.parse(localStorage.getItem('authData') || '{}')
 
 const ResultItem = (properties: { props: IResult }) => {
   const props = properties.props
@@ -20,27 +22,19 @@ const ResultItem = (properties: { props: IResult }) => {
         api
           .getUserWord(props.id)
           .then((data) => {
-            if (
-              data.wordId &&
-              data.optional.correctGuess &&
-              data.optional.wrongGuess
-            ) {
+            if (data.wordId) {
               if (props.isCorrect) {
                 api.updateUserWord(data.wordId, {
                   difficulty: data.difficulty,
                   optional: {
-                    correctGuess: data.optional.correctGuess + 1,
-                    isNewWord: false,
-                    guessTime: Date.now(),
+                    data: new Date().toLocaleDateString(),
                   },
                 })
               } else if (!props.isCorrect) {
                 api.updateUserWord(data.wordId, {
                   difficulty: data.difficulty,
                   optional: {
-                    wrongGuess: data.optional.wrongGuess + 1,
-                    isNewWord: false,
-                    guessTime: Date.now(),
+                    data: new Date().toLocaleDateString(),
                   },
                 })
               }
@@ -51,18 +45,14 @@ const ResultItem = (properties: { props: IResult }) => {
               api.createUserWord(props.id, {
                 difficulty: 'weak',
                 optional: {
-                  correctGuess: 1,
-                  guessTime: Date.now(),
-                  isNewWord: true,
+                  data: new Date().toLocaleDateString(),
                 },
               })
             } else if (!props.isCorrect) {
               api.createUserWord(props.id, {
                 difficulty: 'weak',
                 optional: {
-                  wrongGuess: 1,
-                  guessTime: Date.now(),
-                  isNewWord: true,
+                  data: new Date().toLocaleDateString(),
                 },
               })
             }
@@ -92,10 +82,31 @@ const ResultItem = (properties: { props: IResult }) => {
   )
 }
 
-export default function Result(props: { result: IResult[]; score: number }) {
+export default function Result(props: {
+  result: IResult[]
+  score: number
+  bestStreak: number
+}) {
   let correctWords = props.result.filter((el) => el.isCorrect).length
   let unCorrectWords = props.result.filter((el) => !el.isCorrect).length
   const navigate = useNavigate()
+  console.log(props.bestStreak)
+
+  const rightAnswersIds = props.result
+    .filter((item) => item.isCorrect)
+    .map((item) => item.id)
+  const wrongAnswersIds = props.result
+    .filter((item) => !item.isCorrect)
+    .map((item) => item.id)
+
+  console.log(user.id)
+  updateLocalStatisticSprint(
+    rightAnswersIds,
+    wrongAnswersIds,
+    'sprint',
+    props.bestStreak,
+    user.userId
+  )
 
   return (
     <div className="results">

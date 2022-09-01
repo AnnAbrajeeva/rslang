@@ -1,3 +1,4 @@
+import { IStatistic } from '../types/auth-audio/IStatistic'
 import { IAuthUser, IUser, IWord, IUserWordParams, IUserStatistics, IUserSettings, IUserWordWithParams, IUserHardWords } from '../types/types'
 
 export default class RslangApi {
@@ -242,6 +243,29 @@ export default class RslangApi {
     return hardWords as IUserHardWords[]
   }
 
+  // Получить все выученные слова
+  getAllLearnedWords = async () => {
+    const {token, userId} = this.getUserFromLocalStorage()
+
+    const res = await fetch(`${this.url}users/${userId}/aggregatedWords?wordsPerPage=3600&filter={"userWord.optional.learned":true}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+    const content = await res.json()
+    let hardWords: IUserWordWithParams[] = content[0].paginatedResults
+    hardWords = hardWords.map((word) => {
+      // eslint-disable-next-line no-param-reassign, no-underscore-dangle
+      word.id = word._id 
+      // eslint-disable-next-line no-underscore-dangle, no-param-reassign
+      delete word._id
+      return word
+    }) 
+    return hardWords as IUserWordWithParams[]
+  }
+
   getUserStatistics = async () => {
     const {token, userId} = this.getUserFromLocalStorage()
 
@@ -252,8 +276,8 @@ export default class RslangApi {
         'Content-Type': 'application/json',
       },
     })
-    const content = await res.json() as IUserStatistics[]
-    return content
+    const content = await res.json() as IStatistic
+        return content
   }
 
   updateUserStatistics = async () => {

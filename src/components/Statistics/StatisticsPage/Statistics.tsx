@@ -1,29 +1,11 @@
 /* eslint-disable */
 import Paper from '@mui/material/Paper';
-import { useTypedSelector } from '../../../redux/hooks';
 import StatisticsCard from '../StatisticsCard/StatisticsCard'
 import StatisticsAudio from '../StatisticsCard/StatisticsAudio'
+import StatisticsSprint from '../StatisticsCard/StatisticSprint'
+import OneDayStat from '../StatisticsCard/OneDayStat'
 import './Statistics.css'
 import { Chart } from '../StatisticChart/StatisticChart';
-import { getAudioChallengeStatistics } from '../../../utils/utils';
-
-const stat = {
-  allGamesRight: 0,
-  allGamesWrong: 0,
-  allNewWordsCount: 0,
-  date: '',
-  games: {
-    audiochallenge: {
-      bestStreak: 0,
-      gameNewWordsCount: 0,
-      rightAnswers: 0,
-      wordList: [],
-      wrongAnswers: 0,
-    },
-    wordList: []
-  }, 
-  wordList: []
-}
 
 export default function Statistics() {
   const user = localStorage.getItem('authData');
@@ -48,8 +30,6 @@ export default function Statistics() {
     secondRow: 'Number of learned words:',
     thirdRow: 'Correct answers:'
   }
-
-  const audioChallengeStatistic = getAudioChallengeStatistics();
   
   return (
     <div className="statistics">
@@ -57,9 +37,9 @@ export default function Statistics() {
         <div className="statistics__wrapper">
           <h2 className="statistics__title">Statistics for today:</h2>
           {user && <div className="statistics__cards-wrapper">
-            <StatisticsCard data={sprintData} />
+            <StatisticsSprint data={sprintData} />
             <StatisticsAudio data={audioData} />
-            <StatisticsCard data={oneDay} />
+            <OneDayStat data={oneDay} />
           </div>}
           {!user && <div className="statistics__message">
             Statistics is available only for authorized users :(
