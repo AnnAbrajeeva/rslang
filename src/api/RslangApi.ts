@@ -1,4 +1,4 @@
-import { IAuthUser, IUser, IWord, IUserWordParams, IUserStatistics, IUserSettings, IUserWord, IUserWordWithParams, IUserHardWords } from '../types/types'
+import { IAuthUser, IUser, IWord, IUserWordParams, IUserStatistics, IUserSettings, IUserWordWithParams, IUserHardWords } from '../types/types'
 
 export default class RslangApi {
   url: string
@@ -143,8 +143,16 @@ export default class RslangApi {
         'Content-Type': 'application/json',
       },
     })
-    const content = await res.json() as IUserWordWithParams[]
-    return content
+    const content = await res.json()
+    let words: IUserWordWithParams[] = content[0].paginatedResults
+    words = words.map((word) => {
+      // eslint-disable-next-line no-param-reassign, no-underscore-dangle
+      word.id = word._id 
+      // eslint-disable-next-line no-underscore-dangle, no-param-reassign
+      delete word._id
+      return word
+    })
+    return words
   }
 
 
@@ -222,8 +230,8 @@ export default class RslangApi {
         'Content-Type': 'application/json',
       },
     })
-    const content = await res.json() as IUserWord[]
-    let hardWords = content[0].paginatedResults
+    const content = await res.json()
+    let hardWords: IUserWordWithParams[] = content[0].paginatedResults
     hardWords = hardWords.map((word) => {
       // eslint-disable-next-line no-param-reassign, no-underscore-dangle
       word.id = word._id 

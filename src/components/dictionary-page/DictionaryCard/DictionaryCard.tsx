@@ -8,18 +8,18 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import VolumeUpIcon from '@mui/icons-material/VolumeUp'
 import { useTypedSelector } from "../../../redux/hooks";
-import { IUserWordParams, IWord } from '../../../types/types'
+import { IUserWordParams, IWord, IUserWordWithParams } from '../../../types/types'
 import './DictionaryCard.css'
 
 interface DictionaryCardProps {
-  word: IWord
+  word: IWord | IUserWordWithParams
   addDifficultWord: (id: string) => void
   addLearnedWord: (id: string) => void
   removeFromLearned: (id: string) => void
   removeFromHard: (id: string) => void
   infoWord: IUserWordParams[]
   updateUserWords: () => void
-  checkLearnedPage: () => void
+  allLearned: boolean
 }
 
 export default function DictionaryCard({
@@ -30,12 +30,11 @@ export default function DictionaryCard({
   removeFromHard,
   infoWord,
   updateUserWords,
-  checkLearnedPage
+  allLearned
 }: DictionaryCardProps) {
-  const wordInfo = infoWord.find((uWord) => uWord.wordId === word.id)
   const [play, setPlay] = useState(false)
-  const [hard, setHard] = useState(wordInfo?.difficulty === 'hard')
-  const [learned, setLearned] = useState(wordInfo?.optional.learned)
+  const [hard, setHard] = useState((word as IUserWordWithParams).userWord?.difficulty === 'hard')
+  const [learned, setLearned] = useState((word as IUserWordWithParams).userWord?.optional.learned)
   const { authData } = useTypedSelector(state => state.auth);
   
   const playSound = () => {
@@ -144,7 +143,7 @@ export default function DictionaryCard({
         </CardContent>
         {authData && <CardActions>
           <Button
-            onClick={() => addToDifficult(word.id)}
+            onClick={() => addToDifficult(word.id!)}
             variant={!hard ? 'outlined' : 'contained'}
             color="error"
             fullWidth
@@ -153,7 +152,7 @@ export default function DictionaryCard({
             Difficult word
           </Button>
           <Button
-            onClick={() => addToLearned(word.id)}
+            onClick={() => addToLearned(word.id!)}
             variant={!learned ? 'outlined' : 'contained'}
             color="success"
             fullWidth

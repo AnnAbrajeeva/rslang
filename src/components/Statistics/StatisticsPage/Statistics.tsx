@@ -7,6 +7,23 @@ import './Statistics.css'
 import { Chart } from '../StatisticChart/StatisticChart';
 import { getAudioChallengeStatistics } from '../../../utils/utils';
 
+const stat = {
+  allGamesRight: 0,
+  allGamesWrong: 0,
+  allNewWordsCount: 0,
+  date: '',
+  games: {
+    audiochallenge: {
+      bestStreak: 0,
+      gameNewWordsCount: 0,
+      rightAnswers: 0,
+      wordList: [],
+      wrongAnswers: 0,
+    },
+    wordList: []
+  }, 
+  wordList: []
+}
 
 export default function Statistics() {
   const user = localStorage.getItem('authData');

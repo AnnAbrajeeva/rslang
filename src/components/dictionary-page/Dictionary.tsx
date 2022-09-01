@@ -3,25 +3,21 @@ import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import DictionaryCard from './DictionaryCard/DictionaryCard'
-import { IUserWordParams, IWord } from '../../types/types'
+import { IUserWordParams, IWord, IUserWordWithParams } from '../../types/types'
 import RslangApi from '../../api/RslangApi'
 
 const api = new RslangApi()
-// api.signInUser({ email: 'aaa@aa.ru', password: '12345678' }).then((res) => {
-//   localStorage.setItem('user', JSON.stringify(res))
-//   console.log(res)
-// })
 
 function EmptyList() {
   return <h1 style={{ textAlign: 'center' }}>It's empty yet</h1>
 }
 
 interface IDictionaryProps {
-  words: IWord[]
+  words: IWord[] | IUserWordWithParams[]
   userWords: IUserWordParams[]
   updateUserWords: () => void
   learnCardsStyle: () => string
-  checkLearnedPage: () => void
+  allLearned: boolean
 }
 
 export default function Dictionary({
@@ -29,7 +25,7 @@ export default function Dictionary({
   userWords,
   updateUserWords,
   learnCardsStyle,
-  checkLearnedPage
+  allLearned
 }: IDictionaryProps) {
   const addDifficultWord = async (id: string) => {
     const isUserWord = userWords.find((uWord) => uWord.wordId === id)
@@ -77,7 +73,19 @@ export default function Dictionary({
   const removeFromLearned = async (id: string) => {
     const isUserWord = userWords.find((uWord) => uWord.wordId === id)
     if (isUserWord) {
-      api.deleteUserWord(isUserWord.wordId!)
+      const wordParams = { ...isUserWord }
+      wordParams.optional.learned = false
+      delete wordParams.id
+      delete wordParams.wordId
+      await api.updateUserWord(id, wordParams)
+    } else {
+      const wordParams = {
+        difficulty: 'weak',
+        optional: {
+          learned: false,
+        }
+      }
+      await api.createUserWord(id, wordParams)
     }
     updateUserWords()
   }
@@ -85,7 +93,17 @@ export default function Dictionary({
   const removeFromHard = async (id: string) => {
     const isUserWord = userWords.find((uWord) => uWord.wordId === id)
     if (isUserWord) {
-      api.deleteUserWord(isUserWord.wordId!)
+      const wordParams = { ...isUserWord }
+      wordParams.difficulty = 'weak'
+      delete wordParams.id
+      delete wordParams.wordId
+      await api.updateUserWord(id, wordParams)
+    } else {
+      const wordParams = {
+        difficulty: 'weak',
+        optional: {},
+      }
+      await api.createUserWord(id, wordParams)
     }
     updateUserWords()
   }
@@ -99,7 +117,7 @@ export default function Dictionary({
               <Card sx={{ border: learnCardsStyle}}>
                 <DictionaryCard
                   updateUserWords={updateUserWords}
-                  checkLearnedPage={checkLearnedPage}
+                  allLearned={allLearned}
                   infoWord={userWords}
                   addLearnedWord={addLearnedWord}
                   removeFromLearned={removeFromLearned}
