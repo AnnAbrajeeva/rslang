@@ -229,6 +229,12 @@ export const createNewUserWord = (
         wrongCounter:
           Number(gameName && gameName === AUDIOCHALLENGE && !isRight) || 0,
       },
+      sprint: {
+        rightCounter:
+          Number(gameName && gameName === 'sprint' && isRight) || 0,
+        wrongCounter:
+          Number(gameName && gameName === 'sprint' && !isRight) || 0,
+      },
     },
   };
 };
@@ -250,19 +256,26 @@ export const updateUserWordData = (
       optional: {
         wordId,
         counter: isRight ? optional.counter + 1 : 0,
-        audiochallenge: {
+        audiochallenge: optional.audiochallenge ? {
           rightCounter:
-            gameName && gameName === AUDIOCHALLENGE && isRight
-              ? optional.audiochallenge.rightCounter + 1
-              : optional.audiochallenge.rightCounter,
-          wrongCounter:
-            gameName && gameName === AUDIOCHALLENGE && !isRight
-              ? optional.audiochallenge.wrongCounter + 1
-              : optional.audiochallenge.wrongCounter,
+              gameName && gameName === AUDIOCHALLENGE && isRight
+                ? optional.audiochallenge.rightCounter + 1
+                : optional.audiochallenge.rightCounter,
+            wrongCounter:
+              gameName && gameName === AUDIOCHALLENGE && !isRight
+                ? optional.audiochallenge.wrongCounter + 1
+                : optional.audiochallenge.wrongCounter,
+        } : {
+          rightCounter: isRight ? 1 : 0,
+          wrongCounter: !isRight ? 1 : 0,
+        },
+        sprint: optional.sprint ? optional.sprint : {
+          rightCounter: 0,
+          wrongCounter: 0
         },
       },
     };
-    return updatedUserWord;
+    return updatedUserWord; 
   }
 };
 

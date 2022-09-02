@@ -10,3 +10,6 @@ SelectLevel.tsx
 Sprint.tsx
 SprintGameCont.tsx
 Timer.tsx
+FooterLinks.tsx
+updateStatistic.ts
+index.ts

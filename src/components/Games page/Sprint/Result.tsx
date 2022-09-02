@@ -3,63 +3,21 @@
 import { Button, Grid, List, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { Cancel, CheckCircle, VolumeUp } from '@mui/icons-material'
-import { IResult } from '../../../types/types'
+import { IResult, IUserWordParams } from '../../../types/types'
 import RslangApi from '../../../api/RslangApi'
-import { useEffect } from 'react'
-import { updateLocalStatisticSprint } from './utils/updateStatistic'
+import { useEffect, useState } from 'react'
+import {
+  createNewUserWord,
+  updateLocalStatisticSprint,
+  updateWord,
+} from './utils/updateStatistic'
+import { updateUserWordData } from '../../../utils'
 const api = new RslangApi()
 const user = JSON.parse(localStorage.getItem('authData') || '{}')
 
 const ResultItem = (properties: { props: IResult }) => {
+  const [userWords, setUserWords] = useState<IUserWordParams[]>()
   const props = properties.props
-  let callFunctionOnce = 1
-
-  useEffect(() => {
-    if (callFunctionOnce === 1) {
-      callFunctionOnce++
-
-      if (localStorage.authData) {
-        api
-          .getUserWord(props.id)
-          .then((data) => {
-            if (data.wordId) {
-              if (props.isCorrect) {
-                api.updateUserWord(data.wordId, {
-                  difficulty: data.difficulty,
-                  optional: {
-                    data: new Date().toLocaleDateString(),
-                  },
-                })
-              } else if (!props.isCorrect) {
-                api.updateUserWord(data.wordId, {
-                  difficulty: data.difficulty,
-                  optional: {
-                    data: new Date().toLocaleDateString(),
-                  },
-                })
-              }
-            }
-          })
-          .catch((err) => {
-            if (props.isCorrect) {
-              api.createUserWord(props.id, {
-                difficulty: 'weak',
-                optional: {
-                  data: new Date().toLocaleDateString(),
-                },
-              })
-            } else if (!props.isCorrect) {
-              api.createUserWord(props.id, {
-                difficulty: 'weak',
-                optional: {
-                  data: new Date().toLocaleDateString(),
-                },
-              })
-            }
-          })
-      }
-    }
-  }, [props.id, props.isCorrect])
 
   const audio = new Audio(`https://rs-lang-base.herokuapp.com/${props.sound}`)
 
@@ -99,7 +57,6 @@ export default function Result(props: {
     .filter((item) => !item.isCorrect)
     .map((item) => item.id)
 
-  console.log(user.id)
   updateLocalStatisticSprint(
     rightAnswersIds,
     wrongAnswersIds,
@@ -107,6 +64,32 @@ export default function Result(props: {
     props.bestStreak,
     user.userId
   )
+
+  useEffect(() => {
+    if (user) {
+      const fetchData = async () => {
+        const words = await api.getWords()
+        if (words) {
+          props.result.forEach((el) => {
+            const word = words.find(
+              (item) => item.id === el.id
+            )
+            if (word) {  
+              // @ts-ignore
+              const newWord = updateWord(word, el.isCorrect, 'sprint')
+              if (newWord) {
+                api.updateUserWord(word.id!, newWord)
+              }     
+            } else {
+              const newWord = createNewUserWord(el.id, el.isCorrect, 'sprint') 
+              api.createUserWord(newWord.optional.wordId, newWord)
+            }
+          })
+        }
+      }
+      fetchData()
+    }
+  }, [])
 
   return (
     <div className="results">

@@ -1,6 +1,11 @@
-/* eslint-disable no-unused-expressions */
-// eslint-disable-next-line import/no-cycle
+// eslint-disabled //
+/*eslint import/no-cycle: [2, { ignoreExternal: true }]*/
 import { getCurrentDate, getNewWordsFromArray } from '../../../../utils'
+// import RslangApi from '../../../../api/RslangApi';
+import { IWord } from "../../../../types/auth-audio/IWord";
+import AUDIOCHALLENGE from "../../../../utils/constants";
+
+// const api = new RslangApi()
 
 export interface ILocalStatisticSprint {
     date: string;
@@ -40,7 +45,6 @@ const setInitialLocalStatistic = (
   const prevStatistic =
     userStatistic || (!userId && guestStatistic ? guestStatistic : null)
 
-    console.log(rightAnswersIds, wrongAnswersIds)
 
   const prevData = JSON.parse(prevStatistic || '{}') as ILocalStatisticSprint
   const allWordsList = [...rightAnswersIds, ...wrongAnswersIds]
@@ -233,3 +237,124 @@ export const getSprintChallengeStatistics = () => {
     }
     return null;
   }
+
+  export const createNewUserWord = (
+    // для создания 'пустого' объекта userWord
+    wordId: string,
+    isRight: boolean,
+    gameName?: string,
+    difficulty?: string
+  ) => {
+    const counter = isRight ? 1 : 0;
+    return {
+      difficulty: difficulty || 'easy',
+      optional: {
+        wordId,
+        counter,
+        audiochallenge: {
+          rightCounter:
+            Number(gameName && gameName === AUDIOCHALLENGE && isRight) || 0,
+          wrongCounter:
+            Number(gameName && gameName === AUDIOCHALLENGE && !isRight) || 0,
+        },
+        sprint: {
+          rightCounter:
+            Number(gameName && gameName === 'sprint' && isRight) || 0,
+          wrongCounter:
+            Number(gameName && gameName === 'sprint' && !isRight) || 0,
+        },
+      },
+    };
+  };
+  
+  export const updateWord = (
+    // создание обновленного объекта UserWord после игры
+    word: IWord,
+    isRight: boolean,
+    gameName: string
+  // eslint-disable-next-line consistent-return
+  ) => {
+    // eslint-disable-next-line no-prototype-builtins
+    if (word.userWord) {
+      const { difficulty, optional } = word.userWord!;
+      const { wordId } = optional;
+      const updatedUserWord = {
+        difficulty: difficulty || 'easy',
+        optional: {
+          wordId,
+          // eslint-disable-next-line no-nested-ternary
+          counter: optional.counter ? (isRight ? optional.counter + 1 : 0) : (isRight ? 1 : 0),
+          audiochallenge: optional.audiochallenge ? optional.audiochallenge : {
+            rightCounter: 0,
+            wrongCounter: 0
+          },
+          sprint: optional.sprint ? {
+            rightCounter:
+              gameName && gameName === 'sprint' && isRight
+                ? optional.sprint.rightCounter + 1
+                : optional.sprint.rightCounter,
+            wrongCounter:
+              gameName && gameName === 'sprint' && !isRight
+                ? optional.sprint.wrongCounter + 1
+                : optional.sprint.wrongCounter,
+          } : {
+            rightCounter: isRight ? 1 : 0,
+            wrongCounter: !isRight ? 1 : 0,
+          },
+        },
+      };
+      return updatedUserWord;
+    }
+  };
+
+  // export function updateWord(word: IUserWordParams, isCorrect: boolean) {
+  //   const { difficulty, optional } = word;
+  //   const { wordId } = word;
+  //   const updatedUserWord: IUserWordParams = {
+  //     difficulty,
+  //     optional: {
+  //       wordId,
+  //       counter: isCorrect ? optional.counter! + 1 : 0,
+  //       learned: optional.counter! >= 3 ? true : optional.learned,
+  //       data: getCurrentDate(),
+  //       sprint: optional.sprint ? {
+  //         rightCounter:
+  //         isCorrect
+  //             ? optional.sprint!.rightCounter + 1
+  //             : optional.sprint!.rightCounter,
+  //         wrongCounter:
+  //           !isCorrect
+  //             ? optional.sprint!.wrongCounter + 1
+  //             : optional.sprint!.wrongCounter,
+  //       } : {
+  //         rightCounter:
+  //         isCorrect
+  //             ? 1
+  //             : 0,
+  //         wrongCounter:
+  //           !isCorrect
+  //             ? 1
+  //             : 0,
+  //       },
+  //     },
+  //   };
+  //   api.updateUserWord(wordId!, updatedUserWord)
+  // }
+
+  // export function createNewUserWord(id: string, isCorrect: boolean) {
+  //   const counter = isCorrect ? 1 : 0;
+  //   const newWord = {
+  //     difficulty: 'easy',
+  //     optional: {
+  //       wordId: id,
+  //       counter,
+  //       sprint: {
+  //         rightCounter:
+  //           isCorrect ? 1 : 0,
+  //         wrongCounter:
+  //         !isCorrect ? 1 : 0,
+  //       },
+  //     },
+  //   };
+  //   api.createUserWord(id, newWord)
+  // };
