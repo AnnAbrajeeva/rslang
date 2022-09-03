@@ -293,12 +293,16 @@ export default class RslangApi {
     const {token, userId} = this.getUserFromLocalStorage()
 
     const res = await fetch(`${this.url}users/${userId}/statistics`, {
+      method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
     })
+    if(!res.ok) {
+      console.log("Нет статистики по данному пользователю")
+    }
     const content = await res.json() as IStatistic
         return content
   }

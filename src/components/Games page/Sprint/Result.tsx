@@ -3,9 +3,9 @@
 import { Button, Grid, List, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { Cancel, CheckCircle, VolumeUp } from '@mui/icons-material'
-import { IResult, IUserWordParams } from '../../../types/types'
+import { IResult } from '../../../types/types'
 import RslangApi from '../../../api/RslangApi'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import {
   createNewUserWord,
   updateLocalStatisticSprint,
@@ -13,10 +13,9 @@ import {
 } from './utils/updateStatistic'
 import { prepareNewStatistic } from '../../../redux/features/statisticSlice/utils'
 const api = new RslangApi()
-const user = JSON.parse(localStorage.getItem('authData') || '{}')
+
 
 const ResultItem = (properties: { props: IResult }) => {
-  const [userWords, setUserWords] = useState<IUserWordParams[]>()
   const props = properties.props
 
   const audio = new Audio(`https://rs-lang-base.herokuapp.com/${props.sound}`)
@@ -48,6 +47,8 @@ export default function Result(props: {
   let correctWords = props.result.filter((el) => el.isCorrect).length
   let unCorrectWords = props.result.filter((el) => !el.isCorrect).length
   const navigate = useNavigate()
+  const user = JSON.parse(localStorage.getItem('authData') || '{}')
+  console.log(user)
   console.log(props.bestStreak)
 
   const rightAnswersIds = props.result
@@ -68,20 +69,29 @@ export default function Result(props: {
   useEffect(() => {
     if (user) {
       const fetchData = async () => {
+        const prevStat = await api.getUserStatistics() || {}
+        console.log(123)
+        const allLearnedWords = await api.getAllLearnedWords()
+        console.log(allLearnedWords)
+        const newStat = prepareNewStatistic(prevStat, [...rightAnswersIds, ...wrongAnswersIds], allLearnedWords.length)
+        console.log(newStat)
+        if (newStat) {
+          await api.updateUserStatistics(newStat)
+        }
         const words = await api.getWords()
         if (words) {
           props.result.forEach((el) => {
             const word = words.find(
               (item) => item.id === el.id
             )
-            if (word && word.userWord) {  
+            if (word && word.userWord) {
               // @ts-ignore
               const newWord = updateWord(word, el.isCorrect, 'sprint')
               if (newWord) {
                 api.updateUserWord(word.id!, newWord)
-              }     
+              }
             } else {
-              const newWord = createNewUserWord(el.id, el.isCorrect, 'sprint') 
+              const newWord = createNewUserWord(el.id, el.isCorrect, 'sprint')
               api.createUserWord(newWord.optional.wordId, newWord)
             }
           })
@@ -91,17 +101,12 @@ export default function Result(props: {
     }
   }, [])
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const prevStat = await api.getUserStatistics()
-      const allLearnedWords = await api.getAllLearnedWords()
-      const newStat = prepareNewStatistic(prevStat, [...rightAnswersIds, ...wrongAnswersIds], allLearnedWords.length)
-      if (newStat) {
-        await api.updateUserStatistics(newStat)
-      }     
-    }
-    fetchData()
-  })
+  // useEffect(() => {
+  //   const fetchData = async () => {
+
+  //   }
+  //   fetchData()
+  // }, [])
 
   return (
     <div className="results">

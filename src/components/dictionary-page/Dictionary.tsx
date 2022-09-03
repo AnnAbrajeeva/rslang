@@ -7,9 +7,10 @@ import { IUserWordParams, IWord, IUserWordWithParams } from '../../types/types'
 import RslangApi from '../../api/RslangApi'
 import { getCurrentDate } from '../../utils'
 import { IStatistic } from '../../types/auth-audio/IStatistic'
-import { updateStatistic } from './utils/updateStatistic'
+import { updateUserStatistics } from './DictionaryPage/utils'
 
 const api = new RslangApi()
+// const auth = localStorage.getItem('authData')
 
 function EmptyList() {
   return <h1 style={{ textAlign: 'center' }}>It's empty yet</h1>
@@ -32,12 +33,8 @@ export default function Dictionary({
   allLearned,
   statistic,
 }: IDictionaryProps) {
-  const updateUserStatistics = async (action: string) => {
-    const newStat = await updateStatistic(statistic, action)
-    if (newStat) {
-      await api.updateUserStatistics(newStat)
-    }
-  }
+
+ 
 
   const addDifficultWord = async (id: string) => {
     const isUserWord = userWords.find((uWord) => uWord.wordId === id)
@@ -79,7 +76,7 @@ export default function Dictionary({
         },
       }
       await api.createUserWord(id, wordParams)
-      await updateUserStatistics('add')
+      await updateUserStatistics(statistic, 'add')
     }
     updateUserWords()
   }
@@ -94,7 +91,7 @@ export default function Dictionary({
       await api.updateUserWord(id, wordParams)
     }
     updateUserWords()
-    await updateUserStatistics('remove')
+    await updateUserStatistics(statistic, 'remove')
   }
 
   const removeFromHard = async (id: string) => {
@@ -108,6 +105,7 @@ export default function Dictionary({
     }
     updateUserWords()
   }
+
 
   return (
     <Box sx={{ width: '100%' }}>

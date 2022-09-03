@@ -49,11 +49,13 @@ export function Chart() {
   const dates: string[] = []
   let labels: string[]
   const newWords = []
+  const learnedWords = []
 
   if (statistic) {
     for (let day in statistic.optional.dailyResults) {
       dates.push(day)
       newWords.push(statistic.optional.dailyResults[day].newWordsCounter)
+      learnedWords.push(statistic.optional.dailyResults[day].learnedWords)
     }
   }
 
@@ -86,7 +88,7 @@ export function Chart() {
 
   const set = new Set(dates)
   labels = [...set]
-  const learnedWords = Object.values(sortArr)
+  // const learnedWords = Object.values(sortArr)
 
   const options = {
     responsive: true,
@@ -112,7 +114,7 @@ export function Chart() {
         borderColor: 'rgb(53, 162, 235)',
         backgroundColor: 'rgba(53, 162, 235, 0.5)',
       }
-    ],
+    ], 
   }
 
   return (

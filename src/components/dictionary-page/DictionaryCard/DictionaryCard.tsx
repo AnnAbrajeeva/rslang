@@ -130,18 +130,6 @@ export default function DictionaryCard({
   const allRightCounter = rightCounterAudio + rightCounterSprint
   const allWrongCounter = wrongCounterAudio + wrongCounterSprint
 
-  if(allRightCounter === 3 && hard === false && learned === false) {
-    setLearned(true)
-    addLearnedWord(word.id!)
-  } else if (allRightCounter === 5 && hard) {
-    setLearned(true)
-    setHard(false)
-    addLearnedWord(word.id!)
-  } else if (learned && allWrongCounter > 0) {
-    setLearned(false)
-    removeFromLearned(word.id!)
-  }
-
   function renderStyleHeaderCard() {
     if (hard) {
       return 'rgb(237 180 180)'

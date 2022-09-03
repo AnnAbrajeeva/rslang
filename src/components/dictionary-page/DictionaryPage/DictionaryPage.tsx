@@ -17,6 +17,7 @@ import {
 import { useTypedSelector } from '../../../redux/hooks'
 import Games from '../../Games page/Games'
 import { IStatistic } from '../../../types/auth-audio/IStatistic'
+import { addLearned, removeLearned } from './utils'
 
 const api = new RslangApi()
 const auth = localStorage.getItem('authData')
@@ -44,6 +45,9 @@ export default function DictionaryPage() {
         setWordsParams(response)
         const userStatistic = await api.getUserStatistics()
         setStatistic(userStatistic)
+        uWords.forEach((word) => {
+          checkIsLearnedWord(word)
+        })
       }
 
       if (authData && group === 6) {
@@ -67,7 +71,6 @@ export default function DictionaryPage() {
         )
       }
     })
-  
 
   useEffect(() => {
     if (auth) {
@@ -103,6 +106,55 @@ export default function DictionaryPage() {
   const learnedPageColor = () => {
     const color = allLearned && authData && group !== 6 ? '8px solid green' : ''
     return color
+  }
+
+  const checkIsLearnedWord = async (word: IUserWordWithParams) => {
+    if(auth) {
+        const rightCounterAudio =
+        word.userWord &&
+        word.userWord.optional?.audiochallenge
+          ? Number(
+              word.userWord.optional?.audiochallenge
+                ?.rightCounter
+            )
+          : 0
+    
+      const rightCounterSprint =
+        word.userWord &&
+        word.userWord.optional?.sprint
+          ? Number(
+              word.userWord.optional?.sprint?.rightCounter
+            )
+          : 0
+    
+      const wrongCounterAudio =
+        word.userWord &&
+        (word as IUserWordWithParams).userWord.optional?.audiochallenge
+          ? Number(
+              word.userWord.optional?.audiochallenge
+                ?.wrongCounter
+            )
+          : 0
+    
+      const wrongCounterSprint =
+        word.userWord &&
+        word.userWord.optional?.sprint
+          ? Number(
+              word.userWord.optional?.sprint?.wrongCounter
+            )
+          : 0
+    
+      const allRightCounter = rightCounterAudio + rightCounterSprint
+      const allWrongCounter = wrongCounterAudio + wrongCounterSprint
+    
+      if(allRightCounter >= 3 && word.userWord.difficulty !== 'hard' && !word.userWord.optional.learned && allWrongCounter <= 0) {
+        await addLearned(word, statistic)
+      } else if (allRightCounter >= 5 && word.userWord.difficulty === 'hard') {
+        await addLearned(word, statistic)
+      } else if (word.userWord.optional.learned && allWrongCounter > 0) {
+        removeLearned(word, statistic)
+      }
+    }
   }
 
   return (
