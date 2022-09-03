@@ -11,7 +11,6 @@ import {
   updateLocalStatisticSprint,
   updateWord,
 } from './utils/updateStatistic'
-import { updateUserWordData } from '../../../utils'
 const api = new RslangApi()
 const user = JSON.parse(localStorage.getItem('authData') || '{}')
 
@@ -74,14 +73,16 @@ export default function Result(props: {
             const word = words.find(
               (item) => item.id === el.id
             )
-            if (word) {  
+            if (word && word.userWord) {  
               // @ts-ignore
               const newWord = updateWord(word, el.isCorrect, 'sprint')
+              console.log(newWord)
               if (newWord) {
                 api.updateUserWord(word.id!, newWord)
               }     
             } else {
               const newWord = createNewUserWord(el.id, el.isCorrect, 'sprint') 
+              console.log('newWord', newWord)
               api.createUserWord(newWord.optional.wordId, newWord)
             }
           })

@@ -28,7 +28,7 @@ export default function OneDayStat({ data }: StatisticsCardProps) {
   if (statistic) {
     allGamesRight = statistic.allGamesRight
     allGamesWrong = statistic.allGamesWrong;
-    allNewWordsCount = statistic.allNewWordsCount;
+    allNewWordsCount = Math.round(statistic.allNewWordsCount);
     rightWordsPercent = (allGamesRight + allGamesWrong) > 0 ? Math.round((allGamesRight / (allGamesRight + allGamesWrong)) * 100) : 0;
   }
 
@@ -39,14 +39,15 @@ export default function OneDayStat({ data }: StatisticsCardProps) {
     const fetchData = async () => {
       const words = await api.getAllLearnedWords()
       setUserWords(words)
+      if(words) {
+        const arr = words.filter((word) => word.userWord.optional.data === date)
+        setLearned(arr.length)
+      }
     }
     fetchData()
   const date = getCurrentDate()
 
-  if(userWords) {
-    const arr = userWords.filter((word) => word.userWord.optional.data === date)
-    setLearned(arr.length)
-  }
+  
   }, [])
 
   

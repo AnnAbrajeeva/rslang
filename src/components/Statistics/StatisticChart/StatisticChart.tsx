@@ -40,8 +40,8 @@ export function Chart() {
         setStatistic(stat)
       }
       const words = await api.getAllLearnedWords()
-      setUserWords(words)
       console.log(words)
+      setUserWords(words)
     }
     fetchData()
   }, [])
@@ -83,12 +83,10 @@ export function Chart() {
     {}
   );
 
-  console.log(arr)
-  console.log(sortArr)
+
   const set = new Set(dates)
   labels = [...set]
   const learnedWords = Object.values(sortArr)
-  console.log(learnedWords)
 
   const options = {
     responsive: true,

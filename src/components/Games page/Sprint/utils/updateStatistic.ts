@@ -1,7 +1,7 @@
+import { IUserWordParams } from './../../../../types/types';
 // eslint-disabled //
 /*eslint import/no-cycle: [2, { ignoreExternal: true }]*/
 import { getCurrentDate, getNewWordsFromArray } from '../../../../utils'
-// import RslangApi from '../../../../api/RslangApi';
 import { IWord } from "../../../../types/auth-audio/IWord";
 import AUDIOCHALLENGE from "../../../../utils/constants";
 
@@ -269,14 +269,14 @@ export const getSprintChallengeStatistics = () => {
   
   export const updateWord = (
     // создание обновленного объекта UserWord после игры
-    word: IWord,
+    word: IUserWordParams,
     isRight: boolean,
     gameName: string
   // eslint-disable-next-line consistent-return
   ) => {
     // eslint-disable-next-line no-prototype-builtins
-    if (word.userWord) {
-      const { difficulty, optional } = word.userWord!;
+    if (word) {
+      const { difficulty, optional } = word;
       const { wordId } = optional;
       const updatedUserWord = {
         difficulty: difficulty || 'easy',
