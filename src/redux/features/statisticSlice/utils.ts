@@ -12,7 +12,8 @@ export const prepareNewStatistic = (
   const prevData = { ...prevStatistic };
   const newWordsIds: Array<string> = [];
   const today = getCurrentDate();
-  if (!isObjectEmpty(prevData)) {
+
+  if (Object.keys(prevData).length !== 0) {
     [...gameWordsIds].forEach((el) => {
       if (!(el in prevData!.optional!.learnedWordsIds)) newWordsIds.push(el);
     });

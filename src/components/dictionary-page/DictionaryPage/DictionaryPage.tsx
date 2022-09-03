@@ -40,14 +40,18 @@ export default function DictionaryPage() {
         setWords(res)
       } else {
         const uWords = await api.getAllUserWordsWithParams(page, group)
+        
         setWords(uWords)
         const response = await api.getAllUserWords()
         setWordsParams(response)
         const userStatistic = await api.getUserStatistics()
-        setStatistic(userStatistic)
-        uWords.forEach((word) => {
-          checkIsLearnedWord(word)
-        })
+        if (Object.keys(userStatistic).length !== 0) {
+          setStatistic(userStatistic)
+          uWords.forEach((word) => {
+            checkIsLearnedWord(word)
+          })
+        }
+
       }
 
       if (authData && group === 6) {
@@ -61,9 +65,9 @@ export default function DictionaryPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, group])
 
-  const checkLearnedPage = (): boolean => 
-  // eslint-disable-next-line consistent-return, array-callback-return
-     (words as IUserWordWithParams[]).every((word) => {
+  const checkLearnedPage = (): boolean =>
+    // eslint-disable-next-line consistent-return, array-callback-return
+    (words as IUserWordWithParams[]).every((word) => {
       if (word.userWord) {
         return (
           word.userWord.difficulty === 'hard' ||
@@ -88,6 +92,13 @@ export default function DictionaryPage() {
     } else {
       const uWords = await api.getAllUserWordsWithParams(page, group)
       setWords(uWords)
+      const userStatistic = await api.getUserStatistics()
+        if (Object.keys(userStatistic).length !== 0) {
+          setStatistic(userStatistic)
+          uWords.forEach((word) => {
+            checkIsLearnedWord(word)
+          })
+        }
       setAllLearned(checkLearnedPage())
     }
   }
@@ -109,45 +120,45 @@ export default function DictionaryPage() {
   }
 
   const checkIsLearnedWord = async (word: IUserWordWithParams) => {
-    if(auth) {
-        const rightCounterAudio =
+    if (auth && Object.keys(statistic).length !== 0) {
+      const rightCounterAudio =
         word.userWord &&
-        word.userWord.optional?.audiochallenge
+          word.userWord.optional?.audiochallenge
           ? Number(
-              word.userWord.optional?.audiochallenge
-                ?.rightCounter
-            )
+            word.userWord.optional?.audiochallenge
+              ?.rightCounter
+          )
           : 0
-    
+
       const rightCounterSprint =
         word.userWord &&
-        word.userWord.optional?.sprint
+          word.userWord.optional?.sprint
           ? Number(
-              word.userWord.optional?.sprint?.rightCounter
-            )
+            word.userWord.optional?.sprint?.rightCounter
+          )
           : 0
-    
+
       const wrongCounterAudio =
         word.userWord &&
-        (word as IUserWordWithParams).userWord.optional?.audiochallenge
+          (word as IUserWordWithParams).userWord.optional?.audiochallenge
           ? Number(
-              word.userWord.optional?.audiochallenge
-                ?.wrongCounter
-            )
+            word.userWord.optional?.audiochallenge
+              ?.wrongCounter
+          )
           : 0
-    
+
       const wrongCounterSprint =
         word.userWord &&
-        word.userWord.optional?.sprint
+          word.userWord.optional?.sprint
           ? Number(
-              word.userWord.optional?.sprint?.wrongCounter
-            )
+            word.userWord.optional?.sprint?.wrongCounter
+          )
           : 0
-    
+
       const allRightCounter = rightCounterAudio + rightCounterSprint
       const allWrongCounter = wrongCounterAudio + wrongCounterSprint
-    
-      if(allRightCounter >= 3 && word.userWord.difficulty !== 'hard' && !word.userWord.optional.learned && allWrongCounter <= 0) {
+
+      if (allRightCounter >= 3 && word.userWord.difficulty !== 'hard' && !word.userWord.optional.learned && allWrongCounter <= 0) {
         await addLearned(word, statistic)
       } else if (allRightCounter >= 5 && word.userWord.difficulty === 'hard') {
         await addLearned(word, statistic)

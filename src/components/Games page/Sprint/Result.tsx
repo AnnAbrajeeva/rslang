@@ -70,9 +70,9 @@ export default function Result(props: {
     if (user) {
       const fetchData = async () => {
         const prevStat = await api.getUserStatistics() || {}
-        console.log(123)
         const allLearnedWords = await api.getAllLearnedWords()
         console.log(allLearnedWords)
+        console.log(rightAnswersIds, wrongAnswersIds)
         const newStat = prepareNewStatistic(prevStat, [...rightAnswersIds, ...wrongAnswersIds], allLearnedWords.length)
         console.log(newStat)
         if (newStat) {

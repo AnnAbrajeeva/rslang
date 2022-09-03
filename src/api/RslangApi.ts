@@ -55,7 +55,7 @@ export default class RslangApi {
 
   // Получить пользователя по id
   getUser = async (id: string) => {
-    const {token} = this.getUserFromLocalStorage()
+    const { token } = this.getUserFromLocalStorage()
 
     const res = await fetch(`${this.url}users/${id}`, {
       headers: {
@@ -70,7 +70,7 @@ export default class RslangApi {
 
   // Обновить пользователя
   updateUser = async (data: IUser) => {
-    const {token, userId} = this.getUserFromLocalStorage()
+    const { token, userId } = this.getUserFromLocalStorage()
 
     const res = await fetch(`${this.url}users/${userId}`, {
       method: "PUT",
@@ -82,12 +82,12 @@ export default class RslangApi {
       body: JSON.stringify(data)
     })
     const content = await res.json() as IUser
-    return content 
+    return content
   }
 
-   // Удалить пользователя
-   deleteUser = async (data: IUser) => {
-    const {token, userId} = this.getUserFromLocalStorage()
+  // Удалить пользователя
+  deleteUser = async (data: IUser) => {
+    const { token, userId } = this.getUserFromLocalStorage()
 
     const res = await fetch(`${this.url}users/${userId}`, {
       method: "DELETE",
@@ -104,7 +104,7 @@ export default class RslangApi {
 
   // Обновить токен
   updateToken = async () => {
-    const {token, userId} = this.getUserFromLocalStorage()
+    const { token, userId } = this.getUserFromLocalStorage()
 
     const res = await fetch(`${this.url}users/${userId}/tokens`, {
       headers: {
@@ -119,7 +119,7 @@ export default class RslangApi {
 
   // Все слова пользователя
   getAllUserWords = async () => {
-    const {token, userId} = this.getUserFromLocalStorage()
+    const { token, userId } = this.getUserFromLocalStorage()
 
     const res = await fetch(`${this.url}users/${userId}/words`, {
       headers: {
@@ -135,7 +135,7 @@ export default class RslangApi {
   // Все слова со словами пользователя
 
   getAllUserWordsWithParams = async (page: number, group: number) => {
-    const {token, userId} = this.getUserFromLocalStorage()
+    const { token, userId } = this.getUserFromLocalStorage()
 
     const res = await fetch(`${this.url}users/${userId}/aggregatedWords?group=${group}&page=${page}&wordsPerPage=20`, {
       headers: {
@@ -148,7 +148,7 @@ export default class RslangApi {
     let words: IUserWordWithParams[] = content[0].paginatedResults
     words = words.map((word) => {
       // eslint-disable-next-line no-param-reassign, no-underscore-dangle
-      word.id = word._id 
+      word.id = word._id
       // eslint-disable-next-line no-underscore-dangle, no-param-reassign
       delete word._id
       return word
@@ -157,9 +157,9 @@ export default class RslangApi {
   }
 
 
-   // Добавить слово пользователя
-   createUserWord = async (wordId: string, word: IUserWordParams) => {
-    const {token, userId} = this.getUserFromLocalStorage()
+  // Добавить слово пользователя
+  createUserWord = async (wordId: string, word: IUserWordParams) => {
+    const { token, userId } = this.getUserFromLocalStorage()
 
     const res = await fetch(`${this.url}users/${userId}/words/${wordId}`, {
       method: 'POST',
@@ -176,7 +176,7 @@ export default class RslangApi {
 
   // Получить слово пользователя по Id
   getUserWord = async (wordId: string) => {
-    const {token, userId} = this.getUserFromLocalStorage()
+    const { token, userId } = this.getUserFromLocalStorage()
 
     const res = await fetch(`${this.url}users/${userId}/words/${wordId}`, {
       headers: {
@@ -191,7 +191,7 @@ export default class RslangApi {
 
   // Добавить слово пользователя
   updateUserWord = async (wordId: string, data: IUserWordParams) => {
-    const {token, userId} = this.getUserFromLocalStorage()
+    const { token, userId } = this.getUserFromLocalStorage()
 
     const res = await fetch(`${this.url}users/${userId}/words/${wordId}`, {
       method: 'PUT',
@@ -208,7 +208,7 @@ export default class RslangApi {
 
   // Удалить слово пользователя
   deleteUserWord = async (wordId: string) => {
-    const {token, userId} = this.getUserFromLocalStorage()
+    const { token, userId } = this.getUserFromLocalStorage()
 
     await fetch(`${this.url}users/${userId}/words/${wordId}`, {
       method: 'DELETE',
@@ -222,7 +222,7 @@ export default class RslangApi {
 
   // Получить все сложные слова
   getWords = async () => {
-    const {token, userId} = this.getUserFromLocalStorage()
+    const { token, userId } = this.getUserFromLocalStorage()
 
     const res = await fetch(`${this.url}users/${userId}/aggregatedWords?wordsPerPage=3600`, {
       headers: {
@@ -235,17 +235,17 @@ export default class RslangApi {
     let hardWords: IUserWordWithParams[] = content[0].paginatedResults
     hardWords = hardWords.map((word) => {
       // eslint-disable-next-line no-param-reassign, no-underscore-dangle
-      word.id = word._id 
+      word.id = word._id
       // eslint-disable-next-line no-underscore-dangle, no-param-reassign
       delete word._id
       return word
-    }) 
+    })
     return hardWords as IUserWordWithParams[]
   }
 
   // Получить все сложные слова
   getAllHardWords = async () => {
-    const {token, userId} = this.getUserFromLocalStorage()
+    const { token, userId } = this.getUserFromLocalStorage()
 
     const res = await fetch(`${this.url}users/${userId}/aggregatedWords?wordsPerPage=3600&filter={"userWord.difficulty":"hard"}`, {
       headers: {
@@ -258,17 +258,17 @@ export default class RslangApi {
     let hardWords: IUserWordWithParams[] = content[0].paginatedResults
     hardWords = hardWords.map((word) => {
       // eslint-disable-next-line no-param-reassign, no-underscore-dangle
-      word.id = word._id 
+      word.id = word._id
       // eslint-disable-next-line no-underscore-dangle, no-param-reassign
       delete word._id
       return word
-    }) 
+    })
     return hardWords as IUserHardWords[]
   }
 
   // Получить все выученные слова
   getAllLearnedWords = async () => {
-    const {token, userId} = this.getUserFromLocalStorage()
+    const { token, userId } = this.getUserFromLocalStorage()
 
     const res = await fetch(`${this.url}users/${userId}/aggregatedWords?wordsPerPage=3600&filter={"userWord.optional.learned":true}`, {
       headers: {
@@ -281,16 +281,16 @@ export default class RslangApi {
     let hardWords: IUserWordWithParams[] = content[0].paginatedResults
     hardWords = hardWords.map((word) => {
       // eslint-disable-next-line no-param-reassign, no-underscore-dangle
-      word.id = word._id 
+      word.id = word._id
       // eslint-disable-next-line no-underscore-dangle, no-param-reassign
       delete word._id
       return word
-    }) 
+    })
     return hardWords as IUserWordWithParams[]
   }
 
   getUserStatistics = async () => {
-    const {token, userId} = this.getUserFromLocalStorage()
+    const { token, userId } = this.getUserFromLocalStorage()
 
     const res = await fetch(`${this.url}users/${userId}/statistics`, {
       method: 'GET',
@@ -300,15 +300,15 @@ export default class RslangApi {
         'Content-Type': 'application/json',
       },
     })
-    if(!res.ok) {
-      console.log("Нет статистики по данному пользователю")
+    if (!res.ok) {
+      return {}
     }
     const content = await res.json() as IStatistic
-        return content
+    return content
   }
 
   updateUserStatistics = async (data: IStatistic) => {
-    const {token, userId} = this.getUserFromLocalStorage()
+    const { token, userId } = this.getUserFromLocalStorage()
 
     const res = await fetch(`${this.url}users/${userId}/statistics`, {
       method: 'PUT',
@@ -324,7 +324,7 @@ export default class RslangApi {
   }
 
   getUserSettings = async () => {
-    const {token, userId} = this.getUserFromLocalStorage()
+    const { token, userId } = this.getUserFromLocalStorage()
 
     const res = await fetch(`${this.url}users/${userId}/settings`, {
       headers: {
@@ -338,7 +338,7 @@ export default class RslangApi {
   }
 
   updateUserSettings = async () => {
-    const {token, userId} = this.getUserFromLocalStorage()
+    const { token, userId } = this.getUserFromLocalStorage()
 
     const res = await fetch(`${this.url}users/${userId}/settings`, {
       method: 'PUT',
