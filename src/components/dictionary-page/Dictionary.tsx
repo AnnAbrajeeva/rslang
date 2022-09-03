@@ -6,6 +6,8 @@ import DictionaryCard from './DictionaryCard/DictionaryCard'
 import { IUserWordParams, IWord, IUserWordWithParams } from '../../types/types'
 import RslangApi from '../../api/RslangApi'
 import { getCurrentDate } from '../../utils'
+import { IStatistic } from '../../types/auth-audio/IStatistic'
+import { updateStatistic } from './utils/updateStatistic'
 
 const api = new RslangApi()
 
@@ -19,6 +21,7 @@ interface IDictionaryProps {
   updateUserWords: () => void
   learnCardsStyle: () => string
   allLearned: boolean
+  statistic: IStatistic | {}
 }
 
 export default function Dictionary({
@@ -26,8 +29,16 @@ export default function Dictionary({
   userWords,
   updateUserWords,
   learnCardsStyle,
-  allLearned
+  allLearned,
+  statistic,
 }: IDictionaryProps) {
+  const updateUserStatistics = async (action: string) => {
+    const newStat = await updateStatistic(statistic, action)
+    if (newStat) {
+      await api.updateUserStatistics(newStat)
+    }
+  }
+
   const addDifficultWord = async (id: string) => {
     const isUserWord = userWords.find((uWord) => uWord.wordId === id)
     if (isUserWord) {
@@ -64,10 +75,11 @@ export default function Dictionary({
         difficulty: 'weak',
         optional: {
           learned: true,
-          data: getCurrentDate()
+          data: getCurrentDate(),
         },
       }
       await api.createUserWord(id, wordParams)
+      await updateUserStatistics('add')
     }
     updateUserWords()
   }
@@ -80,8 +92,9 @@ export default function Dictionary({
       delete wordParams.id
       delete wordParams.wordId
       await api.updateUserWord(id, wordParams)
-    } 
+    }
     updateUserWords()
+    await updateUserStatistics('remove')
   }
 
   const removeFromHard = async (id: string) => {
@@ -92,17 +105,22 @@ export default function Dictionary({
       delete wordParams.id
       delete wordParams.wordId
       await api.updateUserWord(id, wordParams)
-    } 
+    }
     updateUserWords()
   }
 
   return (
-    <Box sx={{ width: '100%'}}>
+    <Box sx={{ width: '100%' }}>
       {words.length ? (
         <Grid container spacing={2}>
           {words.map((word) => (
-            <Grid item sm={12} key={word.id} sx={{ paddingRight: '16px', width: '100%' }}>
-              <Card sx={{ border: learnCardsStyle}}>
+            <Grid
+              item
+              sm={12}
+              key={word.id}
+              sx={{ paddingRight: '16px', width: '100%' }}
+            >
+              <Card sx={{ border: learnCardsStyle }}>
                 <DictionaryCard
                   updateUserWords={updateUserWords}
                   allLearned={allLearned}

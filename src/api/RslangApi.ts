@@ -1,4 +1,4 @@
-import { IStatistic } from '../types/auth-audio/IStatistic'
+import { IStatistic } from "../types/auth-audio/IStatistic";
 import { IAuthUser, IUser, IWord, IUserWordParams, IUserStatistics, IUserSettings, IUserWordWithParams, IUserHardWords } from '../types/types'
 
 export default class RslangApi {
@@ -303,7 +303,7 @@ export default class RslangApi {
         return content
   }
 
-  updateUserStatistics = async () => {
+  updateUserStatistics = async (data: IStatistic) => {
     const {token, userId} = this.getUserFromLocalStorage()
 
     const res = await fetch(`${this.url}users/${userId}/statistics`, {
@@ -313,6 +313,7 @@ export default class RslangApi {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify(data)
     })
     const content = await res.json() as IUserStatistics[]
     return content

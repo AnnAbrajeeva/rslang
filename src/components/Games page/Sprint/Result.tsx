@@ -11,6 +11,7 @@ import {
   updateLocalStatisticSprint,
   updateWord,
 } from './utils/updateStatistic'
+import { prepareNewStatistic } from '../../../redux/features/statisticSlice/utils'
 const api = new RslangApi()
 const user = JSON.parse(localStorage.getItem('authData') || '{}')
 
@@ -76,13 +77,11 @@ export default function Result(props: {
             if (word && word.userWord) {  
               // @ts-ignore
               const newWord = updateWord(word, el.isCorrect, 'sprint')
-              console.log(newWord)
               if (newWord) {
                 api.updateUserWord(word.id!, newWord)
               }     
             } else {
               const newWord = createNewUserWord(el.id, el.isCorrect, 'sprint') 
-              console.log('newWord', newWord)
               api.createUserWord(newWord.optional.wordId, newWord)
             }
           })
@@ -91,6 +90,18 @@ export default function Result(props: {
       fetchData()
     }
   }, [])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const prevStat = await api.getUserStatistics()
+      const allLearnedWords = await api.getAllLearnedWords()
+      const newStat = prepareNewStatistic(prevStat, [...rightAnswersIds, ...wrongAnswersIds], allLearnedWords.length)
+      if (newStat) {
+        await api.updateUserStatistics(newStat)
+      }     
+    }
+    fetchData()
+  })
 
   return (
     <div className="results">

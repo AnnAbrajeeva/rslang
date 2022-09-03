@@ -17,7 +17,8 @@ import { prepareNewStatistic } from '../../../../redux/features/statisticSlice/u
 import ResultsItem from '../ResultsItem';
 
 import { StyledButton, StyledResultsTable, StyledRightAnswers, StyledWrongAnswers } from './ResultsTable.styles';
-
+import RslangApi from '../../../../api/RslangApi';
+const api = new RslangApi()
 
 const ResultsTable: FC = () => {
     const navigate = useNavigate();
@@ -28,6 +29,10 @@ const ResultsTable: FC = () => {
     const allWords = useTypedSelector(state => state.words.allWords);
     const rightWords: Array<IWord> = [];
     const wrongWords: Array<IWord> = [];
+    const learnedWords = (async() => {
+        const learned = await api.getAllLearnedWords()
+        return learned
+    })
 
     rightAnswers.forEach(el => {
         rightWords.push(allWords.find(item => item._id === el)!);
@@ -44,7 +49,7 @@ const ResultsTable: FC = () => {
             const userData = JSON.parse(user);
             const { userId } = userData;
             dispatch(saveDailyResults(userId));
-            const newStatistic = prepareNewStatistic(prevStatistic, [...rightAnswers, ...wrongAnswers]) as IStatistic;
+            const newStatistic = prepareNewStatistic(prevStatistic, [...rightAnswers, ...wrongAnswers], learnedWords.length) as IStatistic;
             dispatch(sendStatistic({ userData, newStatistic }));
             rightWords.forEach((el) => {
                 const newUserWord = updateUserWordData(el, true, AUDIOCHALLENGE) as IUserWord;

@@ -16,21 +16,20 @@ import {
 } from '../../../types/types'
 import { useTypedSelector } from '../../../redux/hooks'
 import Games from '../../Games page/Games'
+import { IStatistic } from '../../../types/auth-audio/IStatistic'
 
 const api = new RslangApi()
 const auth = localStorage.getItem('authData')
 
 export default function DictionaryPage() {
   const { authData } = useTypedSelector((state) => state.auth)
-
   const [words, setWords] = useState<IWord[] | IUserWordWithParams[]>([])
-  // eslint-disable-next-line no-unused-vars
-  const [userWords, setUserWords] = useState<IUserWordWithParams[]>([])
   const [wordsParams, setWordsParams] = useState<IUserWordParams[]>([])
   const [loading, setLoading] = useState(false)
   const [page, setPage] = useState(Number(localStorage.getItem('page')) || 0)
   const [group, setGroup] = useState(Number(localStorage.getItem('group')) || 0)
   const [allLearned, setAllLearned] = useState(false)
+  const [statistic, setStatistic] = useState<IStatistic | {}>({})
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,6 +42,8 @@ export default function DictionaryPage() {
         setWords(uWords)
         const response = await api.getAllUserWords()
         setWordsParams(response)
+        const userStatistic = await api.getUserStatistics()
+        setStatistic(userStatistic)
       }
 
       if (authData && group === 6) {
@@ -120,6 +121,7 @@ export default function DictionaryPage() {
             updateUserWords={updateUserWords}
             allLearned={allLearned}
             userWords={wordsParams}
+            statistic={statistic}
           />
         )}
       </Container>
@@ -148,6 +150,7 @@ interface IDictionaryContentProps {
   updateUserWords: () => void
   learnCardsStyle: () => string
   allLearned: boolean
+  statistic: IStatistic | {}
 }
 
 function DictionaryContent({
@@ -158,6 +161,7 @@ function DictionaryContent({
   learnCardsStyle,
   allLearned,
   userWords,
+  statistic
 }: IDictionaryContentProps) {
   return (
     <>
@@ -168,6 +172,7 @@ function DictionaryContent({
           userWords={userWords}
           learnCardsStyle={learnCardsStyle}
           allLearned={allLearned}
+          statistic={statistic}
         />
       </Box>
       {group !== 6 && (

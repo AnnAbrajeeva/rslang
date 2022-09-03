@@ -230,9 +230,9 @@ export const getSprintChallengeStatistics = () => {
       statistics = JSON.parse(localStorage.getItem(statKey)!)
     }
     if (statistics) {
-      statistics.allGamesRight/=2;
-      statistics.allGamesWrong/=2;
-      statistics.allNewWordsCount/=2;
+      statistics.allGamesRight;
+      statistics.allGamesWrong;
+      statistics.allNewWordsCount;
       return statistics;
     }
     return null;
