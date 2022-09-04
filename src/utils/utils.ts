@@ -71,7 +71,7 @@ const setInitialLocalStatistic = (
       };
 
   const newData: ILocalStatisticSprint = {
-    date: getCurrentDate(),
+    date: new Date().toLocaleString().split(', ')[0],
     allNewWordsCount: rightAnswersIds.length + wrongAnswersIds.length,
     allGamesRight: rightAnswersIds.length,
     allGamesWrong: wrongAnswersIds.length,
@@ -98,7 +98,8 @@ export const updateLocalStatistic = (
   const prevStatistic = userStatistic || (!userId && guestStatistic
     ? guestStatistic
     : null);
-  const currentDate = getCurrentDate();
+  const currentDate = new Date().toLocaleString().split(', ')[0];
+  console.log(currentDate)
   let newData: ILocalStatisticSprint;
   const prevData = JSON.parse(prevStatistic || '{}') as ILocalStatisticSprint
   if (prevStatistic && prevData.games.audiochallenge) {

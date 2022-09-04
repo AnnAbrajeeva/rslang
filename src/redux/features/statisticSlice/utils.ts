@@ -11,7 +11,7 @@ export const prepareNewStatistic = (
 ) => {
   const prevData = { ...prevStatistic };
   const newWordsIds: Array<string> = [];
-  const today = getCurrentDate();
+  const today = new Date().toLocaleString().split(', ')[0];
 
   if (Object.keys(prevData).length !== 0) {
     [...gameWordsIds].forEach((el) => {

@@ -5,7 +5,7 @@ import { getCurrentDate, isObjectEmpty } from "../../../utils";
  // eslint-disable-next-line consistent-return
  export const updateStatistic = async(statistic: IStatistic | {}, action: string) => {
     const prevData = { ...statistic };
-    const today = getCurrentDate();
+    const today = new Date().toLocaleString().split(', ')[0];
     if (!isObjectEmpty(prevData)) {
       const newDailyResult =
         today in prevData!.optional!.dailyResults

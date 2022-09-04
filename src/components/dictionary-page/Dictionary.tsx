@@ -63,7 +63,7 @@ export default function Dictionary({
       const wordParams = { ...isUserWord }
       wordParams.difficulty = 'weak'
       wordParams.optional.learned = true
-      wordParams.optional.data = getCurrentDate()
+      wordParams.optional.data = new Date().toLocaleString().split(', ')[0]
       delete wordParams.id
       delete wordParams.wordId
       await api.updateUserWord(id, wordParams)
@@ -72,7 +72,7 @@ export default function Dictionary({
         difficulty: 'weak',
         optional: {
           learned: true,
-          data: getCurrentDate(),
+          data: new Date().toLocaleString().split(', ')[0],
         },
       }
       await api.createUserWord(id, wordParams)

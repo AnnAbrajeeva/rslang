@@ -1,7 +1,6 @@
 import { IStatistic } from '../../../types/auth-audio/IStatistic';
 import { IUserWordWithParams } from '../../../types/types';
 import RslangApi from "../../../api/RslangApi"
-import { getCurrentDate } from "../../../utils"
 import { updateStatistic } from '../utils/updateStatistic';
 
 const api = new RslangApi()
@@ -18,7 +17,8 @@ export const addLearned = async (word: IUserWordWithParams, statistic: IStatisti
         const wordParams = { ...word.userWord }
         wordParams.difficulty = 'weak'
         wordParams.optional.learned = true
-        wordParams.optional.data = getCurrentDate()
+        // eslint-disable-next-line prefer-destructuring
+        wordParams.optional.data = new Date().toLocaleString().split(', ')[0]
         wordParams.optional.audiochallenge!.rightCounter = 0
         wordParams.optional.audiochallenge!.wrongCounter = 0
         wordParams.optional.sprint!.wrongCounter = 0
@@ -31,7 +31,8 @@ export const addLearned = async (word: IUserWordWithParams, statistic: IStatisti
             difficulty: 'weak',
             optional: {
                 learned: true,
-                data: getCurrentDate(),
+                // eslint-disable-next-line prefer-destructuring
+                data: new Date().toLocaleString().split(', ')[0],
             },
         }
         await api.createUserWord(word.id!, wordParams)

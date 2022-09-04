@@ -26,14 +26,16 @@ export default function OneDayStat({ data }: StatisticsCardProps) {
   let rightWordsPercent: number|undefined;
 
   if (statistic) {
-    allGamesRight = statistic.allGamesRight
-    allGamesWrong = statistic.allGamesWrong;
-    allNewWordsCount = Math.round(statistic.allNewWordsCount);
+    allGamesRight = Math.round(statistic.allGamesRight)
+    allGamesWrong = Math.round(statistic.allGamesWrong);
+    allNewWordsCount = Math.round(statistic.games.audiochallenge.gameNewWordsCount+ statistic.games.sprint.gameNewWordsCount);
     rightWordsPercent = (allGamesRight + allGamesWrong) > 0 ? Math.round((allGamesRight / (allGamesRight + allGamesWrong)) * 100) : 0;
   }
 
   const [userWords, setUserWords] = useState<IUserWordWithParams[]>()
   const [learned, setLearned] = useState<number>(0)
+
+  const date = new Date().toLocaleString().split(', ')[0]
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,9 +47,6 @@ export default function OneDayStat({ data }: StatisticsCardProps) {
       }
     }
     fetchData()
-  const date = getCurrentDate()
-
-  
   }, [])
 
   

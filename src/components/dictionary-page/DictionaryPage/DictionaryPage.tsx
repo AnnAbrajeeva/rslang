@@ -40,17 +40,11 @@ export default function DictionaryPage() {
         setWords(res)
       } else {
         const uWords = await api.getAllUserWordsWithParams(page, group)
-        
+
         setWords(uWords)
         const response = await api.getAllUserWords()
         setWordsParams(response)
-        const userStatistic = await api.getUserStatistics()
-        if (Object.keys(userStatistic).length !== 0) {
-          setStatistic(userStatistic)
-          uWords.forEach((word) => {
-            checkIsLearnedWord(word)
-          })
-        }
+
 
       }
 
@@ -64,6 +58,22 @@ export default function DictionaryPage() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, group])
+
+  useEffect(() => {
+    if (auth && authData) {
+      const fetchData = async () => {
+        const userStatistic = await api.getUserStatistics()
+        if (Object.keys(userStatistic).length !== 0) {
+          setStatistic(userStatistic);
+          (words as IUserWordWithParams[]).forEach((word) => {
+            checkIsLearnedWord(word)
+          })
+        }
+      }
+      fetchData()
+    }
+     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [words])
 
   const checkLearnedPage = (): boolean =>
     // eslint-disable-next-line consistent-return, array-callback-return
@@ -93,12 +103,12 @@ export default function DictionaryPage() {
       const uWords = await api.getAllUserWordsWithParams(page, group)
       setWords(uWords)
       const userStatistic = await api.getUserStatistics()
-        if (Object.keys(userStatistic).length !== 0) {
-          setStatistic(userStatistic)
-          uWords.forEach((word) => {
-            checkIsLearnedWord(word)
-          })
-        }
+      if (Object.keys(userStatistic).length !== 0) {
+        setStatistic(userStatistic)
+        uWords.forEach((word) => {
+          checkIsLearnedWord(word)
+        })
+      }
       setAllLearned(checkLearnedPage())
     }
   }
