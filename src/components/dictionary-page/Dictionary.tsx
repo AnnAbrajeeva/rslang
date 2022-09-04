@@ -5,7 +5,6 @@ import Box from '@mui/material/Box'
 import DictionaryCard from './DictionaryCard/DictionaryCard'
 import { IUserWordParams, IWord, IUserWordWithParams } from '../../types/types'
 import RslangApi from '../../api/RslangApi'
-import { getCurrentDate } from '../../utils'
 import { IStatistic } from '../../types/auth-audio/IStatistic'
 import { updateUserStatistics } from './DictionaryPage/utils'
 
@@ -63,6 +62,7 @@ export default function Dictionary({
       const wordParams = { ...isUserWord }
       wordParams.difficulty = 'weak'
       wordParams.optional.learned = true
+      // eslint-disable-next-line prefer-destructuring
       wordParams.optional.data = new Date().toLocaleString().split(', ')[0]
       delete wordParams.id
       delete wordParams.wordId
@@ -72,6 +72,7 @@ export default function Dictionary({
         difficulty: 'weak',
         optional: {
           learned: true,
+           // eslint-disable-next-line prefer-destructuring
           data: new Date().toLocaleString().split(', ')[0],
         },
       }
