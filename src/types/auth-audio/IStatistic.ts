@@ -1,6 +1,7 @@
 export interface IDailyResult {
   newWordsCounter: number;
   allWordsCounter: number;
+  learnedWords: number
 }
 export interface IStatistic {
   id?: string;

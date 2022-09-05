@@ -6,11 +6,14 @@ import { TDailyResults, TLearnedWordsIds } from './types';
 // Функция возвращает новый объект статистики, который нужно отправить на бэк
 export const prepareNewStatistic = (
   prevStatistic: IStatistic | {}, // предыдущая статистика, полученная с бэка
-  gameWordsIds: Array<string> // id всех слов, которые участвовали в игре
+  gameWordsIds: Array<string>, // id всех слов, которые участвовали в игре
+  allLearnedWords: number
 ) => {
   const prevData = { ...prevStatistic };
   const newWordsIds: Array<string> = [];
-  const today = getCurrentDate();
+  const today = new Date().toLocaleString().split(', ')[0];
+  console.log(prevData)
+
   if (!isObjectEmpty(prevData)) {
     [...gameWordsIds].forEach((el) => {
       if (!(el in prevData!.optional!.learnedWordsIds)) newWordsIds.push(el);
@@ -22,10 +25,12 @@ export const prepareNewStatistic = (
               prevData!.optional!.dailyResults[today].newWordsCounter +
               newWordsIds.length,
             allWordsCounter: prevData!.learnedWords! + newWordsIds.length,
+            learnedWords: allLearnedWords
           }
         : {
             newWordsCounter: newWordsIds.length,
             allWordsCounter: prevData!.learnedWords! + newWordsIds.length,
+            learnedWords: allLearnedWords
           };
     const addedWordsIds: TLearnedWordsIds = {};
     newWordsIds.forEach((item) => {
@@ -51,6 +56,7 @@ export const prepareNewStatistic = (
     const dailyResult = {
       newWordsCounter: gameWordsIds.length,
       allWordsCounter: gameWordsIds.length,
+      learnedWords: 0
     };
     const dailyResults: TDailyResults = {};
     dailyResults[today] = dailyResult;

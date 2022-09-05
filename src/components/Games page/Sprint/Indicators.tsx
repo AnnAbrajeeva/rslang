@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 const IndicatorBtn = (props: { isColor: unknown }) => {
   return (
     <>

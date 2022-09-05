@@ -1,5 +1,6 @@
 
 /* eslint-disable  */
+import { ILocalStatisticSprint } from '../components/Games page/Sprint/utils/updateStatistic';
 import { ILocalStatistic } from '../types/auth-audio/ILocalStatistic';
 import { TDifficulty } from '../types/auth-audio/IUserWord';
 import { IWord } from '../types/auth-audio/IWord';
@@ -40,9 +41,18 @@ const setInitialLocalStatistic = (
   rightAnswersIds: Array<string>,
   wrongAnswersIds: Array<string>,
   game: string,
-  currentStreak: number
+  currentStreak: number,
+  prevData: ILocalStatisticSprint
 ) => {
   const allWordsList = [...rightAnswersIds, ...wrongAnswersIds];
+  const sprintStat = prevData && prevData.games && prevData.games.sprint ? prevData.games.sprint : {
+    bestStreak: 0,
+    gameNewWordsCount: 0,
+    rightAnswers: 0,
+    wrongAnswers: 0,
+    wordList: [],
+  };
+
   const audiochallengeStat =
     game === AUDIOCHALLENGE
       ? {
@@ -60,14 +70,15 @@ const setInitialLocalStatistic = (
         wordList: [],
       };
 
-  const newData: ILocalStatistic = {
-    date: getCurrentDate(),
+  const newData: ILocalStatisticSprint = {
+    date: new Date().toLocaleString().split(', ')[0],
     allNewWordsCount: rightAnswersIds.length + wrongAnswersIds.length,
     allGamesRight: rightAnswersIds.length,
     allGamesWrong: wrongAnswersIds.length,
     wordList: allWordsList,
     games: {
       audiochallenge: audiochallengeStat,
+      sprint: sprintStat
     },
   };
   return newData;
@@ -87,10 +98,11 @@ export const updateLocalStatistic = (
   const prevStatistic = userStatistic || (!userId && guestStatistic
     ? guestStatistic
     : null);
-  const currentDate = getCurrentDate();
-  let newData: ILocalStatistic;
-  if (prevStatistic) {
-    const prevData = JSON.parse(prevStatistic);
+  const currentDate = new Date().toLocaleString().split(', ')[0];
+  console.log(currentDate)
+  let newData: ILocalStatisticSprint;
+  const prevData = JSON.parse(prevStatistic || '{}') as ILocalStatisticSprint
+  if (prevStatistic && prevData.games.audiochallenge) {
     let dailyGameNewWords: string[] = [];
     if (game === AUDIOCHALLENGE) {
       dailyGameNewWords = getNewWordsFromArray(
@@ -120,11 +132,12 @@ export const updateLocalStatistic = (
       newData = {
         games: {
           audiochallenge: audiochallengeStat,
+          sprint: prevData.games.sprint
         },
         date: currentDate,
         allNewWordsCount: prevData.allNewWordsCount + dailyAllNewWords.length,
-        allGamesRight: audiochallengeStat.rightAnswers,
-        allGamesWrong: audiochallengeStat.wrongAnswers,
+        allGamesRight: audiochallengeStat.rightAnswers+prevData.games.sprint.rightAnswers,
+        allGamesWrong: audiochallengeStat.wrongAnswers + prevData.games.sprint.wrongAnswers,
         wordList: [...prevData.wordList, ...dailyAllNewWords],
       };
       userId
@@ -153,11 +166,12 @@ export const updateLocalStatistic = (
       newData = {
         games: {
           audiochallenge: audiochallengeStat,
+          sprint: prevData.games.sprint
         },
         date: currentDate,
         allNewWordsCount: dailyAllNewWords.length,
-        allGamesRight: rightAnswersIds.length,
-        allGamesWrong: wrongAnswersIds.length,
+        allGamesRight: rightAnswersIds.length + prevData.games.sprint.rightAnswers,
+        allGamesWrong: wrongAnswersIds.length + prevData.games.sprint.wrongAnswers,
         wordList: [...prevData.wordList, ...dailyAllNewWords],
       };
       userId
@@ -169,7 +183,8 @@ export const updateLocalStatistic = (
       rightAnswersIds,
       wrongAnswersIds,
       game,
-      currentStreak
+      currentStreak,
+      prevData
     );
     userId
       ? localStorage.setItem(userKey, JSON.stringify(newData))
@@ -215,6 +230,12 @@ export const createNewUserWord = (
         wrongCounter:
           Number(gameName && gameName === AUDIOCHALLENGE && !isRight) || 0,
       },
+      sprint: {
+        rightCounter:
+          Number(gameName && gameName === 'sprint' && isRight) || 0,
+        wrongCounter:
+          Number(gameName && gameName === 'sprint' && !isRight) || 0,
+      },
     },
   };
 };
@@ -236,19 +257,26 @@ export const updateUserWordData = (
       optional: {
         wordId,
         counter: isRight ? optional.counter + 1 : 0,
-        audiochallenge: {
+        audiochallenge: optional.audiochallenge ? {
           rightCounter:
-            gameName && gameName === AUDIOCHALLENGE && isRight
-              ? optional.audiochallenge.rightCounter + 1
-              : optional.audiochallenge.rightCounter,
-          wrongCounter:
-            gameName && gameName === AUDIOCHALLENGE && !isRight
-              ? optional.audiochallenge.wrongCounter + 1
-              : optional.audiochallenge.wrongCounter,
+              gameName && gameName === AUDIOCHALLENGE && isRight
+                ? optional.audiochallenge.rightCounter + 1
+                : optional.audiochallenge.rightCounter,
+            wrongCounter:
+              gameName && gameName === AUDIOCHALLENGE && !isRight
+                ? optional.audiochallenge.wrongCounter + 1
+                : optional.audiochallenge.wrongCounter,
+        } : {
+          rightCounter: isRight ? 1 : 0,
+          wrongCounter: !isRight ? 1 : 0,
+        },
+        sprint: optional.sprint ? optional.sprint : {
+          rightCounter: 0,
+          wrongCounter: 0
         },
       },
     };
-    return updatedUserWord;
+    return updatedUserWord; 
   }
 };
 

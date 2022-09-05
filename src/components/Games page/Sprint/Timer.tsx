@@ -5,6 +5,8 @@ import CircularProgress, {
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 
+/* eslint-disable */
+
 const normalise = (value: number) => ((value - 0) * 100) / (60 - 0)
 
 function CircularProgressWithLabel(

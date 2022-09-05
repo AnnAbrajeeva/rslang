@@ -1,9 +1,9 @@
-import Timer from './Timer'
+/* eslint-disable */
+
 import './sprint.css'
 import SprintContainer from './SprintGameCont'
 import { useState } from 'react'
 import Result from './Result'
-import SelectLevel from './SelectLevel'
 import LevelBox from '../../dictionary-page/LevelBox/LevelBox'
 import { isGameBeforeDic } from '../Games'
 import { useEffect } from 'react'
@@ -14,6 +14,8 @@ const Sprint = () => {
   const [level, setLevel] = useState(-1)
   const [page, setPage] = useState(-1)
   const [score, setScore] = useState(0)
+  const [count, setCount] = useState(1)
+  const [bestStreak, setBestStreak] = useState(1)
 
   useEffect(() => {
     if (isGameBeforeDic) {
@@ -21,6 +23,18 @@ const Sprint = () => {
       setPage(Number(localStorage.page))
     }
   }, [])
+
+  function increaseCount() {
+    setCount(count+1)
+  }
+
+  function saveBestStreak() {
+    if(bestStreak < count) {
+      setBestStreak(count)
+      setCount(0)
+    } 
+    setCount(0)
+  }
 
   return (
     <div className="sprint">
@@ -34,10 +48,12 @@ const Sprint = () => {
               score={score}
               setScore={setScore}
               page={page}
+              increaseCount={increaseCount}
+              saveBestStreak={saveBestStreak}
             />
           )}
           {(isEnded || result.length === 20) && (
-            <Result result={result} score={score} />
+            <Result bestStreak={bestStreak} result={result} score={score} />
           )}
         </>
       )}

@@ -1,73 +1,22 @@
+/* eslint-disable */
+
 import { Button, Grid, List, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { Cancel, CheckCircle, VolumeUp } from '@mui/icons-material'
 import { IResult } from '../../../types/types'
 import RslangApi from '../../../api/RslangApi'
 import { useEffect } from 'react'
+import {
+  createNewUserWord,
+  updateLocalStatisticSprint,
+  updateWord,
+} from './utils/updateStatistic'
+import { prepareNewStatistic } from '../../../redux/features/statisticSlice/utils'
+import { useTypedSelector } from '../../../redux/hooks'
 const api = new RslangApi()
 
 const ResultItem = (properties: { props: IResult }) => {
   const props = properties.props
-  let callFunctionOnce = 1
-
-  useEffect(() => {
-    if (callFunctionOnce === 1) {
-      callFunctionOnce++
-
-      if (localStorage.authData) {
-        api
-          .getUserWord(props.id)
-          .then((data) => {
-            if (
-              data.wordId &&
-              data.optional.correctGuess &&
-              data.optional.wrongGuess
-            ) {
-              if (props.isCorrect) {
-                api.updateUserWord(data.wordId, {
-                  difficulty: data.difficulty,
-                  optional: {
-                    correctGuess: data.optional.correctGuess + 1,
-                    isNewWord: false,
-                    guessTime: Date.now(),
-                  },
-                })
-              } else if (!props.isCorrect) {
-                api.updateUserWord(data.wordId, {
-                  difficulty: data.difficulty,
-                  optional: {
-                    wrongGuess: data.optional.wrongGuess + 1,
-                    isNewWord: false,
-                    guessTime: Date.now(),
-                  },
-                })
-              }
-            }
-          })
-          .catch((err) => {
-            if (props.isCorrect) {
-              api.createUserWord(props.id, {
-                difficulty: 'weak',
-                optional: {
-                  correctGuess: 1,
-                  guessTime: Date.now(),
-                  isNewWord: true,
-                },
-              })
-            } else if (!props.isCorrect) {
-              api.createUserWord(props.id, {
-                difficulty: 'weak',
-                optional: {
-                  wrongGuess: 1,
-                  guessTime: Date.now(),
-                  isNewWord: true,
-                },
-              })
-            }
-          })
-      }
-    }
-  }, [props.id, props.isCorrect])
 
   const audio = new Audio(`https://rs-lang-base.herokuapp.com/${props.sound}`)
 
@@ -90,10 +39,65 @@ const ResultItem = (properties: { props: IResult }) => {
   )
 }
 
-export default function Result(props: { result: IResult[]; score: number }) {
+export default function Result(props: {
+  result: IResult[]
+  score: number
+  bestStreak: number
+}) {
   let correctWords = props.result.filter((el) => el.isCorrect).length
   let unCorrectWords = props.result.filter((el) => !el.isCorrect).length
   const navigate = useNavigate()
+  const user = JSON.parse(localStorage.getItem('authData') || '{}')
+  const { authData } = useTypedSelector((state) => state.auth)
+
+  const rightAnswersIds = props.result
+    .filter((item) => item.isCorrect)
+    .map((item) => item.id)
+  const wrongAnswersIds = props.result
+    .filter((item) => !item.isCorrect)
+    .map((item) => item.id)
+
+  updateLocalStatisticSprint(
+    rightAnswersIds,
+    wrongAnswersIds,
+    'sprint',
+    props.bestStreak,
+    user.userId
+  )
+
+  useEffect(() => {
+    if (user && authData) {
+      const fetchData = async () => {
+        const prevStat = (await api.getUserStatistics()) || {}
+        const allLearnedWords = await api.getAllLearnedWords()
+        const newStat = prepareNewStatistic(
+          prevStat,
+          [...rightAnswersIds, ...wrongAnswersIds],
+          allLearnedWords.length
+        )
+        if (newStat) {
+          await api.updateUserStatistics(newStat)
+        }
+        const words = await api.getWords()
+        if (words) {
+          props.result.forEach((el) => {
+            const word = words.find((item) => item.id === el.id)
+            if (word && word.userWord) {
+              // @ts-ignore
+              const newWord = updateWord(word, el.isCorrect, 'sprint')
+              if (newWord) {
+                api.updateUserWord(word.id!, newWord)
+              }
+            } else {
+              const newWord = createNewUserWord(el.id, el.isCorrect, 'sprint')
+              api.createUserWord(newWord.optional.wordId, newWord)
+            }
+          })
+        }
+      }
+      fetchData()
+    }
+  }, [])
 
   return (
     <div className="results">

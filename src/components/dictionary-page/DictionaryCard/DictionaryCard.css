@@ -31,6 +31,31 @@
     font-weight: 600;
 }
 
+.card__sound {
+    display: flex;
+    align-items: center;
+}
+
+.card__attempts {
+    display: flex;
+    gap: 10px;
+    margin-right: 15px;
+}
+
+.card__attempt {
+    padding: 5px 20px;
+    border-radius: 5px; 
+    color: #fff;   
+}
+
+.card__attempt_right {
+    background-color: green;
+}
+
+.card__attempt_wrong {
+    background-color: red;
+}
+
 .card__sound-icon {
     cursor: pointer;
 }

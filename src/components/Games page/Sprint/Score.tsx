@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Typography } from '@mui/material'
 
 const Score = (props: { score: number }) => {

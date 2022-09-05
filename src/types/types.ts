@@ -3,11 +3,18 @@ export interface IUserWordParams {
   difficulty: string
   optional: {
     learned?: boolean
-    studing?: boolean
-    correctGuess?: number
-    wrongGuess?: number
-    isNewWord?: boolean
-    guessTime?: number
+    data?: string
+    counter?: number // для выставления признака изученного слова, инкремент при правильном ответе, обнуление при неправильном
+    sprint?: {
+      rightCounter: number
+      wrongCounter: number
+    }
+    audiochallenge?: {
+      rightCounter: number
+      wrongCounter: number
+    }
+
+    wordId?: string
   }
   wordId?: string
 }
@@ -33,13 +40,20 @@ export interface IUserWordWithParams {
     difficulty: string
     optional: {
       learned?: boolean
-      studing?: boolean
-      correctGuess?: number
+      data: string
+      counter?: number // для выставления признака изученного слова, инкремент при правильном ответе, обнуление при неправильном
+      sprint?: {
+        rightCounter: number
+        wrongCounter: number
+      }
+      audiochallenge?: {
+        rightCounter: number
+        wrongCounter: number
+      }
     }
     wordId?: string
   }
 }
-
 
 export interface IUserHardWords {
   id: string
@@ -85,72 +99,6 @@ export interface IResult {
   isCorrect: boolean
   sound: string
   id: string
-}
-
-export interface IUser {
-  name?: string
-  email: string
-  password: string
-}
-
-export interface IAuthUser {
-  message: 'string'
-  token: 'string'
-  refreshToken: 'string'
-  userId: 'string'
-  name: 'string'
-}
-
-export interface IUserWord {
-  difficulty: 'string'
-  optional: {}
-}
-
-export interface IUserStatistics {
-  learnedWords: number
-  optional: {}
-}
-
-export interface IUserWord {
-  paginatedResults: IUserWordWithParams[]
-  totalCount: {
-    count: number
-  }
-}
-
-export interface IUserStatistics {
-  learnedWords: number
-  optional: {}
-}
-
-export interface IUserSettings {
-  wordsPerDay: number
-  optional: {}
-}
-
-export interface IWord {
-  id: string
-  group: number
-  page: number
-  word: string
-  image: string
-  audio: string
-  audioMeaning: string
-  audioExample: string
-  textMeaning: string
-  textExample: string
-  transcription: string
-  wordTranslate: string
-  textMeaningTranslate: string
-  textExampleTranslate: string
-}
-
-export interface IResult {
-  word: string
-  translation: string
-  isCorrect: boolean
-  sound: string
-  id: string
   transcription: string
 }
 
@@ -175,11 +123,6 @@ export interface IUserWord {
 
 export interface IUserStatistics {
   learnedWords: number
-  optional: {}
-}
-
-export interface IUserSettings {
-  wordsPerDay: number
   optional: {}
 }
 

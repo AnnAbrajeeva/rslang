@@ -1,6 +1,6 @@
 /* eslint-disable */
 import Card from '@mui/material/Card'
-import { getAudioChallengeStatistics } from '../../../utils/utils';
+import { getSprintChallengeStatistics } from '../../Games page/Sprint/utils/updateStatistic';
 import './StatisticsCard.css'
 
 interface StatisticsCardProps {
@@ -12,8 +12,8 @@ interface StatisticsCardProps {
   },
 }
 
-export default function StatisticsAudio({ data }: StatisticsCardProps) {
-  const statistic = getAudioChallengeStatistics();
+export default function StatisticsSprint({ data }: StatisticsCardProps) {
+  const statistic = getSprintChallengeStatistics();
   let bestStreak: number|undefined;
   let gameNewWordsCount: number|undefined;
   let rightAnswers: number|undefined;
@@ -22,11 +22,12 @@ export default function StatisticsAudio({ data }: StatisticsCardProps) {
 
   const date = new Date().toLocaleString().split(', ')[0]
 
-  if (statistic && statistic.date === date) {
-    bestStreak= statistic.games.audiochallenge.bestStreak;
-    rightAnswers = statistic.games.audiochallenge.rightAnswers;
-    wrongAnswers = statistic.games.audiochallenge.wrongAnswers;
-    gameNewWordsCount = statistic.games.audiochallenge.gameNewWordsCount;
+
+  if (statistic && statistic.date === date) { 
+    bestStreak= statistic.games.sprint.bestStreak;
+    rightAnswers = statistic.games.sprint.rightAnswers;
+    wrongAnswers = statistic.games.sprint.wrongAnswers;
+    gameNewWordsCount = statistic.games.sprint.gameNewWordsCount;
     rightWordsPercent = (rightAnswers + wrongAnswers) > 0 ? Math.round((rightAnswers / (rightAnswers + wrongAnswers)) * 100) : 0;
   }
 
