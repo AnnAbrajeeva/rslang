@@ -25,14 +25,14 @@ const Sprint = () => {
   }, [])
 
   function increaseCount() {
-    setCount(count+1)
+    setCount(count + 1)
   }
 
   function saveBestStreak() {
-    if(bestStreak < count) {
+    if (bestStreak < count) {
       setBestStreak(count)
       setCount(0)
-    } 
+    }
     setCount(0)
   }
 

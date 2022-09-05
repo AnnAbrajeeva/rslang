@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { IUserWordWithParams } from './../../../../types/types'
 /*eslint import/no-cycle: [2, { ignoreExternal: true }]*/
 import { getNewWordsFromArray } from '../../../../utils'

@@ -36,7 +36,9 @@ const SprintContainer = (props: {
   const { authData } = useTypedSelector((state) => state.auth)
   let [iteration, setIteration] = useState(0)
   let [words, setWords] = useState<IWord[] | IUserWordWithParams[] | []>([])
-  let [randomNum, setRandomNum] = useState(Math.floor(Math.random() * words.length))
+  let [randomNum, setRandomNum] = useState(
+    Math.floor(Math.random() * words.length)
+  )
   let [scoreIndicator, setScoreIndicator] = useState(0)
   let [toyIndicator, setToyIndicator] = useState(0)
   let [indicators, setIndicators] = useState({ 1: false, 2: false, 3: false })
@@ -60,7 +62,7 @@ const SprintContainer = (props: {
           props.level - 1
         )
         let filterWords = res.filter((word) => {
-          if(word.userWord && word.userWord.optional.learned === true) {
+          if (word.userWord && word.userWord.optional.learned === true) {
             return
           } else {
             return word
@@ -70,14 +72,14 @@ const SprintContainer = (props: {
         if (filterWords.length < 20 && randomPage > 1) {
           const num = 20 - filterWords.length
           const res = await api.getAllUserWordsWithParams(
-            randomPage -= 1,
+            (randomPage -= 1),
             props.level - 1
           )
           allWords = filterWords.concat(res.splice(0, num))
         } else {
           allWords = filterWords
         }
-        setWords(allWords)     
+        setWords(allWords)
       }
       if (auth && authData && props.level === 7) {
         const res = await api.getAllHardWords()
@@ -99,7 +101,7 @@ const SprintContainer = (props: {
   }
 
   function matchBtns() {
-    if (iteration === words.length-1) props.setIsEnded(true)
+    if (iteration === words.length - 1) props.setIsEnded(true)
     props.saveBestStreak()
     setIteration((prev) => (prev += 1))
     if (Math.random() < 0.5) setRandomNum(iteration + 1)
@@ -119,7 +121,6 @@ const SprintContainer = (props: {
       transcription: words[iteration].transcription,
       isCorrect: true,
       sound: words[iteration].audio,
-
       id: words[iteration].id!,
     })
     if (scoreIndicator !== 3) {
