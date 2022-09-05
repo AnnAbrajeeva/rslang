@@ -122,42 +122,85 @@ export default function Result(props: {
 
   return (
     <>
-      {showResults && (
-        <div className="results">
-          <Grid item xs={12} md={6}>
-            <Typography
-              sx={{ mt: 4, mb: 2 }}
-              variant="h5"
-              component="div"
-              style={{
-                textAlign: 'center',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              Correct:&nbsp;<b style={{ color: '#2e7d32' }}>{correctWords}</b>{' '}
-              &nbsp; Wrong:&nbsp;
-              <b style={{ color: '#d32f2f' }}>{unCorrectWords}</b> &nbsp;
-              Score:&nbsp;<b style={{ color: '#34568B' }}>{props.score}</b>
-              &nbsp;
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => navigate(-1)}
-              >
-                Home
-              </Button>
-            </Typography>
-            <List>
-              {props.result.map((el, i) => (
-                <ResultItem props={el} key={i} />
-              ))}
-            </List>
-          </Grid>
-        </div>
+      {localStorage.authData && (
+        <>
+          {showResults && (
+            <div className="results">
+              <Grid item xs={12} md={6}>
+                <Typography
+                  sx={{ mt: 4, mb: 2 }}
+                  variant="h5"
+                  component="div"
+                  style={{
+                    textAlign: 'center',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  Correct:&nbsp;
+                  <b style={{ color: '#2e7d32' }}>{correctWords}</b> &nbsp;
+                  Wrong:&nbsp;
+                  <b style={{ color: '#d32f2f' }}>{unCorrectWords}</b> &nbsp;
+                  Score:&nbsp;<b style={{ color: '#34568B' }}>{props.score}</b>
+                  &nbsp;
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => navigate(-1)}
+                  >
+                    Home
+                  </Button>
+                </Typography>
+                <List>
+                  {props.result.map((el, i) => (
+                    <ResultItem props={el} key={i} />
+                  ))}
+                </List>
+              </Grid>
+            </div>
+          )}
+          {!showResults && <Loader />}
+        </>
       )}
-      {!showResults && <Loader />}
+      {!localStorage.authData && (
+        <>
+          <div className="results">
+            <Grid item xs={12} md={6}>
+              <Typography
+                sx={{ mt: 4, mb: 2 }}
+                variant="h5"
+                component="div"
+                style={{
+                  textAlign: 'center',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                Correct:&nbsp;
+                <b style={{ color: '#2e7d32' }}>{correctWords}</b> &nbsp;
+                Wrong:&nbsp;
+                <b style={{ color: '#d32f2f' }}>{unCorrectWords}</b> &nbsp;
+                Score:&nbsp;<b style={{ color: '#34568B' }}>{props.score}</b>
+                &nbsp;
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => navigate(-1)}
+                >
+                  Home
+                </Button>
+              </Typography>
+              <List>
+                {props.result.map((el, i) => (
+                  <ResultItem props={el} key={i} />
+                ))}
+              </List>
+            </Grid>
+          </div>
+        </>
+      )}
     </>
   )
 }
