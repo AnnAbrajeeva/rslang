@@ -83,7 +83,7 @@ export default function DictionaryPage() {
     })
 
   useEffect(() => {
-    if (auth) {
+    if (auth && authData) {
       setAllLearned(checkLearnedPage());
       (words as IUserWordWithParams[]).forEach((word) => {
         checkIsLearnedWord(word) 

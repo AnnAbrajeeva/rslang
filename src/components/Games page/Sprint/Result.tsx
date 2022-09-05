@@ -12,6 +12,7 @@ import {
   updateWord,
 } from './utils/updateStatistic'
 import { prepareNewStatistic } from '../../../redux/features/statisticSlice/utils'
+import { useTypedSelector } from '../../../redux/hooks'
 const api = new RslangApi()
 
 const ResultItem = (properties: { props: IResult }) => {
@@ -47,6 +48,7 @@ export default function Result(props: {
   let unCorrectWords = props.result.filter((el) => !el.isCorrect).length
   const navigate = useNavigate()
   const user = JSON.parse(localStorage.getItem('authData') || '{}')
+  const { authData } = useTypedSelector((state) => state.auth)
 
   const rightAnswersIds = props.result
     .filter((item) => item.isCorrect)
@@ -64,7 +66,7 @@ export default function Result(props: {
   )
 
   useEffect(() => {
-    if (user) {
+    if (user && authData) {
       const fetchData = async () => {
         const prevStat = (await api.getUserStatistics()) || {}
         const allLearnedWords = await api.getAllLearnedWords()
