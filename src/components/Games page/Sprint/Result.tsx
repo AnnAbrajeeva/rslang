@@ -4,6 +4,7 @@ import { Button, Grid, List, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { Cancel, CheckCircle, VolumeUp } from '@mui/icons-material'
 import { IResult } from '../../../types/types'
+import { IUserWordWithParams, IWord } from '../../../types/types'
 import RslangApi from '../../../api/RslangApi'
 import { useEffect, useState } from 'react'
 import {
@@ -44,6 +45,7 @@ export default function Result(props: {
   result: IResult[]
   score: number
   bestStreak: number
+  words: IWord[] | IUserWordWithParams[] | []
 }) {
   let correctWords = props.result.filter((el) => el.isCorrect).length
   let unCorrectWords = props.result.filter((el) => !el.isCorrect).length
@@ -96,8 +98,8 @@ export default function Result(props: {
                     setResultWords(
                       resultWords.push('done') as unknown as string[]
                     )
-                    if (resultWords.length === 20) setShowResults(true)
-                    console.log(resultWords)
+                    if (resultWords.length === props.words.length)
+                      setShowResults(true)
                   })
                 }
               } else {
@@ -108,8 +110,8 @@ export default function Result(props: {
                     setResultWords(
                       resultWords.push('done') as unknown as string[]
                     )
-                    if (resultWords.length === 20) setShowResults(true)
-                    console.log(resultWords)
+                    if (resultWords.length === props.words.length)
+                      setShowResults(true)
                   })
               }
             })

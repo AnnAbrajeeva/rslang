@@ -32,10 +32,13 @@ const SprintContainer = (props: {
   page: number
   increaseCount: () => void
   saveBestStreak: () => void
+  words: IWord[] | IUserWordWithParams[] | []
+  setWords: Function
 }) => {
+  const {words, setWords} = props
   const { authData } = useTypedSelector((state) => state.auth)
   let [iteration, setIteration] = useState(0)
-  let [words, setWords] = useState<IWord[] | IUserWordWithParams[] | []>([])
+
   let [randomNum, setRandomNum] = useState(
     Math.floor(Math.random() * words.length)
   )

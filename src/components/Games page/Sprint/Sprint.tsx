@@ -1,5 +1,5 @@
 /* eslint-disable */
-
+import { IUserWordWithParams, IWord } from '../../../types/types'
 import './sprint.css'
 import SprintContainer from './SprintGameCont'
 import { useState } from 'react'
@@ -16,6 +16,7 @@ const Sprint = () => {
   const [score, setScore] = useState(0)
   const [count, setCount] = useState(1)
   const [bestStreak, setBestStreak] = useState(1)
+  let [words, setWords] = useState<IWord[] | IUserWordWithParams[] | []>([])
 
   useEffect(() => {
     if (isGameBeforeDic) {
@@ -50,10 +51,17 @@ const Sprint = () => {
               page={page}
               increaseCount={increaseCount}
               saveBestStreak={saveBestStreak}
+              words={words}
+              setWords={setWords}
             />
           )}
           {(isEnded || result.length === 20) && (
-            <Result bestStreak={bestStreak} result={result} score={score} />
+            <Result
+              bestStreak={bestStreak}
+              result={result}
+              score={score}
+              words={words}
+            />
           )}
         </>
       )}
