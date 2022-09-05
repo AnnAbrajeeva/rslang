@@ -1,0 +1,48 @@
+.level {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 10px 10px;
+  cursor: pointer;
+}
+
+.level__wrapper {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  flex-shrink: 0;
+  margin-right: 10px;
+  text-align: center;
+  border-radius: 100%;
+  border: 2px solid black;
+  width: 30px;
+  height: 30px;
+  opacity: 0;
+  transition: all 0.4s ease;
+}
+
+.level__wrapper p {
+  margin: 0;
+  position: absolute;
+  font-weight: bold;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.level__text {
+  margin: 0 auto;
+  font-size: 15px;
+  transition: all 0.4s ease;
+}
+
+.level:hover .level__text,
+.level.active .level__text {
+  opacity: 0;
+}
+
+.level:hover .level__wrapper,
+.level.active .level__wrapper {
+  opacity: 1;
+}
