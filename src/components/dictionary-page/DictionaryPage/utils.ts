@@ -5,8 +5,8 @@ import { updateStatistic } from '../utils/updateStatistic';
 
 const api = new RslangApi()
 
-export const updateUserStatistics = async (statistic: IStatistic | {}, action: string) => {
-    const newStat = await updateStatistic(statistic, action)
+export const updateUserStatistics = async (statistic: IStatistic | {}, action: string, id: string[]) => {
+    const newStat = await updateStatistic(statistic, action, id)
     if (newStat) {
         await api.updateUserStatistics(newStat)
     }
@@ -19,14 +19,12 @@ export const addLearned = async (word: IUserWordWithParams, statistic: IStatisti
         wordParams.optional.learned = true
         // eslint-disable-next-line prefer-destructuring
         wordParams.optional.data = new Date().toLocaleString().split(', ')[0]
-        wordParams.optional.audiochallenge!.rightCounter = 0
         wordParams.optional.audiochallenge!.wrongCounter = 0
         wordParams.optional.sprint!.wrongCounter = 0
-        wordParams.optional.sprint!.rightCounter = 0
         delete wordParams.id
         delete wordParams.wordId
         await api.updateUserWord(word.id!, wordParams)
-    } else {
+    } else { 
         const wordParams = {
             difficulty: 'weak',
             optional: {
@@ -36,7 +34,7 @@ export const addLearned = async (word: IUserWordWithParams, statistic: IStatisti
             },
         }
         await api.createUserWord(word.id!, wordParams)
-        await updateUserStatistics(statistic, 'add')
+        await updateUserStatistics(statistic, 'add', new Array(word.id!))
     }
 }
 
@@ -52,5 +50,5 @@ export const removeLearned = async (word: IUserWordWithParams, statistic: IStati
         delete wordParams.wordId
         await api.updateUserWord(word.id!, wordParams)
     }
-    await updateUserStatistics(statistic, 'remove')
+    await updateUserStatistics(statistic, 'remove', new Array(word.id!))
 }

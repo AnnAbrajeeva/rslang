@@ -12,8 +12,9 @@ export const prepareNewStatistic = (
   const prevData = { ...prevStatistic };
   const newWordsIds: Array<string> = [];
   const today = new Date().toLocaleString().split(', ')[0];
+  console.log(prevData)
 
-  if (Object.keys(prevData).length !== 0) {
+  if (!isObjectEmpty(prevData)) {
     [...gameWordsIds].forEach((el) => {
       if (!(el in prevData!.optional!.learnedWordsIds)) newWordsIds.push(el);
     });

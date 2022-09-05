@@ -1,11 +1,9 @@
 /* eslint-disable */
 
-import Timer from './Timer'
 import './sprint.css'
 import SprintContainer from './SprintGameCont'
 import { useState } from 'react'
 import Result from './Result'
-import SelectLevel from './SelectLevel'
 import LevelBox from '../../dictionary-page/LevelBox/LevelBox'
 import { isGameBeforeDic } from '../Games'
 import { useEffect } from 'react'
@@ -16,8 +14,8 @@ const Sprint = () => {
   const [level, setLevel] = useState(-1)
   const [page, setPage] = useState(-1)
   const [score, setScore] = useState(0)
-  const [count, setCount] = useState(0)
-  const [bestStreak, setBestStreak] = useState(0)
+  const [count, setCount] = useState(1)
+  const [bestStreak, setBestStreak] = useState(1)
 
   useEffect(() => {
     if (isGameBeforeDic) {

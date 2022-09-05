@@ -14,7 +14,6 @@ import {
 import { prepareNewStatistic } from '../../../redux/features/statisticSlice/utils'
 const api = new RslangApi()
 
-
 const ResultItem = (properties: { props: IResult }) => {
   const props = properties.props
 
@@ -48,8 +47,6 @@ export default function Result(props: {
   let unCorrectWords = props.result.filter((el) => !el.isCorrect).length
   const navigate = useNavigate()
   const user = JSON.parse(localStorage.getItem('authData') || '{}')
-  console.log(user)
-  console.log(props.bestStreak)
 
   const rightAnswersIds = props.result
     .filter((item) => item.isCorrect)
@@ -69,21 +66,20 @@ export default function Result(props: {
   useEffect(() => {
     if (user) {
       const fetchData = async () => {
-        const prevStat = await api.getUserStatistics() || {}
+        const prevStat = (await api.getUserStatistics()) || {}
         const allLearnedWords = await api.getAllLearnedWords()
-        console.log(allLearnedWords)
-        console.log(rightAnswersIds, wrongAnswersIds)
-        const newStat = prepareNewStatistic(prevStat, [...rightAnswersIds, ...wrongAnswersIds], allLearnedWords.length)
-        console.log(newStat)
+        const newStat = prepareNewStatistic(
+          prevStat,
+          [...rightAnswersIds, ...wrongAnswersIds],
+          allLearnedWords.length
+        )
         if (newStat) {
           await api.updateUserStatistics(newStat)
         }
         const words = await api.getWords()
         if (words) {
           props.result.forEach((el) => {
-            const word = words.find(
-              (item) => item.id === el.id
-            )
+            const word = words.find((item) => item.id === el.id)
             if (word && word.userWord) {
               // @ts-ignore
               const newWord = updateWord(word, el.isCorrect, 'sprint')
@@ -100,13 +96,6 @@ export default function Result(props: {
       fetchData()
     }
   }, [])
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-
-  //   }
-  //   fetchData()
-  // }, [])
 
   return (
     <div className="results">

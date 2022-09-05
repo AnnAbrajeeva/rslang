@@ -1,5 +1,14 @@
-import { IStatistic } from "../types/auth-audio/IStatistic";
-import { IAuthUser, IUser, IWord, IUserWordParams, IUserStatistics, IUserSettings, IUserWordWithParams, IUserHardWords } from '../types/types'
+import { IStatistic } from '../types/auth-audio/IStatistic'
+import {
+  IAuthUser,
+  IUser,
+  IWord,
+  IUserWordParams,
+  IUserStatistics,
+  IUserSettings,
+  IUserWordWithParams,
+  IUserHardWords,
+} from '../types/types'
 
 export default class RslangApi {
   url: string
@@ -39,7 +48,9 @@ export default class RslangApi {
 
   // Получение всех слов
   getAllWords = (page: number, group: number) =>
-    this.getResource(`${this.url}words?page=${page}&group=${group}`) as Promise<IWord[]>
+    this.getResource(`${this.url}words?page=${page}&group=${group}`) as Promise<
+      IWord[]
+    >
 
   // Получение одного слова по id
   getWord = (id: string): Promise<IWord> =>
@@ -64,7 +75,7 @@ export default class RslangApi {
         'Content-Type': 'application/json',
       },
     })
-    const content = await res.json() as IUser
+    const content = (await res.json()) as IUser
     return content
   }
 
@@ -73,15 +84,15 @@ export default class RslangApi {
     const { token, userId } = this.getUserFromLocalStorage()
 
     const res = await fetch(`${this.url}users/${userId}`, {
-      method: "PUT",
+      method: 'PUT',
       headers: {
         Authorization: `Bearer ${token}`,
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     })
-    const content = await res.json() as IUser
+    const content = (await res.json()) as IUser
     return content
   }
 
@@ -90,13 +101,13 @@ export default class RslangApi {
     const { token, userId } = this.getUserFromLocalStorage()
 
     const res = await fetch(`${this.url}users/${userId}`, {
-      method: "DELETE",
+      method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     })
     const content = await res.json()
     return content
@@ -113,7 +124,7 @@ export default class RslangApi {
         'Content-Type': 'application/json',
       },
     })
-    const content = await res.json() as IAuthUser
+    const content = (await res.json()) as IAuthUser
     return content
   }
 
@@ -128,7 +139,7 @@ export default class RslangApi {
         'Content-Type': 'application/json',
       },
     })
-    const content = await res.json() as IUserWordParams[]
+    const content = (await res.json()) as IUserWordParams[]
     return content
   }
 
@@ -137,13 +148,16 @@ export default class RslangApi {
   getAllUserWordsWithParams = async (page: number, group: number) => {
     const { token, userId } = this.getUserFromLocalStorage()
 
-    const res = await fetch(`${this.url}users/${userId}/aggregatedWords?group=${group}&page=${page}&wordsPerPage=20`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    })
+    const res = await fetch(
+      `${this.url}users/${userId}/aggregatedWords?group=${group}&page=${page}&wordsPerPage=20`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      }
+    )
     const content = await res.json()
     let words: IUserWordWithParams[] = content[0].paginatedResults
     words = words.map((word) => {
@@ -156,7 +170,6 @@ export default class RslangApi {
     return words
   }
 
-
   // Добавить слово пользователя
   createUserWord = async (wordId: string, word: IUserWordParams) => {
     const { token, userId } = this.getUserFromLocalStorage()
@@ -168,9 +181,9 @@ export default class RslangApi {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(word)
+      body: JSON.stringify(word),
     })
-    const content = await res.json() as IUserWordParams
+    const content = (await res.json()) as IUserWordParams
     return content
   }
 
@@ -185,7 +198,7 @@ export default class RslangApi {
         'Content-Type': 'application/json',
       },
     })
-    const content = await res.json() as IUserWordParams
+    const content = (await res.json()) as IUserWordParams
     return content
   }
 
@@ -200,9 +213,9 @@ export default class RslangApi {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     })
-    const content = await res.json() as IUserWordParams[]
+    const content = (await res.json()) as IUserWordParams[]
     return content
   }
 
@@ -224,13 +237,16 @@ export default class RslangApi {
   getWords = async () => {
     const { token, userId } = this.getUserFromLocalStorage()
 
-    const res = await fetch(`${this.url}users/${userId}/aggregatedWords?wordsPerPage=3600`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    })
+    const res = await fetch(
+      `${this.url}users/${userId}/aggregatedWords?wordsPerPage=3600`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      }
+    )
     const content = await res.json()
     let hardWords: IUserWordWithParams[] = content[0].paginatedResults
     hardWords = hardWords.map((word) => {
@@ -247,13 +263,16 @@ export default class RslangApi {
   getAllHardWords = async () => {
     const { token, userId } = this.getUserFromLocalStorage()
 
-    const res = await fetch(`${this.url}users/${userId}/aggregatedWords?wordsPerPage=3600&filter={"userWord.difficulty":"hard"}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    })
+    const res = await fetch(
+      `${this.url}users/${userId}/aggregatedWords?wordsPerPage=3600&filter={"userWord.difficulty":"hard"}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      }
+    )
     const content = await res.json()
     let hardWords: IUserWordWithParams[] = content[0].paginatedResults
     hardWords = hardWords.map((word) => {
@@ -270,13 +289,16 @@ export default class RslangApi {
   getAllLearnedWords = async () => {
     const { token, userId } = this.getUserFromLocalStorage()
 
-    const res = await fetch(`${this.url}users/${userId}/aggregatedWords?wordsPerPage=3600&filter={"userWord.optional.learned":true}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    })
+    const res = await fetch(
+      `${this.url}users/${userId}/aggregatedWords?wordsPerPage=3600&filter={"userWord.optional.learned":true}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      }
+    )
     const content = await res.json()
     let hardWords: IUserWordWithParams[] = content[0].paginatedResults
     hardWords = hardWords.map((word) => {
@@ -303,7 +325,7 @@ export default class RslangApi {
     if (!res.ok) {
       return {}
     }
-    const content = await res.json() as IStatistic
+    const content = (await res.json()) as IStatistic
     return content
   }
 
@@ -317,9 +339,9 @@ export default class RslangApi {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     })
-    const content = await res.json() as IUserStatistics[]
+    const content = (await res.json()) as IUserStatistics[]
     return content
   }
 
@@ -333,7 +355,7 @@ export default class RslangApi {
         'Content-Type': 'application/json',
       },
     })
-    const content = await res.json() as IUserSettings[]
+    const content = (await res.json()) as IUserSettings[]
     return content
   }
 
@@ -348,7 +370,7 @@ export default class RslangApi {
         'Content-Type': 'application/json',
       },
     })
-    const content = await res.json() as IUserSettings[]
+    const content = (await res.json()) as IUserSettings[]
     return content
   }
 }

@@ -9,7 +9,6 @@ import { IStatistic } from '../../types/auth-audio/IStatistic'
 import { updateUserStatistics } from './DictionaryPage/utils'
 
 const api = new RslangApi()
-// const auth = localStorage.getItem('authData')
 
 function EmptyList() {
   return <h1 style={{ textAlign: 'center' }}>It's empty yet</h1>
@@ -32,9 +31,6 @@ export default function Dictionary({
   allLearned,
   statistic,
 }: IDictionaryProps) {
-
- 
-
   const addDifficultWord = async (id: string) => {
     const isUserWord = userWords.find((uWord) => uWord.wordId === id)
     if (isUserWord) {
@@ -72,13 +68,13 @@ export default function Dictionary({
         difficulty: 'weak',
         optional: {
           learned: true,
-           // eslint-disable-next-line prefer-destructuring
+          // eslint-disable-next-line prefer-destructuring
           data: new Date().toLocaleString().split(', ')[0],
         },
       }
       await api.createUserWord(id, wordParams)
-      await updateUserStatistics(statistic, 'add')
     }
+    await updateUserStatistics(statistic, 'add', new Array(id))
     updateUserWords()
   }
 
@@ -87,12 +83,16 @@ export default function Dictionary({
     if (isUserWord) {
       const wordParams = { ...isUserWord }
       wordParams.optional.learned = false
+      if (wordParams.optional.audiochallenge && wordParams.optional.sprint) {
+        wordParams.optional.audiochallenge!.rightCounter = 0
+        wordParams.optional.sprint!.rightCounter = 0
+      }
       delete wordParams.id
       delete wordParams.wordId
       await api.updateUserWord(id, wordParams)
     }
     updateUserWords()
-    await updateUserStatistics(statistic, 'remove')
+    await updateUserStatistics(statistic, 'remove', new Array(id))
   }
 
   const removeFromHard = async (id: string) => {
@@ -106,7 +106,6 @@ export default function Dictionary({
     }
     updateUserWords()
   }
-
 
   return (
     <Box sx={{ width: '100%' }}>

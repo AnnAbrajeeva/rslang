@@ -20,12 +20,16 @@ export default function LevelBox({ changeLevel, group }: LevelBoxProps) {
     { number: 7, text: 'Difficult Words', color: '#FF2700' },
   ]
 
-  // eslint-disable-next-line consistent-return
-  const showLevels = (level: { number: number; text: string; color: string }) => {
+  const showLevels = (level: {
+    number: number
+    text: string
+    color: string
+    // eslint-disable-next-line consistent-return
+  }) => {
     if (level.number !== 7) {
       return (
         <LevelOne
-          activeId={group+1}
+          activeId={group + 1}
           change={changeLevel}
           level={level}
           key={level.number}
@@ -35,13 +39,13 @@ export default function LevelBox({ changeLevel, group }: LevelBoxProps) {
     if (level.number === 7 && authData) {
       return (
         <LevelOne
-          activeId={group+1}
+          activeId={group + 1}
           change={changeLevel}
           level={level}
           key={level.number}
         />
       )
-    } 
+    }
   }
 
   return (
@@ -49,11 +53,7 @@ export default function LevelBox({ changeLevel, group }: LevelBoxProps) {
       <h1 className="level-box__title">Choose your English level:</h1>
       <div className="level-box">
         <div className="level-box__wrapper">
-          {levels.map(
-            (level) => (
-              showLevels(level)
-            )
-          )}
+          {levels.map((level) => showLevels(level))}
         </div>
       </div>
     </Box>

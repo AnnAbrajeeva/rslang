@@ -20,7 +20,10 @@ export default function StatisticsSprint({ data }: StatisticsCardProps) {
   let wrongAnswers: number|undefined;
   let rightWordsPercent: number|undefined;
 
-  if (statistic) {
+  const date = new Date().toLocaleString().split(', ')[0]
+
+
+  if (statistic && statistic.date === date) { 
     bestStreak= statistic.games.sprint.bestStreak;
     rightAnswers = statistic.games.sprint.rightAnswers;
     wrongAnswers = statistic.games.sprint.wrongAnswers;
@@ -34,15 +37,15 @@ export default function StatisticsSprint({ data }: StatisticsCardProps) {
       <table className="stat-card__table">
         <tr className="stat-card__row">
           <td>{data.firstRow}</td>
-          <td className="stat-card__number">{statistic ? gameNewWordsCount : 0}</td>
+          <td className="stat-card__number">{gameNewWordsCount ? gameNewWordsCount : 0}</td>
         </tr>
         <tr className="stat-card__row">
           <td>{data.secondRow}</td>
-          <td className="stat-card__number">{statistic ? rightWordsPercent : 0}%</td>
+          <td className="stat-card__number">{rightWordsPercent ? rightWordsPercent : 0}%</td>
         </tr>
         <tr className="stat-card__row">
           <td>{data.thirdRow}</td>
-          <td className="stat-card__number">{statistic ? bestStreak : 0}</td>
+          <td className="stat-card__number">{bestStreak ? bestStreak : 0}</td>
         </tr>
       </table>
     </Card>

@@ -40,14 +40,10 @@ export default function DictionaryPage() {
         setWords(res)
       } else {
         const uWords = await api.getAllUserWordsWithParams(page, group)
-
         setWords(uWords)
         const response = await api.getAllUserWords()
         setWordsParams(response)
-
-
       }
-
       if (authData && group === 6) {
         const hardWords = await api.getAllHardWords()
         setWords(hardWords)
@@ -64,15 +60,15 @@ export default function DictionaryPage() {
       const fetchData = async () => {
         const userStatistic = await api.getUserStatistics()
         if (Object.keys(userStatistic).length !== 0) {
-          setStatistic(userStatistic);
-          (words as IUserWordWithParams[]).forEach((word) => {
+          setStatistic(userStatistic)
+          ;(words as IUserWordWithParams[]).forEach((word) => {
             checkIsLearnedWord(word)
           })
         }
       }
       fetchData()
     }
-     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [words])
 
   const checkLearnedPage = (): boolean =>
@@ -88,12 +84,13 @@ export default function DictionaryPage() {
 
   useEffect(() => {
     if (auth) {
-      setAllLearned(checkLearnedPage())
+      setAllLearned(checkLearnedPage());
+      (words as IUserWordWithParams[]).forEach((word) => {
+        checkIsLearnedWord(word) 
+      })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [(words as IUserWordWithParams[])])
-
-  // eslint-disable-next-line array-callback-return , consistent-return
+  }, [words as IUserWordWithParams[]])
 
   const updateUserWords = async () => {
     if (group === 6) {
@@ -130,45 +127,36 @@ export default function DictionaryPage() {
   }
 
   const checkIsLearnedWord = async (word: IUserWordWithParams) => {
-    if (auth && Object.keys(statistic).length !== 0) {
+    if (auth && Object.keys(statistic).length !== 0 && word.userWord) {
       const rightCounterAudio =
-        word.userWord &&
-          word.userWord.optional?.audiochallenge
-          ? Number(
-            word.userWord.optional?.audiochallenge
-              ?.rightCounter
-          )
+        word.userWord && word.userWord.optional?.audiochallenge
+          ? Number(word.userWord.optional?.audiochallenge?.rightCounter)
           : 0
 
       const rightCounterSprint =
-        word.userWord &&
-          word.userWord.optional?.sprint
-          ? Number(
-            word.userWord.optional?.sprint?.rightCounter
-          )
+        word.userWord && word.userWord.optional?.sprint 
+          ? Number(word.userWord.optional?.sprint?.rightCounter)
           : 0
 
       const wrongCounterAudio =
         word.userWord &&
-          (word as IUserWordWithParams).userWord.optional?.audiochallenge
-          ? Number(
-            word.userWord.optional?.audiochallenge
-              ?.wrongCounter
-          )
+        (word as IUserWordWithParams).userWord.optional?.audiochallenge
+          ? Number(word.userWord.optional?.audiochallenge?.wrongCounter)
           : 0
 
       const wrongCounterSprint =
-        word.userWord &&
-          word.userWord.optional?.sprint
-          ? Number(
-            word.userWord.optional?.sprint?.wrongCounter
-          )
+        word.userWord && word.userWord.optional?.sprint
+          ? Number(word.userWord.optional?.sprint?.wrongCounter)
           : 0
 
       const allRightCounter = rightCounterAudio + rightCounterSprint
       const allWrongCounter = wrongCounterAudio + wrongCounterSprint
 
-      if (allRightCounter >= 3 && word.userWord.difficulty !== 'hard' && !word.userWord.optional.learned && allWrongCounter <= 0) {
+      if (
+        allRightCounter >= 3 &&
+        word.userWord.difficulty !== 'hard' &&
+        !word.userWord.optional.learned
+      ) {
         await addLearned(word, statistic)
       } else if (allRightCounter >= 5 && word.userWord.difficulty === 'hard') {
         await addLearned(word, statistic)
@@ -176,6 +164,7 @@ export default function DictionaryPage() {
         removeLearned(word, statistic)
       }
     }
+    setAllLearned(checkLearnedPage())
   }
 
   return (
@@ -207,7 +196,10 @@ interface DictionaryGamesWrapperProps {
   group: number
 }
 
-function DictionaryGamesWrapper({ disabled, group }: DictionaryGamesWrapperProps) {
+function DictionaryGamesWrapper({
+  disabled,
+  group,
+}: DictionaryGamesWrapperProps) {
   return (
     <div className={disabled && group !== 6 ? 'disabled' : ''}>
       <Games />
@@ -234,7 +226,7 @@ function DictionaryContent({
   learnCardsStyle,
   allLearned,
   userWords,
-  statistic
+  statistic,
 }: IDictionaryContentProps) {
   return (
     <>
@@ -251,7 +243,9 @@ function DictionaryContent({
       {group !== 6 && (
         <Pagination allLearned={allLearned} changePage={changePage} />
       )}
-      {words.length > 0 && <DictionaryGamesWrapper group={group} disabled={allLearned} />}
+      {words.length > 0 && (
+        <DictionaryGamesWrapper group={group} disabled={allLearned} />
+      )}
     </>
   )
 }

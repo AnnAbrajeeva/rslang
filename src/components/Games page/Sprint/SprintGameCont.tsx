@@ -8,7 +8,7 @@ import {
   FullscreenExit,
   VolumeUp,
 } from '@mui/icons-material'
-import { IResult, IWord } from '../../../types/types'
+import { IResult, IUserWordWithParams, IWord } from '../../../types/types'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import Timer from './Timer'
@@ -16,9 +16,12 @@ import Score from './Score'
 import Indicators from './Indicators'
 import RslangApi from '../../../api/RslangApi'
 import Loader from '../../Loader/Loader'
+import { useTypedSelector } from '../../../redux/hooks'
 const correctSound = new Audio(require('./sounds/correct.mp3'))
 const wrongSound = new Audio(require('./sounds/wrong.mp3'))
 const api = new RslangApi()
+
+const auth = localStorage.getItem('authData')
 
 const SprintContainer = (props: {
   result: IResult[]
@@ -30,20 +33,59 @@ const SprintContainer = (props: {
   increaseCount: () => void
   saveBestStreak: () => void
 }) => {
-  let [randomNum, setRandomNum] = useState(Math.floor(Math.random() * 20))
+  const { authData } = useTypedSelector((state) => state.auth)
   let [iteration, setIteration] = useState(0)
-  let [words, setWords] = useState<IWord[]>([])
+  let [words, setWords] = useState<IWord[] | IUserWordWithParams[] | []>([])
+  let [randomNum, setRandomNum] = useState(Math.floor(Math.random() * words.length))
   let [scoreIndicator, setScoreIndicator] = useState(0)
   let [toyIndicator, setToyIndicator] = useState(0)
   let [indicators, setIndicators] = useState({ 1: false, 2: false, 3: false })
   let [fullscreen, setFullscreen] = useState(false)
   const [volumeOff, setVolumeOff] = useState(false)
-
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     let randomPage = Math.floor(Math.random() * 30)
     if (props.page !== -1) randomPage = props.page
-    api.getAllWords(randomPage, props.level - 1).then((data) => setWords(data))
+
+    const fetchData = async () => {
+      setLoading(true)
+      if (!auth && !authData) {
+        const res = await api.getAllWords(randomPage, props.level - 1)
+        setWords(res)
+      }
+      if (auth && authData && props.level !== 7) {
+        const res = await api.getAllUserWordsWithParams(
+          randomPage,
+          props.level - 1
+        )
+        let filterWords = res.filter((word) => {
+          if(word.userWord && word.userWord.optional.learned === true) {
+            return
+          } else {
+            return word
+          }
+        })
+        let allWords
+        if (filterWords.length < 20 && randomPage > 1) {
+          const num = 20 - filterWords.length
+          const res = await api.getAllUserWordsWithParams(
+            randomPage -= 1,
+            props.level - 1
+          )
+          allWords = filterWords.concat(res.splice(0, num))
+        } else {
+          allWords = filterWords
+        }
+        setWords(allWords)     
+      }
+      if (auth && authData && props.level === 7) {
+        const res = await api.getAllHardWords()
+        setWords(res)
+      }
+      setLoading(false)
+    }
+    fetchData()
   }, [props.level, props.page])
 
   useEffect(() => {
@@ -57,11 +99,11 @@ const SprintContainer = (props: {
   }
 
   function matchBtns() {
-    if (iteration === 19) props.setIsEnded(true)
+    if (iteration === words.length-1) props.setIsEnded(true)
     props.saveBestStreak()
     setIteration((prev) => (prev += 1))
     if (Math.random() < 0.5) setRandomNum(iteration + 1)
-    else setRandomNum(Math.floor(Math.random() * 20))
+    else setRandomNum(Math.floor(Math.random() * words.length))
     correctSound.pause()
     wrongSound.pause()
     correctSound.currentTime = 0
@@ -78,7 +120,7 @@ const SprintContainer = (props: {
       isCorrect: true,
       sound: words[iteration].audio,
 
-      id: words[iteration].id,
+      id: words[iteration].id!,
     })
     if (scoreIndicator !== 3) {
       setScoreIndicator((prev) => (prev += 1))
@@ -102,7 +144,7 @@ const SprintContainer = (props: {
       transcription: words[iteration].transcription,
       isCorrect: false,
       sound: words[iteration].audio,
-      id: words[iteration].id,
+      id: words[iteration].id!,
     })
     props.saveBestStreak()
   }
@@ -169,7 +211,7 @@ const SprintContainer = (props: {
         )}
       </div>
       <div className="sprint-cont">
-        {words.length === 20 && iteration !== 20 && (
+        {words.length > 0 && iteration <= words.length && (
           <>
             <div className="indicators">
               <Timer setIsEnded={props.setIsEnded} />
@@ -202,7 +244,7 @@ const SprintContainer = (props: {
             </div>
           </>
         )}
-        {words.length !== 20 && <Loader />}
+        {loading && <Loader />}
       </div>
     </>
   )

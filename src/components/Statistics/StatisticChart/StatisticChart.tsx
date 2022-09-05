@@ -36,11 +36,11 @@ export function Chart() {
   useEffect(() => {
     const fetchData = async () => {
       const stat = await api.getUserStatistics()
+      console.log(stat)
       if (stat) {
         setStatistic(stat)
       }
       const words = await api.getAllLearnedWords()
-      console.log(words)
       setUserWords(words)
     }
     fetchData()
@@ -51,7 +51,7 @@ export function Chart() {
   const newWords = []
   const learnedWords = []
 
-  if (statistic) {
+  if (statistic && Object.keys(statistic).length > 0) {
     for (let day in statistic.optional.dailyResults) {
       dates.push(day)
       newWords.push(statistic.optional.dailyResults[day].newWordsCounter)
