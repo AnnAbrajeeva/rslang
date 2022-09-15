@@ -1,46 +1,59 @@
-# Getting Started with Create React App
+# RsLang
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### Приложение для изучения английского языка.
 
-## Available Scripts
+Приложение состоит из главной страницы, словаря, который содержит 6 уровней сложности, мини-игр "Спринт" для лучшего запоминания слов и "Аудиовызов" для тренировки понимания на слух, а также статистики, где можно отслеживать свои результаты. В приложении есть авторизация, которая предоставляет возможность добавлять слова в изученные или в категорию "Сложные" для дальнейшего изучения. 
 
-In the project directory, you can run:
+## Стэк технологий
 
-### `npm start`
+Приложение написано на фреймворке React
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+__Eslint+Typescript+Airbnb__ - для отслеживания синтаксических ошибок, багов и неточностей форматирования.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+__Sass__ - для использования переменных, вложенных правил, миксинов
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+__Библиотеки:__ 
 
-### `npm run build`
+__React Router v6__ - библиотека для маршрутизации в React
+__Redux__ - для управления состоянием данных и пользовательским интерфейсом.
+__chart.js__ - для создания графика статистических данных
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Деплой
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+https://annabrajeeva-team-101.netlify.app/
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+### Скриншоты
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+__Главная страница__
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+![image](https://user-images.githubusercontent.com/66987410/190471715-2a2978b7-1375-4288-845d-cb8945842b9f.png)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+__Словарь__
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+![image](https://user-images.githubusercontent.com/66987410/190472106-6b3ae703-8308-4f2f-8382-7679e8649ca5.png)
 
-## Learn More
+__Страница с играми__
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+![image](https://user-images.githubusercontent.com/66987410/190472206-0fd5aa80-8904-4190-9887-20f7d0bb4d7b.png)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+
+__Аудиовызов__
+
+![image](https://user-images.githubusercontent.com/66987410/190472337-32e55fee-a651-46c5-8197-bd24138e231f.png)
+
+__Спринт__
+
+![image](https://user-images.githubusercontent.com/66987410/190472458-c9a25840-888a-4720-bf42-737fcc420987.png)
+
+__Статистика__
+
+![image](https://user-images.githubusercontent.com/66987410/190472816-41d17638-a369-4728-91d7-42ac6979bad5.png)
+
+
+![image](https://user-images.githubusercontent.com/66987410/190472928-adef9efa-5800-4610-8223-4b34f967346b.png)
+
+
+
+
