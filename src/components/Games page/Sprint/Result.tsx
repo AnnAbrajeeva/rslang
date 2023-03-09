@@ -1,26 +1,21 @@
-/* eslint-disable */
-
-import { Button, Grid, List, Typography } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
-import { Cancel, CheckCircle, VolumeUp } from '@mui/icons-material'
-import { IResult } from '../../../types/types'
-import { IUserWordWithParams, IWord } from '../../../types/types'
-import RslangApi from '../../../api/RslangApi'
-import { useEffect, useState } from 'react'
-import {
-  createNewUserWord,
-  updateLocalStatisticSprint,
-  updateWord,
-} from './utils/updateStatistic'
-import { prepareNewStatistic } from '../../../redux/features/statisticSlice/utils'
-import { useTypedSelector } from '../../../redux/hooks'
-import Loader from '../../Loader/Loader'
-const api = new RslangApi()
+import React from 'react';
+import { Button, Grid, List, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { Cancel, CheckCircle, VolumeUp } from '@mui/icons-material';
+import { IResult } from '../../../types/types';
+import { IUserWordWithParams, IWord } from '../../../types/types';
+import RslangApi from '../../../api/RslangApi';
+import { useEffect, useState } from 'react';
+import { createNewUserWord, updateLocalStatisticSprint, updateWord } from './utils/updateStatistic';
+import { prepareNewStatistic } from '../../../redux/features/statisticSlice/utils';
+import { useTypedSelector } from '../../../redux/hooks';
+import Loader from '../../Loader/Loader';
+const api = new RslangApi();
 
 const ResultItem = (properties: { props: IResult }) => {
-  const props = properties.props
+  const props = properties.props;
 
-  const audio = new Audio(`https://rs-lang-base.herokuapp.com/${props.sound}`)
+  const audio = new Audio(`https://rs-lang-be-orcn.onrender.com/${props.sound}`);
 
   return (
     <div className="result-item">
@@ -34,33 +29,29 @@ const ResultItem = (properties: { props: IResult }) => {
       </div>
       <VolumeUp
         onClick={() => {
-          audio.play()
+          audio.play();
         }}
       />
     </div>
-  )
-}
+  );
+};
 
 export default function Result(props: {
-  result: IResult[]
-  score: number
-  bestStreak: number
-  words: IWord[] | IUserWordWithParams[] | []
+  result: IResult[];
+  score: number;
+  bestStreak: number;
+  words: IWord[] | IUserWordWithParams[] | [];
 }) {
-  let correctWords = props.result.filter((el) => el.isCorrect).length
-  let unCorrectWords = props.result.filter((el) => !el.isCorrect).length
-  const navigate = useNavigate()
-  const user = JSON.parse(localStorage.getItem('authData') || '{}')
-  const { authData } = useTypedSelector((state) => state.auth)
-  const [resultWords, setResultWords] = useState<string[]>([])
-  const [showResults, setShowResults] = useState(false)
+  let correctWords = props.result.filter((el) => el.isCorrect).length;
+  let unCorrectWords = props.result.filter((el) => !el.isCorrect).length;
+  const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem('authData') || '{}');
+  const { authData } = useTypedSelector((state) => state.auth);
+  const [resultWords, setResultWords] = useState<string[]>([]);
+  const [showResults, setShowResults] = useState(false);
 
-  const rightAnswersIds = props.result
-    .filter((item) => item.isCorrect)
-    .map((item) => item.id)
-  const wrongAnswersIds = props.result
-    .filter((item) => !item.isCorrect)
-    .map((item) => item.id)
+  const rightAnswersIds = props.result.filter((item) => item.isCorrect).map((item) => item.id);
+  const wrongAnswersIds = props.result.filter((item) => !item.isCorrect).map((item) => item.id);
 
   updateLocalStatisticSprint(
     rightAnswersIds,
@@ -68,59 +59,51 @@ export default function Result(props: {
     'sprint',
     props.bestStreak,
     user.userId
-  )
-  let callFucntionOnce = 1
+  );
+  let callFucntionOnce = 1;
 
   useEffect(() => {
     if (callFucntionOnce === 1) {
-      callFucntionOnce++
+      callFucntionOnce++;
       if (user && authData) {
         const fetchData = async () => {
-          const prevStat = (await api.getUserStatistics()) || {}
-          const allLearnedWords = await api.getAllLearnedWords()
+          const prevStat = (await api.getUserStatistics()) || {};
+          const allLearnedWords = await api.getAllLearnedWords();
           const newStat = prepareNewStatistic(
             prevStat,
             [...rightAnswersIds, ...wrongAnswersIds],
             allLearnedWords.length
-          )
+          );
           if (newStat) {
-            await api.updateUserStatistics(newStat)
+            await api.updateUserStatistics(newStat);
           }
-          const words = await api.getWords()
+          const words = await api.getWords();
           if (words) {
             props.result.forEach((el) => {
-              const word = words.find((item) => item.id === el.id)
+              const word = words.find((item) => item.id === el.id);
               if (word && word.userWord) {
                 // @ts-ignore
-                const newWord = updateWord(word, el.isCorrect, 'sprint')
+                const newWord = updateWord(word, el.isCorrect, 'sprint');
                 if (newWord) {
                   api.updateUserWord(word.id!, newWord).then((data) => {
-                    setResultWords(
-                      resultWords.push('done') as unknown as string[]
-                    )
-                    if (resultWords.length === props.words.length)
-                      setShowResults(true)
-                  })
+                    setResultWords(resultWords.push('done') as unknown as string[]);
+                    if (resultWords.length === props.words.length) setShowResults(true);
+                  });
                 }
               } else {
-                const newWord = createNewUserWord(el.id, el.isCorrect, 'sprint')
-                api
-                  .createUserWord(newWord.optional.wordId, newWord)
-                  .then((data) => {
-                    setResultWords(
-                      resultWords.push('done') as unknown as string[]
-                    )
-                    if (resultWords.length === props.words.length)
-                      setShowResults(true)
-                  })
+                const newWord = createNewUserWord(el.id, el.isCorrect, 'sprint');
+                api.createUserWord(newWord.optional.wordId, newWord).then((data) => {
+                  setResultWords(resultWords.push('done') as unknown as string[]);
+                  if (resultWords.length === props.words.length) setShowResults(true);
+                });
               }
-            })
+            });
           }
-        }
-        fetchData()
+        };
+        fetchData();
       }
     }
-  }, [])
+  }, []);
 
   return (
     <>
@@ -141,16 +124,11 @@ export default function Result(props: {
                   }}
                 >
                   Correct:&nbsp;
-                  <b style={{ color: '#2e7d32' }}>{correctWords}</b> &nbsp;
-                  Wrong:&nbsp;
-                  <b style={{ color: '#d32f2f' }}>{unCorrectWords}</b> &nbsp;
-                  Score:&nbsp;<b style={{ color: '#34568B' }}>{props.score}</b>
+                  <b style={{ color: '#2e7d32' }}>{correctWords}</b> &nbsp; Wrong:&nbsp;
+                  <b style={{ color: '#d32f2f' }}>{unCorrectWords}</b> &nbsp; Score:&nbsp;
+                  <b style={{ color: '#34568B' }}>{props.score}</b>
                   &nbsp;
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => navigate(-1)}
-                  >
+                  <Button variant="contained" color="primary" onClick={() => navigate(-1)}>
                     Home
                   </Button>
                 </Typography>
@@ -181,16 +159,11 @@ export default function Result(props: {
                 }}
               >
                 Correct:&nbsp;
-                <b style={{ color: '#2e7d32' }}>{correctWords}</b> &nbsp;
-                Wrong:&nbsp;
-                <b style={{ color: '#d32f2f' }}>{unCorrectWords}</b> &nbsp;
-                Score:&nbsp;<b style={{ color: '#34568B' }}>{props.score}</b>
+                <b style={{ color: '#2e7d32' }}>{correctWords}</b> &nbsp; Wrong:&nbsp;
+                <b style={{ color: '#d32f2f' }}>{unCorrectWords}</b> &nbsp; Score:&nbsp;
+                <b style={{ color: '#34568B' }}>{props.score}</b>
                 &nbsp;
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => navigate(-1)}
-                >
+                <Button variant="contained" color="primary" onClick={() => navigate(-1)}>
                   Home
                 </Button>
               </Typography>
@@ -204,5 +177,5 @@ export default function Result(props: {
         </>
       )}
     </>
-  )
+  );
 }

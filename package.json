@@ -15,8 +15,6 @@
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.2",
     "@types/node": "^16.11.48",
-    "@types/react": "^18.0.17",
-    "@types/react-dom": "^18.0.6",
     "@types/react-router-dom": "^5.3.3",
     "@typescript-eslint/eslint-plugin": "^5.33.1",
     "axios": "^0.27.2",
@@ -76,6 +74,10 @@
     ]
   },
   "devDependencies": {
-    "@types/styled-components": "^5.1.26"
+    "@types/babel__core": "^7.20.0",
+    "@types/react": "^18.0.28",
+    "@types/react-dom": "^18.0.11",
+    "@types/styled-components": "^5.1.26",
+    "eslint-plugin-prettier": "^4.2.1"
   }
 }

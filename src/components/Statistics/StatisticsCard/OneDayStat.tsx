@@ -1,55 +1,54 @@
-/* eslint-disable */
-import Card from '@mui/material/Card'
+import React from 'react';
+import Card from '@mui/material/Card';
 import { useEffect, useState } from 'react';
 import RslangApi from '../../../api/RslangApi';
-import { IUserWordWithParams } from '../../../types/types';
-import { getCurrentDate } from '../../../utils';
 import { getOneDayStatistics } from '../../Games page/Sprint/utils/updateStatistic';
-import './StatisticsCard.css'
+import './StatisticsCard.css';
 
 interface StatisticsCardProps {
   data: {
-    title: string
-    firstRow: string
-    secondRow: string
-    thirdRow: string
-  },
+    title: string;
+    firstRow: string;
+    secondRow: string;
+    thirdRow: string;
+  };
 }
 
-const api = new RslangApi()
+const api = new RslangApi();
 
 export default function OneDayStat({ data }: StatisticsCardProps) {
   const statistic = getOneDayStatistics();
-  let allGamesRight: number|undefined;
-  let allGamesWrong: number|undefined;
-  let allNewWordsCount: number|undefined;
-  let rightWordsPercent: number|undefined;
+  let allGamesRight: number | undefined;
+  let allGamesWrong: number | undefined;
+  let allNewWordsCount: number | undefined;
+  let rightWordsPercent: number | undefined;
 
-  const date = new Date().toLocaleString().split(', ')[0]
+  const date = new Date().toLocaleString().split(', ')[0];
 
   if (statistic && statistic.date === date) {
-    allGamesRight = Math.round(statistic.allGamesRight)
+    allGamesRight = Math.round(statistic.allGamesRight);
     allGamesWrong = Math.round(statistic.allGamesWrong);
-    allNewWordsCount = Math.round(statistic.games.audiochallenge.gameNewWordsCount+ statistic.games.sprint.gameNewWordsCount);
-    rightWordsPercent = (allGamesRight + allGamesWrong) > 0 ? Math.round((allGamesRight / (allGamesRight + allGamesWrong)) * 100) : 0;
+    allNewWordsCount = Math.round(
+      statistic.games.audiochallenge.gameNewWordsCount + statistic.games.sprint.gameNewWordsCount
+    );
+    rightWordsPercent =
+      allGamesRight + allGamesWrong > 0
+        ? Math.round((allGamesRight / (allGamesRight + allGamesWrong)) * 100)
+        : 0;
   }
 
-  const [learned, setLearned] = useState<number>(0)
+  const [learned, setLearned] = useState<number>(0);
 
   useEffect(() => {
     const fetchData = async () => {
-      const allWords = await api.getAllLearnedWords()
-      if(allWords.length) {
-        const arr = allWords.filter((word) => word.userWord.optional.data === date)
-        setLearned(arr.length)
+      const allWords = await api.getAllLearnedWords();
+      if (allWords.length) {
+        const arr = allWords.filter((word) => word.userWord.optional.data === date);
+        setLearned(arr.length);
       }
-    }
-    fetchData()
-  }, [])
-
-  
-
-
+    };
+    fetchData();
+  }, []);
 
   return (
     <Card className="stat-card" sx={{ minWidth: 275 }}>
@@ -69,5 +68,5 @@ export default function OneDayStat({ data }: StatisticsCardProps) {
         </tr>
       </table>
     </Card>
-  )
+  );
 }

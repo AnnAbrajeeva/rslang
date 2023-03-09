@@ -1,12 +1,13 @@
-import { Button, ButtonGroup } from '@mui/material'
-import { Link } from 'react-router-dom'
-import FooterLinks from './FooterLinks'
-import './main.css'
+import React from 'react';
+import { Button, ButtonGroup } from '@mui/material';
+import { Link } from 'react-router-dom';
+import FooterLinks from './FooterLinks';
+import './main.css';
 
 const Footer = (props: { setValue: (arg0: string) => void }) => {
   const changeNav = () => {
-    props.setValue('team')
-  }
+    props.setValue('team');
+  };
 
   return (
     <footer>
@@ -16,20 +17,16 @@ const Footer = (props: { setValue: (arg0: string) => void }) => {
 
       <h3>2022</h3>
 
-      <ButtonGroup
-        variant="contained"
-        aria-label="outlined primary button group"
-        color="secondary"
-      >
-        <Button onClick={changeNav}>
-          <Link to="/team">Our Team</Link>
+      <ButtonGroup variant="contained" aria-label="outlined primary button group" color="secondary">
+        <Button >
+          <Link onClick={changeNav} to="/team">Our Team</Link>
         </Button>
         <Button>
           <FooterLinks />
         </Button>
       </ButtonGroup>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;

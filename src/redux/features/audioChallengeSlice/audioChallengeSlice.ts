@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IWord } from '../../../types/types';
 import { updateLocalStatistic } from '../../../utils';
@@ -55,18 +54,11 @@ const challengeSlice = createSlice({
     },
     selectAnswer(state, action: PayloadAction<string>) {
       state.isButtonsBlocked = true;
-      if (
-        action.payload ===
-        state.currentQuestionsSet[state.currentQuestionIndex].wordTranslate
-      ) {
-        state.rightAnswers.push(
-          state.currentQuestionsSet[state.currentQuestionIndex]._id!
-        );
+      if (action.payload === state.currentQuestionsSet[state.currentQuestionIndex].wordTranslate) {
+        state.rightAnswers.push(state.currentQuestionsSet[state.currentQuestionIndex]._id!);
         state.currentRightStreak++;
       } else {
-        state.wrongAnswers.push(
-          state.currentQuestionsSet[state.currentQuestionIndex]._id!
-        );
+        state.wrongAnswers.push(state.currentQuestionsSet[state.currentQuestionIndex]._id!);
         if (state.currentRightStreak > state.bestGameStreak)
           state.bestGameStreak = state.currentRightStreak;
         state.currentRightStreak = 0;

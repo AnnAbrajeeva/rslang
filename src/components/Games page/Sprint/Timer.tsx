@@ -1,17 +1,12 @@
-import { useState, useEffect } from 'react'
-import CircularProgress, {
-  CircularProgressProps,
-} from '@mui/material/CircularProgress'
-import Typography from '@mui/material/Typography'
-import Box from '@mui/material/Box'
+import React from 'react';
+import { useState, useEffect } from 'react';
+import CircularProgress, { CircularProgressProps } from '@mui/material/CircularProgress';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 
-/* eslint-disable */
+const normalise = (value: number) => ((value - 0) * 100) / (60 - 0);
 
-const normalise = (value: number) => ((value - 0) * 100) / (60 - 0)
-
-function CircularProgressWithLabel(
-  props: CircularProgressProps & { value: number }
-) {
+function CircularProgressWithLabel(props: CircularProgressProps & { value: number }) {
   return (
     <Box
       sx={{
@@ -43,26 +38,24 @@ function CircularProgressWithLabel(
           component="h2"
           color="text.secondary"
           style={{ fontSize: '25px' }}
-        >{`${
-          props.value ? Math.round(props.value) : 'Time is up!'
-        }`}</Typography>
+        >{`${props.value ? Math.round(props.value) : 'Time is up!'}`}</Typography>
       </Box>
     </Box>
-  )
+  );
 }
 
 export default function Timer(props: { setIsEnded: (arg0: boolean) => void }) {
-  const [progress, setProgress] = useState(60)
+  const [progress, setProgress] = useState(60);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setProgress((prevProgress) => (prevProgress > 0 ? prevProgress - 1 : 0))
-    }, 1000)
-    if (progress === 0) props.setIsEnded(true)
+      setProgress((prevProgress) => (prevProgress > 0 ? prevProgress - 1 : 0));
+    }, 1000);
+    if (progress === 0) props.setIsEnded(true);
     return () => {
-      clearInterval(timer)
-    }
-  }, [progress, props])
+      clearInterval(timer);
+    };
+  }, [progress, props]);
 
-  return <CircularProgressWithLabel value={progress} />
+  return <CircularProgressWithLabel value={progress} />;
 }

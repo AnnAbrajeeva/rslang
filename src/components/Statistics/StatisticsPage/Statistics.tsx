@@ -1,11 +1,10 @@
-/* eslint-disable */
 import Paper from '@mui/material/Paper';
-import StatisticsCard from '../StatisticsCard/StatisticsCard'
 import StatisticsAudio from '../StatisticsCard/StatisticsAudio'
 import StatisticsSprint from '../StatisticsCard/StatisticSprint'
 import OneDayStat from '../StatisticsCard/OneDayStat'
 import './Statistics.css'
 import { Chart } from '../StatisticChart/StatisticChart';
+import React from 'react';
 
 export default function Statistics() {
   const user = localStorage.getItem('authData');

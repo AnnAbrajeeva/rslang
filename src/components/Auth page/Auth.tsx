@@ -1,11 +1,11 @@
-/* eslint-disable */
-import { FC, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { setEnteringFlag, setSigningInError } from "../../redux/features/authSlice";
-import { useTypedDispatch, useTypedSelector } from "../../redux/hooks";
-import Wrapper from "./Auth.styles";
-import Alerts from "./components/Alerts";
-import AuthForm from "./components/AuthForm";
+import React from 'react';
+import { FC, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { setEnteringFlag, setSigningInError } from '../../redux/features/authSlice';
+import { useTypedDispatch, useTypedSelector } from '../../redux/hooks';
+import Wrapper from './Auth.styles';
+import Alerts from './components/Alerts';
+import AuthForm from './components/AuthForm';
 
 const Auth: FC = () => {
   const dispatch = useTypedDispatch();
@@ -39,7 +39,10 @@ const Auth: FC = () => {
         <div>
           <AuthForm />
           <h3>
-            New to RS Lang? <span><Link to='/registration'>Sign up now!</Link></span>
+            New to RS Lang?{' '}
+            <span>
+              <Link to="/registration">Sign up now!</Link>
+            </span>
           </h3>
         </div>
       )}

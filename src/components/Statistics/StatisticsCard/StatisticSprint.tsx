@@ -1,4 +1,4 @@
-/* eslint-disable */
+import React from 'react';
 import Card from '@mui/material/Card'
 import { getSprintChallengeStatistics } from '../../Games page/Sprint/utils/updateStatistic';
 import './StatisticsCard.css'

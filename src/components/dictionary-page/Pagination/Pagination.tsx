@@ -1,18 +1,15 @@
-import * as React from 'react'
-import Pagination from '@mui/material/Pagination'
-import Stack from '@mui/material/Stack'
-import Box from '@mui/material/Box'
-import './pagination.css'
+import * as React from 'react';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box';
+import './pagination.css';
 
 interface PaginationRoundedProps {
-  changePage: (newPage: number) => void
-  allLearned: boolean
+  changePage: (newPage: number) => void;
+  allLearned: boolean;
 }
 
-export default function PaginationRounded({
-  changePage,
-  allLearned,
-}: PaginationRoundedProps) {
+export default function PaginationRounded({ changePage, allLearned }: PaginationRoundedProps) {
   return (
     <Box
       sx={{
@@ -39,5 +36,5 @@ export default function PaginationRounded({
         />
       </Stack>
     </Box>
-  )
+  );
 }

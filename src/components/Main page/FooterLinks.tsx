@@ -52,8 +52,8 @@ export default function FooterLinks() {
               { git: 'shahzod222', name: 'Shahzod' },
               { git: 'AnnAbrajeeva', name: 'Anna' },
               { git: 'kirakle', name: 'Viachaslau' },
-            ].map((el) => (
-              <FooterLink github={el.git} name={el.name} />
+            ].map((el, i) => (
+              <FooterLink github={el.git} name={el.name} key={i} />
             ))}
           </Popover>
         </div>

@@ -1,16 +1,15 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-import { Link } from 'react-router-dom'
-import '../../Games page/games.css'
-import Game1 from '../../Games page/images/game1-bg.gif'
-import Game2 from '../../Games page/images/game2-bg.gif'
-import { setGameFromTextbook } from '../../../redux/features/audioChallengeSlice'
-import { useTypedDispatch } from '../../../redux/hooks'
-import './DictionaryGames.css'
+import React from 'react';
+import { Link } from 'react-router-dom';
+import '../../Games page/games.css';
+import Game1 from '../../Games page/images/game1-bg.gif';
+import Game2 from '../../Games page/images/game2-bg.gif';
+import { setGameFromTextbook } from '../../../redux/features/audioChallengeSlice';
+import { useTypedDispatch } from '../../../redux/hooks';
+import './DictionaryGames.css';
 
 interface GamesProps {
-  img: string
-  type: string
+  img: string;
+  type: string;
 }
 
 function Games({ img, type }: GamesProps) {
@@ -21,18 +20,18 @@ function Games({ img, type }: GamesProps) {
         <h2 className="game-name">{type}</h2>
       </div>
     </div>
-  )
+  );
 }
 
 export default function DictionaryGames() {
-  const dispatch = useTypedDispatch()
+  const dispatch = useTypedDispatch();
   const games = [
     { num: 1, type: 'Audio Call', link: '/games/audio-calll', img: Game1 },
     { num: 2, type: 'Sprint', link: '/games/sprint', img: Game2 },
-  ]
+  ];
   const handleAudiochallengeClick = () => {
-    dispatch(setGameFromTextbook())
-  }
+    dispatch(setGameFromTextbook());
+  };
   return (
     <div className="dic-games">
       <h2 className="dic-games__title">Try out our games:</h2>
@@ -44,5 +43,5 @@ export default function DictionaryGames() {
         ))}
       </div>
     </div>
-  )
+  );
 }

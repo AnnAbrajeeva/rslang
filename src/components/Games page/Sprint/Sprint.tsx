@@ -1,40 +1,40 @@
-/* eslint-disable */
-import { IUserWordWithParams, IWord } from '../../../types/types'
-import './sprint.css'
-import SprintContainer from './SprintGameCont'
-import { useState } from 'react'
-import Result from './Result'
-import LevelBox from '../../dictionary-page/LevelBox/LevelBox'
-import { isGameBeforeDic } from '../Games'
-import { useEffect } from 'react'
+import React from 'react';
+import { IUserWordWithParams, IWord } from '../../../types/types';
+import './sprint.css';
+import SprintContainer from './SprintGameCont';
+import { useState } from 'react';
+import Result from './Result';
+import LevelBox from '../../dictionary-page/LevelBox/LevelBox';
+import { isGameBeforeDic } from '../Games';
+import { useEffect } from 'react';
 
 const Sprint = () => {
-  const [isEnded, setIsEnded] = useState(false)
-  const [result, setResult] = useState([])
-  const [level, setLevel] = useState(-1)
-  const [page, setPage] = useState(-1)
-  const [score, setScore] = useState(0)
-  const [count, setCount] = useState(1)
-  const [bestStreak, setBestStreak] = useState(1)
-  let [words, setWords] = useState<IWord[] | IUserWordWithParams[] | []>([])
+  const [isEnded, setIsEnded] = useState(false);
+  const [result, setResult] = useState([]);
+  const [level, setLevel] = useState(-1);
+  const [page, setPage] = useState(-1);
+  const [score, setScore] = useState(0);
+  const [count, setCount] = useState(1);
+  const [bestStreak, setBestStreak] = useState(1);
+  let [words, setWords] = useState<IWord[] | IUserWordWithParams[] | []>([]);
 
   useEffect(() => {
     if (isGameBeforeDic) {
-      setLevel(Number(localStorage.group) + 1)
-      setPage(Number(localStorage.page))
+      setLevel(Number(localStorage.group) + 1);
+      setPage(Number(localStorage.page));
     }
-  }, [])
+  }, []);
 
   function increaseCount() {
-    setCount(count + 1)
+    setCount(count + 1);
   }
 
   function saveBestStreak() {
     if (bestStreak < count) {
-      setBestStreak(count)
-      setCount(0)
+      setBestStreak(count);
+      setCount(0);
     }
-    setCount(0)
+    setCount(0);
   }
 
   return (
@@ -56,12 +56,7 @@ const Sprint = () => {
             />
           )}
           {(isEnded || result.length === 20) && (
-            <Result
-              bestStreak={bestStreak}
-              result={result}
-              score={score}
-              words={words}
-            />
+            <Result bestStreak={bestStreak} result={result} score={score} words={words} />
           )}
         </>
       )}
@@ -71,7 +66,7 @@ const Sprint = () => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Sprint
+export default Sprint;

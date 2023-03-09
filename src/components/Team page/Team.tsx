@@ -1,6 +1,6 @@
 import { GitHub } from '@mui/icons-material'
 import { Avatar } from '@mui/material'
-import { useEffect } from 'react'
+import React from 'react'
 import './team.css'
 
 const Member = (props: {

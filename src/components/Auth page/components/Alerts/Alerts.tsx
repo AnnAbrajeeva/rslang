@@ -1,11 +1,11 @@
-/* eslint-disable  */
-import { FC } from "react"
-import { Alert, AlertTitle } from "@mui/material";
-import Wrapper from "./Alerts.styles";
-import { useTypedSelector } from "../../../../redux/hooks";
+import React from 'react';
+import { FC } from 'react';
+import { Alert, AlertTitle } from '@mui/material';
+import Wrapper from './Alerts.styles';
+import { useTypedSelector } from '../../../../redux/hooks';
 
 const Alerts: FC = () => {
-  const { signingInError, enteringFlag } = useTypedSelector(state => state.auth);
+  const { signingInError, enteringFlag } = useTypedSelector((state) => state.auth);
 
   const isSuccess = !signingInError && enteringFlag;
   const isError = signingInError && enteringFlag;
@@ -16,16 +16,16 @@ const Alerts: FC = () => {
         <Alert severity="success">
           <AlertTitle>Success</AlertTitle>
           You are successfully logged in!
-        </Alert>)
-      }
+        </Alert>
+      )}
       {isError && (
         <Alert severity="error">
           <AlertTitle>Error</AlertTitle>
           {signingInError}
-        </Alert>)
-      }
+        </Alert>
+      )}
     </Wrapper>
-  )
+  );
 };
 
 export default Alerts;

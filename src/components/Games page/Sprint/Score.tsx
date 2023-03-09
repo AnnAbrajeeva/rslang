@@ -1,6 +1,5 @@
-/* eslint-disable */
-
-import { Typography } from '@mui/material'
+import React from 'react';
+import { Typography } from '@mui/material';
 
 const Score = (props: { score: number }) => {
   return (
@@ -14,7 +13,7 @@ const Score = (props: { score: number }) => {
         {props.score}
       </Typography>
     </div>
-  )
-}
+  );
+};
 
-export default Score
+export default Score;

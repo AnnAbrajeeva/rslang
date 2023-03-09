@@ -1,2 +1,2 @@
 const AUDIOCHALLENGE = 'audiochallenge';
-export default AUDIOCHALLENGE; 
+export default AUDIOCHALLENGE;

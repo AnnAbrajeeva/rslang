@@ -1,11 +1,10 @@
-/* eslint-disable */
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { IUser } from '../types/types';
 import { IAuthUser } from '../types/types';
 import { IGetUserWords, IPostUserWord, ISendStatistic, ISignIn } from './types';
 
-export const BASE_URL = 'https://rs-lang-base.herokuapp.com';
+export const BASE_URL = 'https://rs-lang-be-orcn.onrender.com';
 
 export const createUser = createAsyncThunk(
   'thunks/createUser',
@@ -20,9 +19,7 @@ export const createUser = createAsyncThunk(
       return response.data;
     } catch (e) {
       if (e instanceof Error) console.log(e.message);
-      return thunkAPI.rejectWithValue(
-        'New user could not be created! Try again.'
-      );
+      return thunkAPI.rejectWithValue('New user could not be created! Try again.');
     }
   }
 );
@@ -39,21 +36,19 @@ export const signIn = createAsyncThunk(
       return response.data;
     } catch (e) {
       if (e instanceof Error) console.log(e.message);
-      return thunkAPI.rejectWithValue(
-        'Failed to log in to my account! Try again.'
-      );
+      return thunkAPI.rejectWithValue('Failed to log in to my account! Try again.');
     }
   }
 );
 
 export const fetchAllWords = createAsyncThunk(
   'thunks/fetchAllWords',
-  async (_, thunkAPI) => {
+  async (pageParams: { page: string; group: string }, thunkAPI) => {
     try {
-      const response = await axios.get(`https://zoukman-rslang.herokuapp.com/wordsAll`);
-      return response.data.map((el: any) =>
-        ({ ...el, _id: el._id.$oid })
+      const response = await axios.get(
+        `https://rs-lang-be-orcn.onrender.com/words/?page=${pageParams.page}&group=${pageParams.group}`
       );
+      return response.data;
     } catch (e) {
       if (e instanceof Error) console.log(e.message);
       return thunkAPI.rejectWithValue('Failed to get the words');
@@ -65,21 +60,16 @@ export const fetchUserWords = createAsyncThunk(
   'thunks/fetchUserWords',
   async (userData: IGetUserWords, thunkAPI) => {
     try {
-      const response = await axios.get(
-        `${BASE_URL}/users/${userData.userId}/words`,
-        {
-          headers: {
-            Authorization: `Bearer ${userData.token}`,
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+      const response = await axios.get(`${BASE_URL}/users/${userData.userId}/words`, {
+        headers: {
+          Authorization: `Bearer ${userData.token}`,
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(
-        'Failed to load user words'
-      );
+      return thunkAPI.rejectWithValue('Failed to load user words');
     }
   }
 );
@@ -89,21 +79,15 @@ export const postUserWord = createAsyncThunk(
   async ({ newUserWord, userData }: IPostUserWord, thunkAPI) => {
     const { wordId } = newUserWord.optional;
     try {
-      await axios.post(
-        `${BASE_URL}/users/${userData.userId}/words/${wordId}`,
-        newUserWord,
-        {
-          headers: {
-            Authorization: `Bearer ${userData.token}`,
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+      await axios.post(`${BASE_URL}/users/${userData.userId}/words/${wordId}`, newUserWord, {
+        headers: {
+          Authorization: `Bearer ${userData.token}`,
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
     } catch (error) {
-      return thunkAPI.rejectWithValue(
-        'Failed to post a word in the database'
-      );
+      return thunkAPI.rejectWithValue('Failed to post a word in the database');
     }
   }
 );
@@ -113,21 +97,15 @@ export const updateUserWord = createAsyncThunk(
   async ({ newUserWord, userData }: IPostUserWord, thunkAPI) => {
     const { wordId } = newUserWord.optional;
     try {
-      await axios.put(
-        `${BASE_URL}/users/${userData.userId}/words/${wordId}`,
-        newUserWord,
-        {
-          headers: {
-            Authorization: `Bearer ${userData.token}`,
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+      await axios.put(`${BASE_URL}/users/${userData.userId}/words/${wordId}`, newUserWord, {
+        headers: {
+          Authorization: `Bearer ${userData.token}`,
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
     } catch (error) {
-      return thunkAPI.rejectWithValue(
-        'Failed to update a word in the database'
-      );
+      return thunkAPI.rejectWithValue('Failed to update a word in the database');
     }
   }
 );

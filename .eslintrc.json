@@ -1,56 +1,52 @@
 {
-  "env": {
-      "browser": true,
-      "es2021": true
-  },
+  "parser": "@typescript-eslint/parser",
   "extends": [
-      "eslint:recommended",
-      "plugin:react/recommended",
-      "plugin:react-hooks/recommended",
-      "plugin:import/recommended",
-      "airbnb",
-      "prettier"
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier",
+    "plugin:react-hooks/recommended",
+    "plugin:prettier/recommended"
   ],
-  "overrides": [
-  ],
-  "parser": "@typescript-eslint/parser", 
+  "env": {
+    "browser": true,
+    "es6": true,
+    "jest": true,
+    "node": true
+  },
+  "root": true,
   "parserOptions": {
-      "project": "./tsconfig.json", 
-      "ecmaVersion": "latest",
-      "sourceType": "module"   
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": "latest",
+		"sourceType": "module"
   },
   "plugins": [
-      "react", "@typescript-eslint"
+    "@typescript-eslint", "react", "prettier", "react-hooks"
   ],
   "rules": {
-      "no-unused-vars": ["error", { "vars": "all", "args": "none", "ignoreRestSiblings": false }],
-      "class-methods-use-this": ["error", { "enforceForClassFields": false }],
-      "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".ts", "tsx"] }],
-      "react/react-in-jsx-scope": "off",
-      "import/extensions": [
-          "error",
-          "ignorePackages",
-          {
-            "js": "never",
-            "jsx": "never",
-            "ts": "never",
-            "tsx": "never"
-          }
-       ],
-       "import/no-unresolved": [
-        2, 
-        { "caseSensitive": false }
-     ]
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "comma-dangle": ["error", "only-multiline"],
+    "react/prop-types": "off",
+    "react/display-name": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "prettier/prettier": ["error", { "endOfLine": "auto" }],
+    "@typescript-eslint/interface-name-prefix": "off",
+    "@typescript-eslint/ban-ts-comment": "error",
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-empty-function": "off",
+    "@typescript-eslint/no-explicit-any": "error",
+    "@typescript-eslint/no-var-reqiures": "off",
+    "react/jsx-uses-react": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/no-unescaped-entities": 0
   },
-  "settings": {
-      "import/resolver": {
-        "node": {
-          "extensions": [".js", ".jsx", ".ts", ".tsx"]
-        }
-      },
-      "import/parsers": {
-          "@typescript-eslint/parser": [".js", ".jsx", ".ts", ".tsx"]
-      }
-  }
+	"settings": {
+		"react": {
+			"pragma": "React",
+			"version": "detect"
+		}
+	}
 }
-

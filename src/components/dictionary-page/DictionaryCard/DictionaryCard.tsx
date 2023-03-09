@@ -1,29 +1,26 @@
-import { useState } from 'react'
-import CardMedia from '@mui/material/CardMedia'
-import CardContent from '@mui/material/CardContent'
-import Typography from '@mui/material/Typography'
-import CardActions from '@mui/material/CardActions'
-import Button from '@mui/material/Button'
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'
-import CheckCircleIcon from '@mui/icons-material/CheckCircle'
-import VolumeUpIcon from '@mui/icons-material/VolumeUp'
-import { useTypedSelector } from '../../../redux/hooks'
-import {
-  IUserWordParams,
-  IWord,
-  IUserWordWithParams,
-} from '../../../types/types'
-import './DictionaryCard.css'
+import React from 'react';
+import { useState } from 'react';
+import CardMedia from '@mui/material/CardMedia';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import CardActions from '@mui/material/CardActions';
+import Button from '@mui/material/Button';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import { useTypedSelector } from '../../../redux/hooks';
+import { IUserWordParams, IWord, IUserWordWithParams } from '../../../types/types';
+import './DictionaryCard.css';
 
 interface DictionaryCardProps {
-  word: IWord | IUserWordWithParams
-  addDifficultWord: (id: string) => void
-  addLearnedWord: (id: string) => void
-  removeFromLearned: (id: string) => void
-  removeFromHard: (id: string) => void
-  infoWord: IUserWordParams[]
-  updateUserWords: () => void
-  allLearned: boolean
+  word: IWord | IUserWordWithParams;
+  addDifficultWord: (id: string) => void;
+  addLearnedWord: (id: string) => void;
+  removeFromLearned: (id: string) => void;
+  removeFromHard: (id: string) => void;
+  infoWord: IUserWordParams[];
+  updateUserWords: () => void;
+  allLearned: boolean;
 }
 
 export default function DictionaryCard({
@@ -32,117 +29,100 @@ export default function DictionaryCard({
   addLearnedWord,
   removeFromLearned,
   removeFromHard,
-  infoWord,
-  updateUserWords,
-  allLearned,
 }: DictionaryCardProps) {
-  const [play, setPlay] = useState(false)
-  const [hard, setHard] = useState(
-    (word as IUserWordWithParams).userWord?.difficulty === 'hard'
-  )
-  const [learned, setLearned] = useState(
-    (word as IUserWordWithParams).userWord?.optional.learned
-  )
-  const { authData } = useTypedSelector((state) => state.auth)
+  const [play, setPlay] = useState(false);
+  const [hard, setHard] = useState((word as IUserWordWithParams).userWord?.difficulty === 'hard');
+  const [learned, setLearned] = useState((word as IUserWordWithParams).userWord?.optional.learned);
+  const { authData } = useTypedSelector((state) => state.auth);
 
   const playSound = () => {
-    setPlay((prev) => !prev)
+    setPlay((prev) => !prev);
     const audio = [
-      `https://rs-lang-base.herokuapp.com/${word.audio}`,
-      `https://rs-lang-base.herokuapp.com/${word.audioMeaning}`,
-      `https://rs-lang-base.herokuapp.com/${word.audioExample}`,
-    ]
+      `https://rs-lang-be-orcn.onrender.com/${word.audio}`,
+      `https://rs-lang-be-orcn.onrender.com/${word.audioMeaning}`,
+      `https://rs-lang-be-orcn.onrender.com/${word.audioExample}`,
+    ];
 
-    let index = 0
-    const audioTrack = new Audio(audio[0])
+    let index = 0;
+    const audioTrack = new Audio(audio[0]);
 
     function playNext() {
       if (index < audio.length - 1) {
-        index += 1
-        audioTrack.src = audio[index]
-        audioTrack.load()
-        audioTrack.play()
+        index += 1;
+        audioTrack.src = audio[index];
+        audioTrack.load();
+        audioTrack.play();
       } else {
-        setPlay(false)
-        audioTrack.removeEventListener('ended', playNext, false)
+        setPlay(false);
+        audioTrack.removeEventListener('ended', playNext, false);
       }
     }
-    audioTrack.addEventListener('ended', playNext)
-    audioTrack.play()
-  }
+    audioTrack.addEventListener('ended', playNext);
+    audioTrack.play();
+  };
 
   const addToDifficult = async (id: string) => {
     if (hard) {
-      removeFromHard(id)
-      setHard(false)
+      removeFromHard(id);
+      setHard(false);
     } else {
-      setLearned(false)
-      addDifficultWord(id)
-      setHard(true)
+      setLearned(false);
+      addDifficultWord(id);
+      setHard(true);
     }
-  }
+  };
 
   const addToLearned = async (id: string) => {
     if (learned === true) {
-      await removeFromLearned(id)
-      setLearned(false)
+      await removeFromLearned(id);
+      setLearned(false);
     } else {
-      setLearned(true)
-      setHard(false)
-      await addLearnedWord(id)
+      setLearned(true);
+      setHard(false);
+      await addLearnedWord(id);
     }
-  }
+  };
 
   const rightCounterAudio =
     (word as IUserWordWithParams).userWord &&
     (word as IUserWordWithParams).userWord.optional?.audiochallenge
-      ? Number(
-          (word as IUserWordWithParams).userWord.optional?.audiochallenge
-            ?.rightCounter
-        )
-      : 0
+      ? Number((word as IUserWordWithParams).userWord.optional?.audiochallenge?.rightCounter)
+      : 0;
 
   const rightCounterSprint =
     (word as IUserWordWithParams).userWord &&
     (word as IUserWordWithParams).userWord.optional?.sprint
-      ? Number(
-          (word as IUserWordWithParams).userWord.optional?.sprint?.rightCounter
-        )
-      : 0
+      ? Number((word as IUserWordWithParams).userWord.optional?.sprint?.rightCounter)
+      : 0;
 
   const wrongCounterAudio =
     (word as IUserWordWithParams).userWord &&
     (word as IUserWordWithParams).userWord.optional?.audiochallenge
-      ? Number(
-          (word as IUserWordWithParams).userWord.optional?.audiochallenge
-            ?.wrongCounter
-        )
-      : 0
+      ? Number((word as IUserWordWithParams).userWord.optional?.audiochallenge?.wrongCounter)
+      : 0;
 
   const wrongCounterSprint =
     (word as IUserWordWithParams).userWord &&
     (word as IUserWordWithParams).userWord.optional?.sprint
-      ? Number(
-          (word as IUserWordWithParams).userWord.optional?.sprint?.wrongCounter
-        )
-      : 0
+      ? Number((word as IUserWordWithParams).userWord.optional?.sprint?.wrongCounter)
+      : 0;
 
-  const allRightCounter = rightCounterAudio + rightCounterSprint
-  const allWrongCounter = wrongCounterAudio + wrongCounterSprint
+  const allRightCounter = rightCounterAudio + rightCounterSprint;
+  const allWrongCounter = wrongCounterAudio + wrongCounterSprint;
 
   function renderStyleHeaderCard() {
     if (hard) {
-      return 'rgb(237 180 180)'
+      return 'rgb(237 180 180)';
     }
     if (learned) {
-      return 'rgb(204 243 213)'
+      return 'rgb(204 243 213)';
     }
-    return 'rgb(204, 218, 243)'
+    return 'rgb(204, 218, 243)';
   }
 
   const style = {
     backgroundColor: renderStyleHeaderCard(),
-  }
+  };
 
   return (
     <div className="card">
@@ -151,7 +131,7 @@ export default function DictionaryCard({
         className="card__img"
         component="img"
         sx={{ width: 251 }}
-        image={`https://rs-lang-base.herokuapp.com/${word.image}`}
+        image={`https://rs-lang-be-orcn.onrender.com/${word.image}`}
         alt={word.word}
       />
       <div className="card__descr">
@@ -164,16 +144,10 @@ export default function DictionaryCard({
           <div className="card__sound">
             {authData && (
               <div className="card__attempts">
-                <div
-                  title="Right answers count"
-                  className="card__attempt card__attempt_right"
-                >
+                <div title="Right answers count" className="card__attempt card__attempt_right">
                   {allRightCounter}
                 </div>
-                <div
-                  title="Wrong answers count"
-                  className="card__attempt card__attempt_wrong"
-                >
+                <div title="Wrong answers count" className="card__attempt card__attempt_wrong">
                   {allWrongCounter}
                 </div>
               </div>
@@ -184,35 +158,25 @@ export default function DictionaryCard({
               fontSize="large"
               color={play ? 'success' : 'inherit'}
             />
-            <audio src={`https://rs-lang-base.herokuapp.com/${word.audio}`}>
+            <audio src={`https://rs-lang-be-orcn.onrender.com/${word.audio}`}>
               <track kind="captions" />
             </audio>
-            <audio
-              src={`https://rs-lang-base.herokuapp.com/${word.audioMeaning}`}
-            >
+            <audio src={`https://rs-lang-be-orcn.onrender.com/${word.audioMeaning}`}>
               <track kind="captions" />
             </audio>
-            <audio
-              src={`https://rs-lang-base.herokuapp.com/${word.audioExample}`}
-            >
+            <audio src={`https://rs-lang-be-orcn.onrender.com/${word.audioExample}`}>
               <track kind="captions" />
             </audio>
           </div>
         </div>
         <CardContent>
           <Typography component="div" variant="body2" color="text.secondary">
-            <p
-              className="card__mean"
-              dangerouslySetInnerHTML={{ __html: word.textMeaning }}
-            />
+            <p className="card__mean" dangerouslySetInnerHTML={{ __html: word.textMeaning }} />
             <p className="card__trans">{word.textMeaningTranslate}</p>
           </Typography>
           <hr />
           <Typography component="div" variant="body2" color="text.secondary">
-            <p
-              className="card__mean"
-              dangerouslySetInnerHTML={{ __html: word.textExample }}
-            />
+            <p className="card__mean" dangerouslySetInnerHTML={{ __html: word.textExample }} />
             <p className="card__trans">{word.textExampleTranslate}</p>
           </Typography>
         </CardContent>
@@ -240,5 +204,5 @@ export default function DictionaryCard({
         )}
       </div>
     </div>
-  )
+  );
 }

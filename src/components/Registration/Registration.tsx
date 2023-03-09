@@ -1,17 +1,14 @@
-/* eslint-disable  */
-import { FC, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { setRegisteringFlag, setUserCreationError } from "../../redux/features/registrationSlice";
-import { useTypedDispatch, useTypedSelector } from "../../redux/hooks";
-import Alerts from "./components/Alerts";
-import RegistrationForm from "./components/RegistrationFrom";
-import { Wrapper } from "./Registration.styles";
+import React from 'react';
+import { FC, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { setRegisteringFlag, setUserCreationError } from '../../redux/features/registrationSlice';
+import { useTypedDispatch, useTypedSelector } from '../../redux/hooks';
+import Alerts from './components/Alerts';
+import RegistrationForm from './components/RegistrationFrom';
+import { Wrapper } from './Registration.styles';
 
 const Registration: FC = () => {
-  const {
-    userCreationError,
-    registeringFlag,
-  } = useTypedSelector(state => state.registration);
+  const { userCreationError, registeringFlag } = useTypedSelector((state) => state.registration);
   const dispatch = useTypedDispatch();
   const navigate = useNavigate();
 
@@ -42,7 +39,10 @@ const Registration: FC = () => {
         <div>
           <RegistrationForm />
           <h3>
-            Signed up already? <span><Link to='/sign-in'>Sign in to the app</Link></span>
+            Signed up already?{' '}
+            <span>
+              <Link to="/sign-in">Sign in to the app</Link>
+            </span>
           </h3>
         </div>
       )}

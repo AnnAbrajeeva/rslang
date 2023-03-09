@@ -1,13 +1,13 @@
-/* eslint-disable */
-import { FC } from "react";
-import { TextField } from "@mui/material";
+import React from 'react';
+import { FC } from 'react';
+import { TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import { useTypedSelector } from "../../../../redux/hooks";
-import { Form } from "./AuthForm.styles";
-import { useFormikCustom } from "./hooks/useFormikCustom";
+import { useTypedSelector } from '../../../../redux/hooks';
+import { Form } from './AuthForm.styles';
+import { useFormikCustom } from './hooks/useFormikCustom';
 
 const AuthForm: FC = () => {
-  const { isSigningIn } = useTypedSelector((state: { auth: any; }) => state.auth);
+  const { isSigningIn } = useTypedSelector((state: { auth: any }) => state.auth);
   const formik = useFormikCustom();
 
   return (
@@ -36,7 +36,8 @@ const AuthForm: FC = () => {
       <LoadingButton
         color="primary"
         variant="contained"
-        fullWidth type="submit"
+        fullWidth
+        type="submit"
         loading={isSigningIn}
         disabled={isSigningIn}
       >
