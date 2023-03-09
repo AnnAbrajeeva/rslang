@@ -33,7 +33,7 @@ __Yup__ - библиотека для валидации формы регист
 
 ## Деплой
 
-https://annabrajeeva-team-101.netlify.app/
+https://app-rs-lang.netlify.app/
 
 
 ### Скриншоты
